@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+<meta name="google-site-verification" content="Zy3IjXJ98POTASl0aOyyZABIsvO-AJXgk87IzxQvnkY" />
+<meta name="baidu-site-verification" content="VB3sPdwBsu" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"peonycsa.com","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本篇文章主要记录作者在研究sqlmap源码时获得的各方面收获">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sqlmap源码浅析">
+<meta property="og:url" content="https://peonycsa.com/sqlmap-codeanlysis/index.html">
+<meta property="og:site_name" content="Pe0ny GrayWar">
+<meta property="og:description" content="本篇文章主要记录作者在研究sqlmap源码时获得的各方面收获">
+<meta property="og:image" content="https://peonycsa.com/sqlmap-codeanlysis/sqlmap-code-analysis-1.png">
+<meta property="og:image" content="https://peonycsa.com/sqlmap-codeanlysis/sqlmap-code-analysis-2.png">
+<meta property="article:published_time" content="2020-03-12T11:38:51.000Z">
+<meta property="article:modified_time" content="2020-11-19T06:09:31.825Z">
+<meta property="article:author" content="Pe0ny GrayWar">
+<meta property="article:tag" content="sqlmap源码">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://peonycsa.com/sqlmap-codeanlysis/sqlmap-code-analysis-1.png">
+
+<link rel="canonical" href="https://peonycsa.com/sqlmap-codeanlysis/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>sqlmap源码浅析 | Pe0ny GrayWar</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Pe0ny GrayWar" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Pe0ny GrayWar</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://peonycsa.com/sqlmap-codeanlysis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/author.png">
+      <meta itemprop="name" content="Pe0ny GrayWar">
+      <meta itemprop="description" content="数据分析 | 信息安全 | 密码学 | 经济 | 日语">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pe0ny GrayWar">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          sqlmap源码浅析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-12 19:38:51" itemprop="dateCreated datePublished" datetime="2020-03-12T19:38:51+08:00">2020-03-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-11-19 14:09:31" itemprop="dateModified" datetime="2020-11-19T14:09:31+08:00">2020-11-19</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+            <div class="post-description">本篇文章主要记录作者在研究sqlmap源码时获得的各方面收获</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>本篇文章主要记录作者在研究sqlmap源码时获得的各方面收获。</p>
+<p>最近忙着考研，有缘再回来更新吧。</p>
+<p><strong>关键词: sqlmap；源码; </strong></p>
+<a id="more"></a>
+<h2 id="项目结构图"><a href="#项目结构图" class="headerlink" title="项目结构图"></a>项目结构图</h2><p>sqlmap版本 : 1.4.3.3#dev</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sqlmap:.</span><br><span class="line">├─data</span><br><span class="line">├─doc          # 描述文档: readme等</span><br><span class="line">├─extra        # 拓展程序: 声音控制，运行CMD等</span><br><span class="line">├─lib          # 核心功能: waf检测，注入检测等</span><br><span class="line">├─plugins      # 插件程序: 各类数据库的信息,通用操作类</span><br><span class="line">├─tamper       # 操作脚本: 绕过过滤</span><br><span class="line">├─thirdparty   # 第三方库: 如BeautifulSoup爬虫库等</span><br><span class="line">├─txt          # 字典文件: 库名，表名，列名</span><br><span class="line">├─sqlmap.conf  # 配置</span><br><span class="line">├─sqlmap.py    # 主程序</span><br><span class="line">└─sqlmapapi.py # api文件</span><br></pre></td></tr></table></figure>
+<h2 id="初始化与底层建筑"><a href="#初始化与底层建筑" class="headerlink" title="初始化与底层建筑"></a>初始化与底层建筑</h2><h3 id="主要结构"><a href="#主要结构" class="headerlink" title="主要结构"></a>主要结构</h3><p><img src="sqlmap-code-analysis-1.png" alt="图1"></p>
+<!-- 正如上图所示，各个模块对应的功能如下：
+
+`try` ——
+`except SqlmapUserQuitException` ——
+`except (SqlmapSilentQuitException, bdb.BdbQuit)` ——
+`except SqlmapShellQuitException` ——
+`except SqlmapBaseException as ex` ——
+`except KeyboardInterrupt` ——
+`except EOFError` ——
+`except SystemExit` ——
+`except` ——
+`finally` —— -->
+<p>我相信大家看到了上图应该就知道我们主要应该看 try 中的内容。实际上 except 中指的是 sqlmap 中各种各样异常处理，包含让程序退出而释放的异常/用户异常以及各种预期或非预期异常，在 finally 中，大致进行了数据库（HashDB）的检查/恢复/释放以及 dumper 的收尾操作和多线程的资源回收操作。</p>
+<h3 id="具体分析"><a href="#具体分析" class="headerlink" title="具体分析"></a>具体分析</h3><h4 id="0x01-引入部分"><a href="#0x01-引入部分" class="headerlink" title="0x01 引入部分"></a>0x01 引入部分</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sys.dont_write_bytecode = <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p>这个变量意思就是当这个值为真时， <code>.pyc</code> 文件不会出现在资源包中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sys.executable <span class="keyword">if</span> weAreFrozen() <span class="keyword">else</span> __file__</span><br></pre></td></tr></table></figure>
+<p>大意就是 <code>sys.executable</code> 函数返回python解释器位置。<br><code>weAreFrozen()</code> 函数从 <code>lib/core/common.py</code> 引入，作用是[待填]。<br>这块代码的功能是[待填]。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="string">"sqlmap.sqlmap"</span> <span class="keyword">in</span> sys.modules:</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> (<span class="string">"cmdLineOptions"</span>, <span class="string">"conf"</span>, <span class="string">"kb"</span>):</span><br><span class="line">        globals()[_] = getattr(sys.modules[<span class="string">"lib.core.data"</span>], _)</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> (<span class="string">"SqlmapBaseException"</span>, <span class="string">"SqlmapShellQuitException"</span>, <span class="string">"SqlmapSilentQuitException"</span>, <span class="string">"SqlmapUserQuitException"</span>):</span><br><span class="line">    globals()[_] = getattr(sys.modules[<span class="string">"lib.core.exception"</span>], _)</span><br></pre></td></tr></table></figure>
+<p><code>getattr</code> 功能为返回对象的值。整块代码的功能是为了导入 <code>cmdLineOptions</code> , <code>conf</code> , <code>kb</code> 等全局变量。</p>
+<h4 id="0x02-入口部分"><a href="#0x02-入口部分" class="headerlink" title="0x02 入口部分"></a>0x02 入口部分</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dirtyPatches()</span><br><span class="line">resolveCrossReferences()</span><br><span class="line">checkEnvironment()</span><br><span class="line">setPaths(modulePath())</span><br><span class="line">banner()</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>第一个函数就是 <code>dirtyPatches()</code> , 这个函数位于 <code>lib.core.patch</code> , 79行。其作用是：首先设定了 httplib 的最大行长度（ <code>_http_client._MAXLINE</code> ），紧接着处理双重分块编码问题，接下来导入第三方的 windows 下的 ip地址转换函数模块（ <code>win_inet_pton</code> ），然后对编码进行了一些替换，把 cp65001 替换为 utf8 避免出现一些交互上的错误，以及处理了<a href="http://bugs.python.org/issue17849" target="_blank" rel="noopener">http://bugs.python.org/issue17849</a>这个bug，这些操作对于 sqlmap 的实际功能影响并不是特别大，属于保证起用户体验和系统设置的正常选项，不需要进行过多关心。</p>
+</li>
+<li><p>紧接着即是 <code>resolveCrossReferences()</code> 函数, 该函数位于 <code>lib.core.patch</code> ，79行。主要用于解决交叉引用解析。交叉引用即导入循环，属于设计中层次不明问题。</p>
+</li>
+<li><p><code>checkEnvironment()</code> 函数定义就在主函数中，其主要功能即检查模块路径，检查 Python 版本，导入全局变量。最关键的是导入了 <code>(&quot;cmdLineOptions&quot;, &quot;conf&quot;, &quot;kb&quot;)</code> 这几个全局变量，并且直接在定义处( <code>lib.core.data</code> )找这几个变量意义不大，因为它们并非在定义处初始化的。</p>
+</li>
+<li><p><code>setPaths(modulePath())</code> 函数作用为初始化各种资源文件路径。</p>
+</li>
+<li><p><code>banner()</code> : 打印 Banner。</p>
+</li>
+</ol>
+<!-- six. PY3模块待解释 -->
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">args = cmdLineParser()</span><br><span class="line">cmdLineOptions.update(args.__dict__ <span class="keyword">if</span> hasattr(args, <span class="string">"__dict__"</span>) <span class="keyword">else</span> args)</span><br><span class="line">initOptions(cmdLineOptions)</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p><code>cmdLineParser()</code> 函数解析命令和参数。</p>
+</li>
+<li><p><code>initOptions(cmdLineOptions)</code> 函数进行初始化，进行了配置文件初始化，知识库（KnowledgeBase初始化）以及用户操作的 Merge 和初始化。</p>
+</li>
+</ol>
+<p>如果遇到了针对 <code>kb</code> 和 <code>conf</code> 的操作，可以直接在这个函数对应的 <code>lib.core.option</code> 模块中寻找对应的初始化变量的定义，当然也有可能来源于 <code>lib.parse.cmdline</code> 中。</p>
+<p>在检查输入是否标准和以及检查是否调用api（当调用api时覆写系统输出）后，进行初始化。（ <code>init</code> 函数 ）。确定所有初始变量的初始值，当然不需要跟进研究，只是在我们需要了解参数作用时再回头来研究即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> conf.updateAll:</span><br><span class="line"><span class="comment"># Postponed imports (faster start)</span></span><br><span class="line">    <span class="keyword">if</span> conf.smokeTest:</span><br><span class="line">        <span class="keyword">from</span> lib.core.testing <span class="keyword">import</span> smokeTest</span><br><span class="line">        os._exitcode = <span class="number">1</span> - (smokeTest() <span class="keyword">or</span> <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">elif</span> conf.vulnTest:</span><br><span class="line">        <span class="keyword">from</span> lib.core.testing <span class="keyword">import</span> vulnTest</span><br><span class="line">        os._exitcode = <span class="number">1</span> - (vulnTest() <span class="keyword">or</span> <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">elif</span> conf.bedTest:</span><br><span class="line">        <span class="keyword">from</span> lib.core.testing <span class="keyword">import</span> bedTest</span><br><span class="line">        os._exitcode = <span class="number">1</span> - (bedTest() <span class="keyword">or</span> <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">elif</span> conf.fuzzTest:</span><br><span class="line">        <span class="keyword">from</span> lib.core.testing <span class="keyword">import</span> fuzzTest</span><br><span class="line">        fuzzTest()</span><br></pre></td></tr></table></figure>
+<p>初始化后立即就开始测试，当然这有个条件 <code>if not conf.updateAll</code> ，这个是来源于 <code>lib.parse.cmdline</code> 中定义的更新选项，如果这个选项打开，sqlmap 会自动更新并且不会执行后续测试步骤和实际工作的步骤。</p>
+<p>测试板块：冒烟测试、vulnserver 运行测试、testbed 运行测试、fuzz测试。测试返回这个思路设计得还蛮精巧的。</p>
+<p>冒烟测试是在将代码更改嵌入到产品的源树中之前对这些更改进行验证的过程。Vulnserver是一个由Stephen Bradshaw撰写易受攻击的服务器，其实相当于fuzz测试。Testbed 就是软件测试的特定软件、硬件环境，可以包括软件、硬件以及网络构件.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># part 1</span></span><br><span class="line">    <span class="keyword">if</span> conf.crawlDepth <span class="keyword">and</span> conf.bulkFile:</span><br><span class="line">        targets = getFileItems(conf.bulkFile)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> xrange(len(targets)):</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                kb.targets.clear()</span><br><span class="line">                target = targets[i]</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> re.search(<span class="string">r"(?i)\Ahttp[s]*://"</span>, target):</span><br><span class="line">                        target = <span class="string">"http://%s"</span> % target</span><br><span class="line">                    infoMsg = <span class="string">"starting crawler for target URL '%s' (%d/%d)"</span> % (target, i + <span class="number">1</span>, len(targets))</span><br><span class="line">                    logger.info(infoMsg)</span><br><span class="line">                    crawl(target)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> ex:</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> isinstance(ex, SqlmapUserQuitException):</span><br><span class="line">                     errMsg = <span class="string">"problem occurred while crawling '%s' ('%s')"</span> % (target, getSafeExString(ex))</span><br><span class="line">                     logger.error(errMsg)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                     <span class="keyword">raise</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># part 2</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> kb.targets:</span><br><span class="line">            start()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            start()</span><br><span class="line"></span><br><span class="line"><span class="comment"># part 3</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> ex:</span><br><span class="line">    os._exitcode = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="string">"can't start new thread"</span> <span class="keyword">in</span> getSafeExString(ex):</span><br><span class="line">        errMsg = <span class="string">"unable to start new threads. Please check OS (u)limits"</span></span><br><span class="line">        logger.critical(errMsg)</span><br><span class="line">        <span class="keyword">raise</span> SystemExit</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
+<p>接下来就是真正的入口部分了，当然这段需要分析的代码比较多，所以我分成了3个部分：</p>
+<ul>
+<li><p><strong>part 1:</strong> 这部分的主要功能是爬虫。当同时存在 <code>conf.crawlDepth</code> 和 <code>conf.bulkFile</code> 参数时，通过 <code>getFileItems</code> 函数获得目标页面的URL <code>targets</code> ，然后对目标进行爬取。核心功能函数是 <code>crawl</code> ，位于 <code>lib\utils\crawler</code> 。</p>
+</li>
+<li><p><strong>part 2:</strong> 不同时存在 <code>conf.crawlDepth</code> 和 <code>conf.bulkFile</code> 参数时，直接进入 <code>start</code> 函数。</p>
+</li>
+<li><p><strong>part 3:</strong> 错误处理以及退出。</p>
+</li>
+</ul>
+<p>入口部分基本就介绍到这吧，接下来就进入 <code>start</code> 函数分析了。（ <code>crawl</code> 函数有空再分析吧）</p>
+<h4 id="0x03-start-函数"><a href="#0x03-start-函数" class="headerlink" title="0x03 start 函数"></a>0x03 start 函数</h4><p>首先根据选项来判断处理，为了方便阅读，先把关键代码折叠起来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># part 1</span></span><br><span class="line"><span class="keyword">if</span> conf.hashFile:</span><br><span class="line">    crackHashFile(conf.hashFile)</span><br><span class="line"></span><br><span class="line"><span class="comment"># part 2</span></span><br><span class="line"><span class="keyword">if</span> conf.direct:</span><br><span class="line">    initTargetEnv()</span><br><span class="line">    setupTargetEnv()</span><br><span class="line">    action()</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># part 3</span></span><br><span class="line"><span class="keyword">if</span> conf.url <span class="keyword">and</span> <span class="keyword">not</span> any((conf.forms, conf.crawlDepth)):</span><br><span class="line">    kb.targets.add((conf.url, conf.method, conf.data, conf.cookie, <span class="literal">None</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># part 4</span></span><br><span class="line"><span class="keyword">if</span> conf.configFile <span class="keyword">and</span> <span class="keyword">not</span> kb.targets:</span><br><span class="line">    errMsg = <span class="string">"you did not edit the configuration file properly, set "</span></span><br><span class="line">    errMsg += <span class="string">"the target URL, list of targets or google dork"</span></span><br><span class="line">    logger.error(errMsg)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># part 5</span></span><br><span class="line"><span class="keyword">if</span> kb.targets <span class="keyword">and</span> len(kb.targets) &gt; <span class="number">1</span>:</span><br><span class="line">    infoMsg = <span class="string">"found a total of %d targets"</span> % len(kb.targets)</span><br><span class="line">    logger.info(infoMsg)</span><br><span class="line"></span><br><span class="line"><span class="comment"># part 6</span></span><br><span class="line">hostCount = <span class="number">0</span></span><br><span class="line">initialHeaders = list(conf.httpHeaders)</span><br><span class="line"></span><br><span class="line"><span class="comment"># part 7: important part</span></span><br><span class="line"><span class="keyword">for</span> targetUrl, targetMethod, targetData, targetCookie, targetHeaders <span class="keyword">in</span> kb.targets:……</span><br><span class="line"></span><br><span class="line"><span class="comment"># part 5</span></span><br><span class="line"><span class="keyword">if</span> kb.dataOutputFlag <span class="keyword">and</span> <span class="keyword">not</span> conf.multipleTargets:</span><br><span class="line">    logger.info(<span class="string">"fetched data logged to text files under '%s'"</span> % conf.outputPath)</span><br><span class="line"><span class="keyword">if</span> conf.multipleTargets:</span><br><span class="line">    <span class="keyword">if</span> conf.resultsFile:</span><br><span class="line">    infoMsg = <span class="string">"you can find results of scanning in multiple targets "</span></span><br><span class="line">    infoMsg += <span class="string">"mode inside the CSV file '%s'"</span> % conf.resultsFile</span><br><span class="line">    logger.info(infoMsg)</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>检查 <code>conf.hashFile</code> 参数，即在指令中包含了 <code>--crack</code> 选项时，脱机加载并破解哈希加密。</p>
+</li>
+<li><p>检查 <code>conf.direct</code> 参数，同上，指令中包含了 <code>-d</code> 选项时，进入action()函数，连接数据库。</p>
+</li>
+<li><p>检查 <code>conf.url</code> 参数，以及确定不存在表单和爬虫等选项( <code>conf.forms</code> 和 <code>conf.crawlDepth</code> 参数)，将 <code>url</code> , <code>method</code> , <code>data</code> , <code>cookie</code> 加入到 <code>kb.targets</code> 。这些参数的值都是通过解析命令行的指令得来的。如果输入了一条这样的命令: <code>python .\sqlmap.py -u &quot;http://localhost/sqlilab/Less-1/index.php&quot; --data id=1 --cookie PHPSESSID=a8d127e</code> 。那么此时参数就呈现这个样子：</p>
+</li>
+</ol>
+<p><img src="sqlmap-code-analysis-2.png" alt="图2"></p>
+<ol>
+<li><p>使用 <code>-c</code> 选项时，但是 <code>kb.targets</code> 参数没有获得正常解析(通常是格式不对)，报错处理并且错误抛出。</p>
+</li>
+<li><p>打印各种信息，具体可以看代码，在此不赘述。</p>
+</li>
+</ol>
+<div class="note warning">
+            <p><strong>关键部分 Part 7</strong></p>
+          </div>
+<p>分块来分析最核心的检测方法，第一部分代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 检查网络连接</span></span><br><span class="line"><span class="keyword">if</span> conf.checkInternet:</span><br><span class="line">    infoMsg = <span class="string">"checking for Internet connection"</span></span><br><span class="line">    logger.info(infoMsg)</span><br><span class="line"><span class="comment"># 重连</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> checkInternet():</span><br><span class="line">        warnMsg = <span class="string">"[%s] [WARNING] no connection detected"</span> % time.strftime(<span class="string">"%X"</span>)</span><br><span class="line">        dataToStdout(warnMsg)</span><br><span class="line"></span><br><span class="line">        valid = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> xrange(conf.retries):</span><br><span class="line">            <span class="keyword">if</span> checkInternet():</span><br><span class="line">                valid = <span class="literal">True</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                dataToStdout(<span class="string">'.'</span>)</span><br><span class="line">                time.sleep(<span class="number">5</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> valid:</span><br><span class="line">            errMsg = <span class="string">"please check your Internet connection and rerun"</span></span><br><span class="line">            <span class="keyword">raise</span> SqlmapConnectionException(errMsg)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            dataToStdout(<span class="string">"\n"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 字段设置</span></span><br><span class="line">conf.url = targetUrl</span><br><span class="line">conf.method = targetMethod.upper().strip() <span class="keyword">if</span> targetMethod <span class="keyword">else</span> targetMethod</span><br><span class="line">conf.data = targetData</span><br><span class="line">conf.cookie = targetCookie</span><br><span class="line">conf.httpHeaders = list(initialHeaders)</span><br><span class="line">conf.httpHeaders.extend(targetHeaders <span class="keyword">or</span> [])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> conf.randomAgent <span class="keyword">or</span> conf.mobile:</span><br><span class="line">    <span class="keyword">for</span> header, value <span class="keyword">in</span> initialHeaders:</span><br><span class="line">        <span class="keyword">if</span> header.upper() == HTTP_HEADER.USER_AGENT.upper():</span><br><span class="line">            conf.httpHeaders.append((header, value))</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">conf.httpHeaders = [conf.httpHeaders[i] <span class="keyword">for</span> i <span class="keyword">in</span> xrange(len(conf.httpHeaders)) <span class="keyword">if</span> conf.httpHeaders[i][<span class="number">0</span>].upper() <span class="keyword">not</span> <span class="keyword">in</span> (__[<span class="number">0</span>].upper() <span class="keyword">for</span> __ <span class="keyword">in</span> conf.httpHeaders[i + <span class="number">1</span>:])]</span><br><span class="line"></span><br><span class="line">initTargetEnv()</span><br><span class="line">parseTargetUrl()</span><br><span class="line">testSqlInj = <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<p>先是检查网络连接以及重连，然后是 <code>conf.url,conf.method,conf.data,conf.cookie</code> 和 <code>headers</code> 字段的传递与设置，以及目标环境的设置，并且在 <code>parseTargetUrl</code> 函数中进行各种合理性检查， <code>testSqlInj</code> 的值为标记是否已进行注入测试。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> PLACE.GET <span class="keyword">in</span> conf.parameters <span class="keyword">and</span> <span class="keyword">not</span> any((conf.data, conf.testParameter)):</span><br><span class="line">    <span class="keyword">for</span> parameter <span class="keyword">in</span> re.findall(<span class="string">r"([^=]+)=([^%s]+%s?|\Z)"</span> % (re.escape(conf.paramDel <span class="keyword">or</span> <span class="string">""</span>) <span class="keyword">or</span> DEFAULT_GET_POST_DELIMITER, re.escape(conf.paramDel <span class="keyword">or</span> <span class="string">""</span>) <span class="keyword">or</span> DEFAULT_GET_POST_DELIMITER), conf.parameters[PLACE.GET]):</span><br><span class="line">        paramKey = (conf.hostname, conf.path, PLACE.GET, parameter[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> paramKey <span class="keyword">not</span> <span class="keyword">in</span> kb.testedParams:</span><br><span class="line">            testSqlInj = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    paramKey = (conf.hostname, conf.path, <span class="literal">None</span>, <span class="literal">None</span>)</span><br><span class="line">    <span class="keyword">if</span> paramKey <span class="keyword">not</span> <span class="keyword">in</span> kb.testedParams:</span><br><span class="line">        testSqlInj = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> testSqlInj <span class="keyword">and</span> conf.hostname <span class="keyword">in</span> kb.vulnHosts:</span><br><span class="line">    <span class="keyword">if</span> kb.skipVulnHost <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        message = <span class="string">"SQL injection vulnerability has already been detected "</span></span><br><span class="line">        message += <span class="string">"against '%s'. Do you want to skip "</span> % conf.hostname</span><br><span class="line">        message += <span class="string">"further tests involving it? [Y/n]"</span></span><br><span class="line"></span><br><span class="line">        kb.skipVulnHost = readInput(message, default=<span class="string">'Y'</span>, boolean=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    testSqlInj = <span class="keyword">not</span> kb.skipVulnHost</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> testSqlInj:</span><br><span class="line">    infoMsg = <span class="string">"skipping '%s'"</span> % targetUrl</span><br><span class="line">    logger.info(infoMsg)</span><br><span class="line">    <span class="keyword">continue</span></span><br></pre></td></tr></table></figure>
+<p>提取当前需要检查的参数，然后再警察缓存是否已经检测过当前目标，如果检查过了，就直接跳过并进入下一个目标的检测。接下来是针对多个目标的处理，因为篇幅原因就不贴代码了，与之前所写的单目标相同：初始化检测目标对应的字段，提取参数并验证格式，只是多了一个提示是否需要检测的语句。</p>
+<!-- 在完成上述操作之后，后续的操作相对容易理解。不过仍有以下函数需要重点关注：
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">setupTargetEnv()</span><br><span class="line">……</span><br><span class="line">checkWaf()</span><br><span class="line">……</span><br><span class="line">checkStability()</span><br><span class="line">……</span><br><span class="line">heuristicCheckSqlInjection()</span><br><span class="line">……</span><br><span class="line">checkSqlInjection()</span><br></pre></td></tr></table></figure>
+<p>这几个函数的具体代码将在之后的部分深入跟进分析，现在我们可以大概先画出 <code>start()</code> 函数的流程了:</p>
+<h4 id="0x04-setupTargetEnv-函数"><a href="#0x04-setupTargetEnv-函数" class="headerlink" title="0x04 setupTargetEnv 函数"></a>0x04 setupTargetEnv 函数</h4><h4 id="0x05-checkWaf-函数"><a href="#0x05-checkWaf-函数" class="headerlink" title="0x05 checkWaf 函数"></a>0x05 checkWaf 函数</h4><h4 id="0x06-checkStability-函数"><a href="#0x06-checkStability-函数" class="headerlink" title="0x06 checkStability 函数"></a>0x06 checkStability 函数</h4><h4 id="0x07-heuristicCheckSqlInjection-函数"><a href="#0x07-heuristicCheckSqlInjection-函数" class="headerlink" title="0x07 heuristicCheckSqlInjection 函数"></a>0x07 heuristicCheckSqlInjection 函数</h4><h4 id="0x08-checkSqlInjection-函数-—-gt"><a href="#0x08-checkSqlInjection-函数-—-gt" class="headerlink" title="0x08 checkSqlInjection 函数 —&gt;"></a>0x08 checkSqlInjection 函数 —&gt;</h4>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag"><i class="fa fa-tag"></i> 代码分析</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/sqlilab-learning/" rel="prev" title="从sqli-labs学习SQL注入">
+      <i class="fa fa-chevron-left"></i> 从sqli-labs学习SQL注入
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/fwwb-mlcode-introduction/" rel="next" title="服务外包机器学习项目总结">
+      服务外包机器学习项目总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目结构图"><span class="nav-number">2.</span> <span class="nav-text">项目结构图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化与底层建筑"><span class="nav-number">3.</span> <span class="nav-text">初始化与底层建筑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主要结构"><span class="nav-number">3.1.</span> <span class="nav-text">主要结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体分析"><span class="nav-number">3.2.</span> <span class="nav-text">具体分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-引入部分"><span class="nav-number">3.2.1.</span> <span class="nav-text">0x01 引入部分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-入口部分"><span class="nav-number">3.2.2.</span> <span class="nav-text">0x02 入口部分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-start-函数"><span class="nav-number">3.2.3.</span> <span class="nav-text">0x03 start 函数</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pe0ny GrayWar"
+      src="/images/author.png">
+  <p class="site-author-name" itemprop="name">Pe0ny GrayWar</p>
+  <div class="site-description" itemprop="description">数据分析 | 信息安全 | 密码学 | 经济 | 日语</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Catsofsuffering" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Catsofsuffering" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:catofsuffering@gmail.com" title="E-Mail → mailto:catofsuffering@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.shinenet.cn/" title="https:&#x2F;&#x2F;www.shinenet.cn" rel="noopener" target="_blank">卖女孩的小火柴</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+  <div class="beian"><a href="http://www.beian.miit.gov.cn/" rel="noopener" target="_blank">渝ICP备 - 19009761号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pe0ny GrayWar</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">164k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:29</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

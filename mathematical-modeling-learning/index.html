@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+<meta name="google-site-verification" content="Zy3IjXJ98POTASl0aOyyZABIsvO-AJXgk87IzxQvnkY" />
+<meta name="baidu-site-verification" content="VB3sPdwBsu" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"peonycsa.com","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本篇文章主要记录作者在参加数学建模比赛的一些心得体会，希望对于不了解却想要参加数学建模比赛的读者做个参考。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数学建模入门方法">
+<meta property="og:url" content="https://peonycsa.com/mathematical-modeling-learning/index.html">
+<meta property="og:site_name" content="Pe0ny GrayWar">
+<meta property="og:description" content="本篇文章主要记录作者在参加数学建模比赛的一些心得体会，希望对于不了解却想要参加数学建模比赛的读者做个参考。">
+<meta property="article:published_time" content="2020-03-11T14:55:58.000Z">
+<meta property="article:modified_time" content="2020-04-29T03:27:34.048Z">
+<meta property="article:author" content="Pe0ny GrayWar">
+<meta property="article:tag" content="数学建模">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://peonycsa.com/mathematical-modeling-learning/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>数学建模入门方法 | Pe0ny GrayWar</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Pe0ny GrayWar" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Pe0ny GrayWar</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://peonycsa.com/mathematical-modeling-learning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/author.png">
+      <meta itemprop="name" content="Pe0ny GrayWar">
+      <meta itemprop="description" content="数据分析 | 信息安全 | 密码学 | 经济 | 日语">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pe0ny GrayWar">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数学建模入门方法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-11 22:55:58" itemprop="dateCreated datePublished" datetime="2020-03-11T22:55:58+08:00">2020-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-29 11:27:34" itemprop="dateModified" datetime="2020-04-29T11:27:34+08:00">2020-04-29</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+            <div class="post-description">本篇文章主要记录作者在参加数学建模比赛的一些心得体会，希望对于不了解却想要参加数学建模比赛的读者做个参考。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>本篇文章主要记录作者在参加数学建模比赛的一些心得体会，希望对于不了解却想要参加数学建模比赛的读者做个参考。</p>
+<p><strong>关键词: 数学建模；入门方法;</strong></p>
+<a id="more"></a>
+<h2 id="队伍构成"><a href="#队伍构成" class="headerlink" title="队伍构成"></a>队伍构成</h2><p><strong>注意：不能过分分工明确</strong></p>
+<h3 id="算手"><a href="#算手" class="headerlink" title="算手"></a>算手</h3><ol>
+<li><p>基本参赛要求：</p>
+<ul>
+<li>掌握Matlab基础语法；</li>
+<li>学会SPSS，Excel，Lingo等主流软件的使用；</li>
+</ul>
+</li>
+<li><p>进阶要求:</p>
+<ul>
+<li>学会使用Mathwork文档进行学习，在求解程序中多利用算法工具箱；</li>
+<li>拥有一定的算法和程序的积累；</li>
+<li>增强学习能力，在短时间学会使用非主流比较冷门的软件（如：stata，sas，eveiw，cad等）来对问题进行求解；</li>
+</ul>
+</li>
+</ol>
+<h3 id="建模手"><a href="#建模手" class="headerlink" title="建模手"></a>建模手</h3><ol>
+<li><p>基本参赛要求：</p>
+<ul>
+<li>了解各种题型，主流题型有：机理，优化，预测，评价，数据；</li>
+<li>了解各种模型，有基本的模型和题目对应的能力，读完题后能建立模型；</li>
+<li>初步了解模型对应的算法，了解算法的基本思想和大致优缺点；</li>
+<li>满足基本参赛要求可以先通过上网看百度百科，只做到浅显了解</li>
+</ul>
+</li>
+<li><p>进阶要求：</p>
+<ul>
+<li>深入研究各种模型，对模型的对应算法有了解（能够帮助算手写程序）。</li>
+<li>帮助写手完成公式的编辑；</li>
+</ul>
+</li>
+</ol>
+<h3 id="写手"><a href="#写手" class="headerlink" title="写手"></a>写手</h3><ol>
+<li><p>基本参赛要求：</p>
+<ul>
+<li>能够熟练运用Word或者WPS对论文进行排版；</li>
+<li>掌握MatyType对公式进行制作；</li>
+<li>在建模的时候，就进行论文能完成的部分。进行到那一步就写到那一步，节约时间。</li>
+</ul>
+</li>
+<li><p>进阶要求：</p>
+<ul>
+<li>做到建模手基本参赛要求的（1）（2）步</li>
+<li>尝试用LaTex进行论文的写作</li>
+</ul>
+</li>
+</ol>
+<p><strong>建议队伍组成</strong>：三人分工，一人主XX副XX。（能够有效提高效率）</p>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ol>
+<li><p>论文写作：</p>
+<ul>
+<li>论文不需要文采斐然，但是一定要思路清晰，语言简洁，逻辑严密。</li>
+<li>使用公式编辑器MathType编辑公式，也可使用Latex书写论文（入门难度大）。</li>
+<li>论文图表一定比例合适，好的论文排版能在很大程度上为论文加分（比如二等奖水平的排版好论文可以获得一等奖）。</li>
+</ul>
+</li>
+<li><p>模型建立：</p>
+<ul>
+<li>将题目中的信息提取精炼成数学公式表达，复杂公式尽可能有严密推导步骤和论证过程。</li>
+<li>数学建模更看重真实性，即更注重自己推导研究的过程，而并非最终的结果。</li>
+</ul>
+</li>
+<li><p>算法与程序：</p>
+<ul>
+<li>最终结果只占一部分评分，所以当计算不出结果的时候不必过于死磕。</li>
+<li>算法除了流程图之外，最好用分步式的语言（伪代码）进行描述。</li>
+<li>不必追求高级复杂的算法，关键在于解决问题。</li>
+<li>工具（SPSS, MATLAB, EXCEL）或者编程语言(C, C++, Python)，没有优劣之分，抓到耗子就是好猫</li>
+</ul>
+</li>
+<li><p>主要得分点：</p>
+<ul>
+<li>摘要：摘要清晰，明确问题的模型，求解算法，使用的软件；</li>
+<li>模型建立：明确使用的模型，步骤清晰，能够让人一看就懂；</li>
+<li>模型求解：明确求解的算法，给出准确的结果（数据或图表）；</li>
+</ul>
+</li>
+</ol>
+<h2 id="基本思路和常规做法"><a href="#基本思路和常规做法" class="headerlink" title="基本思路和常规做法"></a>基本思路和常规做法</h2><p>以正式比赛的时间（三天）举例。</p>
+<p><strong>Day1</strong>：<br>（1）选题，根据比赛给出的题目（三道或者四道），一般是不同题型，选最有把握的题；<br>（2）把一二问的模型建立出来（一道题一般三四问）；<br>（3）最好能把第一问的结果求出来（一般第一问比较简单）；<br><strong>Day2</strong>：<br>（1）求解第二问，第二问一般是整个问题的重点，同时需要比较完整的模型，也是算法和程序编写<br>的难点。也许处理数据和编写程序就会将近花费一天（题目比较难的情况下）。<br>（2）建立好第三天的模型 。<br><strong>Day3</strong>：<br>（1）求解第三问的结果；<br>（2）第四问一般是对前面二三问模型的应用（如果速度够快，第三天中午就能完成所有问题的求<br>解）<br>（3）写手（或者全队）进行剩余论文写作，排版（插入图表等），准备附录（处理好的数据，程序，正文中放不下的结果）；</p>
+<h2 id="细节"><a href="#细节" class="headerlink" title="细节"></a>细节</h2><ul>
+<li>提交：临近提交时间的时候最好要提前一个小时提交论文，一般比赛的网站会卡。</li>
+<li>建模：三个人一起面对面讨论，效率更高（推荐）。</li>
+</ul>
+<h2 id="书籍与学习网站推荐"><a href="#书籍与学习网站推荐" class="headerlink" title="书籍与学习网站推荐"></a>书籍与学习网站推荐</h2><p>•司守奎，孙玺菁. 数学建模算法与应用[M]. 北京：国防工业出版社，2011，8<br>•李昕《MATLAB数学建模》清华大学出版社<br>•简书入门介绍文章：<a href="https://www.jianshu.com/p/09fcb377cecc" target="_blank" rel="noopener">https://www.jianshu.com/p/09fcb377cecc</a><br>•Matlab在线教程网站：<a href="https://www.w3cschool.cn/matlab/" target="_blank" rel="noopener">https://www.w3cschool.cn/matlab/</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/" rel="tag"><i class="fa fa-tag"></i> 数学建模</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/sqlilab-learning/" rel="next" title="从sqli-labs学习SQL注入">
+      从sqli-labs学习SQL注入 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#队伍构成"><span class="nav-number">2.</span> <span class="nav-text">队伍构成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算手"><span class="nav-number">2.1.</span> <span class="nav-text">算手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建模手"><span class="nav-number">2.2.</span> <span class="nav-text">建模手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写手"><span class="nav-number">2.3.</span> <span class="nav-text">写手</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目标"><span class="nav-number">3.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本思路和常规做法"><span class="nav-number">4.</span> <span class="nav-text">基本思路和常规做法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#细节"><span class="nav-number">5.</span> <span class="nav-text">细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#书籍与学习网站推荐"><span class="nav-number">6.</span> <span class="nav-text">书籍与学习网站推荐</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pe0ny GrayWar"
+      src="/images/author.png">
+  <p class="site-author-name" itemprop="name">Pe0ny GrayWar</p>
+  <div class="site-description" itemprop="description">数据分析 | 信息安全 | 密码学 | 经济 | 日语</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Catsofsuffering" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Catsofsuffering" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:catofsuffering@gmail.com" title="E-Mail → mailto:catofsuffering@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.shinenet.cn/" title="https:&#x2F;&#x2F;www.shinenet.cn" rel="noopener" target="_blank">卖女孩的小火柴</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+  <div class="beian"><a href="http://www.beian.miit.gov.cn/" rel="noopener" target="_blank">渝ICP备 - 19009761号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pe0ny GrayWar</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">164k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:29</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
