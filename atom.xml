@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://peonycsa.com/"/>
-  <updated>2020-04-29T03:28:41.154Z</updated>
+  <updated>2020-11-21T14:39:27.633Z</updated>
   <id>https://peonycsa.com/</id>
   
   <author>
@@ -15,6 +15,48 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>生活感悟 2020-11-21</title>
+    <link href="https://peonycsa.com/life-apperception/"/>
+    <id>https://peonycsa.com/life-apperception/</id>
+    <published>2020-11-21T08:23:43.000Z</published>
+    <updated>2020-11-21T14:39:27.633Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>大三上期遇事种种的一些反思和思考，关于前路，关于人生。</p><a id="more"></a><h2 id="天道酬勤"><a href="#天道酬勤" class="headerlink" title="天道酬勤"></a>天道酬勤</h2><p>胜负取决于很多因素，而努力应该是最基本的要求。学习，简单而言就是读书做事，本质则是思考。春日耕种，秋日收获，本就是顺应自然规律总结的经验。努力奋斗提升自己，应该是最百分百接近“一分耕耘一分收获”的事情了。我是坚信厚积薄发的，关键是在过程中踏实认真，定心定性。乔布斯曾说过：“学习无关紧要的事情就像是收集贝壳，当你创造事业时就能用绳子将它们巧妙地串成精致的项链。“</p><blockquote class="blockquote-center">            <p>Life sucks, such is life.——与其翘首以盼，不如不期而遇。</p>          </blockquote><h2 id="做自己的主人"><a href="#做自己的主人" class="headerlink" title="做自己的主人"></a>做自己的主人</h2><p>每天的生活中，我们或许在不知不觉中被生活的种种推着不断向前走。做自己的主人，完全的把握自己，这一点其实有两个含义：</p><ul><li><strong>良好的自控能力</strong></li><li><strong>强大的抗干扰能力</strong></li></ul><p><strong>良好的自控能力</strong>，主要涉及到管理自己：时间、精力、情绪、欲望、情感。在向着目标进发的途中，即使有外界的诱因，但更多存在于我们自身——额外的自发的干扰。克制，忍耐，消除，转移，都是对待自我干扰的手段。</p><p><strong>强大的抗干扰能力</strong>，则主要关于限制外界对自身的影响：打击、骄纵、诱惑、懒散。每一种对情绪、对欲望的干扰，往往都会让我工作效率大幅降低，如何改善并应对种种外界干扰，依旧值得我认真探索和思考。</p>]]></content>
+    
+    <summary type="html">
+    
+      近半年的点滴思考汇总
+    
+    </summary>
+    
+    
+    
+      <category term="life apperception" scheme="https://peonycsa.com/tags/life-apperception/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>code-server 云服务器配置指南</title>
+    <link href="https://peonycsa.com/code-server-install/"/>
+    <id>https://peonycsa.com/code-server-install/</id>
+    <published>2020-11-19T06:22:40.000Z</published>
+    <updated>2020-11-21T14:03:40.250Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>本文记录了作者在京东云服务器上布置code-server的全过程，包括部署安装，配置域名，布置nginx反代，使用ssl加密以及CDN加速等。</p><div class="note info"><p style="margin-top:0">持续更新中</p></div><a id="more"></a><h2 id="部署安装"><a href="#部署安装" class="headerlink" title="部署安装"></a>部署安装</h2>]]></content>
+    
+    <summary type="html">
+    
+      code-server在京东云Ubuntu 18.04上部署的具体过程
+    
+    </summary>
+    
+    
+    
+      <category term="cloud" scheme="https://peonycsa.com/tags/cloud/"/>
+    
+  </entry>
   
   <entry>
     <title>西方经济学（微观部分）学习笔记</title>
