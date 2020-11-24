@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://peonycsa.com/"/>
-  <updated>2020-11-22T05:50:04.070Z</updated>
+  <updated>2020-11-24T09:36:20.348Z</updated>
   <id>https://peonycsa.com/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Docker+ELK+Mqtt可视化物联网平台</title>
+    <link href="https://peonycsa.com/docker-elk-mqtt-agv/"/>
+    <id>https://peonycsa.com/docker-elk-mqtt-agv/</id>
+    <published>2020-11-24T09:34:40.000Z</published>
+    <updated>2020-11-24T09:36:20.348Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>作者参加学校的SRTP项目，要求快速上线一个物联网可视化平台，于是选择了Docker+ELK+Mqtt的方案。</p><div class="note info"><p style="margin-top:0">持续更新中</p></div><a id="more"></a><h2 id="拓补图"><a href="#拓补图" class="headerlink" title="拓补图"></a>拓补图</h2><p><img src="docker-elk-mqtt-agv-1.png" alt="拓补图"></p><h2 id="基本流程"><a href="#基本流程" class="headerlink" title="基本流程"></a>基本流程</h2><ol><li>从Host处（机械）收集数据</li><li>上传至Mqtt数据库转存</li><li>Mqtt将数据送往Logstash加工</li><li>加工完成后，大量数据存储在Elasticsearch</li><li>Kibana通过调取Elasticsearch中的数据，直接在可视化界面展示</li><li>用户在客户端（Client）访问服务器，查询状态等信息</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      本文记录了作者搭建Docker+ELK+Mqtt可视化物联网平台的过程。
+    
+    </summary>
+    
+    
+    
+      <category term="数据可视化" scheme="https://peonycsa.com/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/"/>
+    
+      <category term="Docker" scheme="https://peonycsa.com/tags/Docker/"/>
+    
+      <category term="ELK" scheme="https://peonycsa.com/tags/ELK/"/>
+    
+      <category term="Mqtt" scheme="https://peonycsa.com/tags/Mqtt/"/>
+    
+      <category term="IoT" scheme="https://peonycsa.com/tags/IoT/"/>
+    
+  </entry>
   
   <entry>
     <title>生活感悟 2020-11-21</title>
