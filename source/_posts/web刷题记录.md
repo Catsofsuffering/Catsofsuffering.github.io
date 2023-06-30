@@ -6,7 +6,7 @@ tags:
   - Web
 categories: Web
 keywords: CTF
-description: 本文记录了作者在刷CTF的Web方向题目中面临的问题以及解决方案
+description: 本文记录了作者在刷CTF的Web方向题目中面临的问题以及解决方案，包含了文件上传绕过、php弱类型、sql注入绕过等知识点。
 top_img: https://pic.imgdb.cn/item/647dcd821ddac507ccf5ba20.jpg
 cover: https://pic.imgdb.cn/item/647dcd821ddac507ccf5ba20.jpg
 # password: xdxdsqyc15511551

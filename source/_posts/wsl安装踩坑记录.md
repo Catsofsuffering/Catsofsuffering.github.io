@@ -6,7 +6,7 @@ tags:
   - 工具
 categories: 工具
 keywords: wsl
-description: 本文记录了作者在安装wsl时面临的问题以及解决方案
+description: 本文记录了作者在安装wsl时面临的问题以及解决方案，主要包含了对wsl的安装、配置子系统代理、更改默认用户、安装Win-kex以及配置对应Windows terminal窗口的处理方法。
 top_img: https://pic.imgdb.cn/item/647c13acf024cca173275319.png
 cover: https://pic.imgdb.cn/item/647c13acf024cca173275319.png
 ---
@@ -74,21 +74,39 @@ del ubuntu20.04.tar
 
 ### 设置ALL_PROXY环境变量
 
-~~折腾一天半，累了，毁灭吧。~~
+我尝试了网上两种常用的配置方法，但都无法在我的机器上实现，不得已使用 `proxychains` 来完成代理：
 
-试了两种方法：
+1. ~~通过查找 Linux 子系统的 IP 地址，配置代理地址，同时打开 Windows 防火墙是代理流量通过；~~
 
-~~通过查找 Linux 子系统的 IP 地址，配置代理地址，同时打开 Windows 防火墙是代理流量通过；~~
+2. ~~直接配置 Windows 的 IP 地址进行代理；~~
 
-~~直接配置 Windows 的 IP 地址进行代理；~~
+3. 直接下载 `proxychains` 对命令行进行代理
+
+``` bash
+sudo apt install -y proxychains
+```
+
+然后配置 `proxychains4.conf` 文件，根据安装位置不同，可能在 `/etc/proxychains4.conf` 处或者 `/usr/local/etc/proxychains4.conf` 处，修改代理为
+
+``` conf
+[ProxyList]
+# add proxy here ...
+# meanwile
+# defaults set to "tor"
+socks4 <Windows IP> <Port>
+```
+
+`<Windows IP>` 是对应的 Windows IP ，如 `192.168.0.xxx` 等， `<Port>` 是代理端口。
+
+前两种方法的踩坑记录保存在隐藏框中。
 
 {% hideToggle 踩坑记录 %}
 
-以下内容在我的机器上无法实现
-
 ---
 
-首先，找到 Linux 子系统的 IP 地址，可以查看 DNS 服务器动态分配给子系统的 IP ；
+**通过子系统IP进行代理**
+
+首先，找到 Linux 子系统的 IP 地址，可以查看 DNS 服务器动态分配给子系统的 IP ：
 
 ``` bash
 cat /etc/resolv.conf
@@ -189,7 +207,7 @@ esac
 
 ---
 
-**此种方法也不行**
+**通过Windows IP 进行代理**
 
 莫名其妙用 DNS 服务器动态分配 IP 无法代理，但是直接用 Windows 的 IP 做代理却能成功转发，因此直接编写脚本 `.proxyrc` 如下
 
@@ -209,29 +227,12 @@ echo "source /path/to/.proxyrc -e" >> ~/.bashrc
 
 {% endhideToggle %}
 
-我直接下载 `proxychains` 对命令行进行代理
-
-``` bash
-sudo apt install -y proxychains
-```
-
-然后配置 `proxychains4.conf` 文件，根据安装位置不同，可能在 `/etc/proxychains4.conf` 处或者 `/usr/local/etc/proxychains4.conf` 处，修改代理为
-
-``` conf
-[ProxyList]
-# add proxy here ...
-# meanwile
-# defaults set to "tor"
-socks4 <Windows IP> <Port>
-```
-
-`<Windows IP>` 是对应的 Windows IP ，如 `192.168.0.xxx` 等， `<Port>` 是代理端口。
-
 ## wsl更改默认登录账户
 
 wsl 默认是通过 root 账户登录的，出于安全考虑，希望能更换成常规账户登录.
 
 通过 `<distro name>.exe config --default-user [new default user]` 命令，其中 `<distro name>.exe` 是需要更换用户的WSL发行版的可执行文件， `[new default user]` 是需要切换的用户。例如，安装了 Ubuntu 20.04 需要切换默认用户为 `peony` ，运行 `ubuntu2004.exe config --default-user peony` 即可。
+
 ## Win-Kex SL模式踩坑
 
 ### 安装VcXsrv

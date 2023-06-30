@@ -2,6 +2,13 @@
 title: vulnhub-JARBAS通关
 date: 2023-06-10 10:00:24
 tags:
+- vulnhub
+- jarbas
+description: 本文记录了作者在通关vulnhub靶机JARBAS中遇到的问题以及踩坑后的解决方案。（摘要补充）
+top_img: https://pic.imgdb.cn/item/647cc8931ddac507ccbda697.jpg
+cover: https://pic.imgdb.cn/item/647cc8931ddac507ccbda697.jpg
+password: xdxdsqyc15511551
+message: 暂未完成，仍在施工
 ---
 
 

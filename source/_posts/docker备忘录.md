@@ -1,11 +1,12 @@
 ---
 title: Docker备忘录
+date: 2023-03-22 14:29:48
 tags: 
     - 备忘录
     - Docker
 categories: 备忘录
 keywords: Docker
-description: Docker 是一种常用的容器化平台，它可以帮助开发人员将应用程序及其依赖项打包为轻量级、可移植的容器。下面是一份 Docker 命令备忘录，以便参考和使用。
+description: Docker 是一种常用的容器化平台，它可以帮助开发人员将应用程序及其依赖项打包为轻量级、可移植的容器。这是一份 Docker 命令备忘录，以便参考和使用。
 top_img: https://pic.imgdb.cn/item/647c1399f024cca1732733c8.jpg
 cover: https://pic.imgdb.cn/item/647c1399f024cca1732733c8.jpg
 ---
