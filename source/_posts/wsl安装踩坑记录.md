@@ -102,8 +102,6 @@ socks4 <Windows IP> <Port>
 
 {% hideToggle 踩坑记录 %}
 
----
-
 **通过子系统IP进行代理**
 
 首先，找到 Linux 子系统的 IP 地址，可以查看 DNS 服务器动态分配给子系统的 IP ：
@@ -223,7 +221,7 @@ export ALL_PROXY="socks5://<Windows IP>:<Port>"
 echo "source /path/to/.proxyrc -e" >> ~/.bashrc
 ```
 
-其中 `/path/to/` 是一个占位符，表示要指定的文件或目录的路径，需要把 `/path/to/` 替换成 `.proxyrc` 文件所在的路径，比如 `/home/user/.proxyrc` 。这样，每次每次登录 WSL 子系统时，就会自动执行 .proxyrc 文件中的命令，开启代理。
+其中 `/path/to/` 是一个占位符，表示要指定的文件或目录的路径，需要把 `/path/to/` 替换成 `.proxyrc` 文件所在的路径，比如 `/home/user/.proxyrc` 。这样，每次每次登录 WSL 子系统时，就会自动执行 `.proxyrc` 文件中的命令，开启代理。
 
 {% endhideToggle %}
 
@@ -294,4 +292,16 @@ wsl 默认是通过 root 账户登录的，出于安全考虑，希望能更换�
       "commandline": "wsl -d kali-linux kex --sl --wtstart -s",
 },
 ```
-  
+
+
+## WSL 中远程连接服务器
+
+无需再另外使用 XShell 或者 terminal 等ssh管理工具了，直接使用下面命令进行对远程设备进行操作：
+
+```
+ssh <user>@<IP>:<Port>       # ssh连接
+scp <user>@<IP>              # scp文件管理
+sftp <user>@<IP>             # sftp文件管理
+```
+
+如果需要持久化管理，还可以打开 wsl 的 `settings.json` 在 `profile` 项中进行配置。

@@ -1,6 +1,9 @@
 ---
 title: HTB-PC通关记录
 tags:
+- HackTheBox
+- PC
+- WriteUp
 ---
 
 ## HTB-PC
