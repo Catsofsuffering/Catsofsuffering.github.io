@@ -6,7 +6,17 @@ tags:
 - WriteUp
 ---
 
-## HTB-PC
+## 靶机描述
+
+靶机 IP :  10.10.11.214
+
+## 信息收集
+
+### nmap扫描
+
+按照常规的方法：通过 TCP | UDP 扫描端口、获取开放端口对应信息、系统版本信息
+
+下面是通过 TCP 扫描发现的开放端口信息：
 
 ```
 ┌──(kali㉿DESKTOP-OBF4V3F)-[~/Desktop/BoxWalk/HTB/PC]
@@ -34,6 +44,8 @@ PORT      STATE  SERVICE
 
 Nmap done: 1 IP address (1 host up) scanned in 16.39 seconds
 ```
+
+
 
 ```
 ┌──(kali㉿DESKTOP-OBF4V3F)-[~/Desktop/BoxWalk/HTB/PC]
