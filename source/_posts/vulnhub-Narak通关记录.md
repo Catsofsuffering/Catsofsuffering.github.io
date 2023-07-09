@@ -4,15 +4,12 @@ date: 2023-04-18 21:54:56
 tags: 
 - vulnhub
 - Narak
-categories: vulnhub
-keywords: 
-- vulnhub
-- Narak
+- WriteUp
+categories: WriteUp
+keywords: vulnhub
 description: 本文记录了作者在通关vulnhub靶机Narak中遇到的问题以及踩坑后的解决方案。涉及TFTP信息泄漏，webdav反弹shell上传。二级提权，第一级通过找到可写bash脚本文件中的brainfuck语句，获得凭据，二级通过motd脚本获得root权限。
 top_img: https://pic.imgdb.cn/item/647cc8931ddac507ccbda697.jpg
 cover: https://pic.imgdb.cn/item/647cc8931ddac507ccbda697.jpg
-# password: xdxdsqyc15511551
-# message: 暂未完成，仍在施工
 ---
 
 ## HA-Narak

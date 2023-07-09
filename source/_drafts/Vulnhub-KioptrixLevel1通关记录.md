@@ -3,7 +3,6 @@ title: Vulnhub-KioptrixLevel1通关记录
 tags:
 ---
 
-
 ## 靶机描述
 
 靶机 IP :  10.8.12.128
@@ -46,6 +45,19 @@ PORT     STATE SERVICE
 Linux 2.4.9 - 2.4.18 (likely embedded) (97%)......
 ```
 
+
+### Web 目录扫描
+
+
+```
+/.html                (Status: 403) [Size: 269]
+/index.html           (Status: 200) [Size: 2890]
+/test.php             (Status: 200) [Size: 27]
+/manual               (Status: 301) [Size: 294] [--> http://127.0.0.1/manual/]
+/usage                (Status: 301) [Size: 293] [--> http://127.0.0.1/usage/]
+/mrtg                 (Status: 301) [Size: 292] [--> http://127.0.0.1/mrtg/]
+```
+
 ## 总结
 
 ### 知识点
@@ -56,7 +68,7 @@ Linux 2.4.9 - 2.4.18 (likely embedded) (97%)......
 
 ![RPC流程图](https://pic.imgdb.cn/item/64a6d7c41ddac507ccd18b65.jpg)
 
-### 什么是CGI
+### CGI 定义
 
 >CGI 目前由NCSA维护，NCSA 定义 CGI 如下：
 >

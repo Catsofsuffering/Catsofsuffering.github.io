@@ -4,10 +4,9 @@ date: 2023-06-03 10:30:35
 tags: 
 - vulnhub
 - w1r3s
-categories: vulnhub
-keywords: 
-- vulnhub
-- w1r3s
+- WriteUp
+categories: WriteUp
+keywords: vulnhub
 description: 本文记录了作者在通关vulnhub靶机Narak中遇到的问题以及踩坑后的解决方案。
 top_img: https://pic.imgdb.cn/item/647dcd281ddac507ccf5125c.jpg
 cover: https://pic.imgdb.cn/item/647dcd281ddac507ccf5125c.jpg
