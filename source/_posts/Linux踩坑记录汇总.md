@@ -11,7 +11,6 @@ top_img: https://pic.imgdb.cn/item/64aae46e1ddac507cc3c4359.jpg
 cover: https://pic.imgdb.cn/item/64aae46e1ddac507cc3c4359.jpg
 ---
 
-
 ## ss5 代理无法正常连接
 
 ### 问题详情
@@ -20,7 +19,7 @@ cover: https://pic.imgdb.cn/item/64aae46e1ddac507cc3c4359.jpg
 
 ### 解决办法
 
-幸好组长给了服务器的账号密码，所以直接上服务器排查：
+幸好组长给了服务器的账号密码，所以直接上服务器排查：<sup>[①](#tail命令)</sup><sup>[②](#journalctl命令)</sup>
 
 ```bash
 # check ss5 conf
@@ -80,7 +79,6 @@ tail命令是一个用于查看文件末尾内容的命令。它可以显示文�
 2. 过滤日志：`journalctl`命令能够可以根据时间范围、日志级别、特定单元（如服务或进程）等过滤显示的日志内容。
 3. 跟踪日志：`journalctl -f` 可以实时跟踪并显示最新的日志消息。
 4. 导出日志：`journalctl` 能将日志导出为文件。
-
 
 ### ss5 使用
 

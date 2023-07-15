@@ -81,8 +81,24 @@ tags:
 
 ## 敏感信息检索示例
 
+常用搜索语法：
+
 ```
-in:description,readme
+content:<regex> in:description,readme
 
+content:
 
+```
+
+常用正则表达式（regex）：`(/<regex>/)
+
+```
+# email
+(/[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/) 
+
+# host
+(/^[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
+
+# IP
+/((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}/
 ```

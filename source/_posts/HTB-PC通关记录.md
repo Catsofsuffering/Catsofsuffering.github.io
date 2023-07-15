@@ -12,12 +12,9 @@ top_img: https://pic.imgdb.cn/item/64aaeb061ddac507cc460e7c.jpg
 cover: https://pic.imgdb.cn/item/64aaeb061ddac507cc460e7c.jpg
 ---
 
-
 ## 靶机描述
 
 靶机 IP :  10.10.11.214
-
-
 
 ## 信息收集
 

@@ -38,7 +38,7 @@ docker pull monstertsl/upload-labs
 
 或者稍微做点混淆：
 
-此处是基于 [`AntSword`](https://github.com/AntSwordProject/antSword) 中的插件———免杀 shell 自动生成的一句话木马文件，因为博主在自己电脑上写经典的一句话木马老是被Win10杀软自动删除，又懒得去调整，所以才使用了这个版本。
+此处是基于 [`AntSword`](https://github.com/AntSwordProject/antSword) 中的插件———免杀 shell 自动生成的一句话木马文件，因为博主在自己电脑上写经典的一句话木马老是被 Win10 杀软自动删除，又懒得去调整，所以才使用了这个版本。
 
 
 ```php
@@ -93,7 +93,7 @@ $wegt = new WEGT();
 
 ![Pass-01抓包结果02](https://pic.imgdb.cn/item/647c139df024cca1732738f2.png)
 
- AntSword 链接试试：
+`AntSword` 链接试试：
 
 ![AntSword链接结果](https://pic.imgdb.cn/item/647c139ef024cca1732739d6.png)
 
@@ -155,35 +155,9 @@ $wegt = new WEGT();
 ### 知识点
 
 考察点：`MIME` 绕过
-应用场景：只对 `MIME` 进行检查
+应用场景：只对 `MIME` 进行检查<sup>[①](#MIME)</sup>
 
-要想绕过 `MIME` ，就得先了解 `MIME` 是什么。
-
->`MIME` 通过在文件的头部添加一些元数据（例如文件类型和编码方式）来指示文件的类型和处理方式。这些元数据可以帮助接收者在不同的设备和软件上正确地打开、显示或处理文件。例如，`MIME` 可以用于将图像文件、音频文件、视频文件、文档文件和其他类型的文件添加到电子邮件中，从而使邮件接收者可以轻松地查看和下载这些文件。
->`MIME` 也用于 Web 服务器上的文件传输，允许 Web 服务器将不同的文件类型正确地传输到 Web 浏览器。Web 浏览器可以使用 `MIME` 类型来确定如何处理从 Web 服务器接收到的文件，例如在浏览器中显示图像或将文件下载到计算机上。
-
-HTTP 头部的 `Content-Type` 字段的内容就是 `MIME` 类型。
-
-所谓 `MIME` 绕过，就是因为服务器后端只检测了 `MIME` 头，因此把对应部分修改成符合要求的文件类型即可绕过。
-
-以下是一些常见的 `MIME` 文件类型，以及它们对应的 `MIME` 类型和文件扩展名，但是这并非全部 `MIME` 类型：
-
-| MIME类型                      | 文件扩展名  |
-| ----------------------------- | :---------: |
-| text/plain                    |    .txt     |
-| text/html                     | .html; .htm |
-| application/pdf               |    .pdf     |
-| application/msword            |    .doc     |
-| application/vnd.ms-excel      |    .xls     |
-| application/vnd.ms-powerpoint |    .ppt     |
-| image/jpeg                    | .jpg; .jpeg |
-| image/gif                     |    .gif     |
-| image/png                     |    .png     |
-| audio/mpeg                    |    .mp3     |
-| video/mpeg                    |    .mpeg    |
-| video/mp4                     |    .mp4     |
-| application/zip               |    .zip     |
-| application/x-gzip            | .gzip; .gz  |
+### 解题方法
 
 在题目中，只需要打开 BurpSuite 抓包，将 `Content-Type` 字段改为 `image/jpeg` 即可
 
@@ -191,10 +165,10 @@ HTTP 头部的 `Content-Type` 字段的内容就是 `MIME` 类型。
 
 ## Pass-03
 
-{% note primary %}
+### 知识点
+
 考察点： 不完全的黑名单
 应用场景：特殊后缀名能够解析
-{% endnote %}
 
 此处的黑名单绕过比较简单，只是通过黑盒测试讲不清楚原理，因此此处贴出部分后端代码：
 
@@ -243,19 +217,9 @@ if (isset($_POST['submit'])) {
 1. 掉文件名末尾的点；
 2. 获取文件后缀名；
 3. 将其文件后缀名转换为小写；
-4. 去除字符串 `::$DATA` ；
+4. 去除字符串 `::$DATA` ；<sup>[②](#NTFS-文件特性)</sup>
 5. 去除文件后缀名中首尾可能存在的空格；
 6. 重命名文件。
-
-{% hideToggle 关于 ::$DATA 的解释,green,white %}
-
-`::$DATA` 是 `Windows` 操作系统中的一种特殊命名约定，用于表示 NTFS 文件系统中的数据流。
-
-在 PHP 中，可以使用 `fopen()` 、`fread()` 和 `fwrite()` 等函数来读取和写入文件流，但是不能直接使用 `::$DATA` 来访问数据流。
-
-在后文中还会详细介绍。
-
-{% endhideToggle %}
 
 通过审计源码/黑盒测试，发现只对 `'.asp','.aspx','.php','.jsp'` 四种文件类型做黑名单处理。因此可以通过不同php后缀文件（ `php3 ; php4 ; phtml` 等）来绕过检测。
 
@@ -263,13 +227,12 @@ if (isset($_POST['submit'])) {
 
 ![抓包结果](https://pic.imgdb.cn/item/647c139ef024cca173273b1b.png)
 
-{% note danger %}
-踩坑提示
-{% endnote %}
+
+### 踩坑提示
 
 不同php后缀文件（ `php3 ; php4 ; phtml` 等）需要在服务器能够解析的情况下才能应用（一般默认是无法解析的），因此现目前这个绕过方式相对来说比较鸡肋。
 
-此前博主未在 {% label phpStudy blue %}中正确配置 `httpd.conf` 文件，因此请求上传的 PHP 脚本始终没有回显。
+此前博主未在  `phpStudy` 正确配置 `httpd.conf` 文件，因此请求上传的 PHP 脚本始终没有回显。
 
 而只需要在 `httpd.conf` 文件添加解析代码
 
@@ -279,52 +242,46 @@ AddType application/x-hppd-php .php .phtml .php4 .php3 .php2
 
 ## Pass-04
 
-{% note primary %}
+### 知识点
+
 考察点：`htaccess` 绕过
 应用场景：服务端允许 `.htaccess` 文件生效
-{% endnote %}
+
+### 解题方法
 
 分析本题的后端源码，发现除了文件后缀名黑名单增多之外，整体逻辑与前一题没有任何差别。因此绕过的思想还是寻找黑名单中没有但能达到目的的文件类型。
 
-这里就要提到 `.htaccess` 文件了
-
-{% blockquote ChatGPT https://chat.openai.com/ %}
-`.htaccess` 文件是一种 Apache Web 服务器使用的配置文件，它通常用于在特定目录下设置 Web 服务器的配置选项和规则。它可以用于控制目录的访问权限、启用 URL 重写和重定向、设置自定义错误页面、设置缓存等等。通过修改 `.htaccess` 文件，您可以对特定目录的访问权限进行细粒度的控制，从而使您能够更好地保护您的网站和数据。
-{% endblockquote %}
-
-因此要想解答此题，只需要上传一个允许php文件解析的 `.htaccess` 文件即可：
+要想解答此题，只需要上传一个允许php文件解析的 `.htaccess` 文件即可：
 
 ``` ini
 SetHandler application/x-httpd-php
 ```
 
-{% note danger %}
-踩坑提示（应用场景）
-{% endnote %}
+### 踩坑提示
 
 本题同样需要服务器能够解析 `.htaccess` 文件。
 
-{% hideToggle 存疑的解决方式,orange, %}
-
 需要在 `httpd.conf` 中，修改两处配置项：
 
- `Apache` 加载 `rewrite` 模块
+`Apache` 加载 `rewrite` 模块
 
 ``` ini
 LoadModule rewrite_module modules/mod_rewrite.so
 AllowOverride All（默认为None）
 ```
 
-{% btn 'https://github.com/AntSwordProject/antSword', GitHub 传送门,fa-solid fa-download,outline purple %}
-
-{% endhideToggle %}
-
 ## Pass-05
 
-{% note primary %}
+### 知识点
+
 考察点：`.user.ini` 文件
-应用场景：① 服务器脚本语言为 PHP；② 并且使用 CGI/FastCGI 模式；③ PHP 版本>5.3.0；④ 上传目录下要有可执行的 PHP 文件；
-{% endnote %}
+应用场景：
+
+1. 服务器脚本语言为 PHP；
+2. 并且使用 CGI/FastCGI 模式；
+3. PHP 版本>5.3.0；
+4. 上传目录下要有可执行的 PHP 文件；
+
 
 本题在黑名单中添加了 `.htaccess` 文件，因此第4题的做法无法在继续了。
 
@@ -334,11 +291,7 @@ AllowOverride All（默认为None）
 
 这里又涉及到另外一种 Web 配置文件—— `ini` 文件：
 
-{% blockquote 白垩之子 https://www.freebuf.com/articles/web/265245.html %}
-
-`.user.ini` ，它会影响 `php.ini` 中的配置，从而将指定的文件内容按 php 来解析，影响的范围该文件所在的目录以及子目录。需要等待 `php.ini` 中的 `user_ini.cache_ttl` 设置的时间或重启 Apache 才能生效，且只在 `php5.3.0` 之后的版本才生效。`.user.ini` 比 `.htaccess` 用的更广，不管是 `nginx/Apache/IIS` ，只要是以 `Fastcgi` 运行的 php 都可以用这个办法。如果使用Apache，则用 `.htaccess` 文件有同样的效果。
-
-{% endblockquote %}
+>`.user.ini` ，它会影响 `php.ini` 中的配置，从而将指定的文件内容按 php 来解析，影响的范围该文件所在的目录以及子目录。需要等待 `php.ini` 中的 `user_ini.cache_ttl` 设置的时间或重启 Apache 才能生效，且只在 `php5.3.0` 之后的版本才生效。`.user.ini` 比 `.htaccess` 用的更广，不管是 `nginx/Apache/IIS` ，只要是以 `Fastcgi` 运行的 php 都可以用这个办法。如果使用Apache，则用 `.htaccess` 文件有同样的效果。
 
 此处只需要在 `.user.ini` 文件中写入
 
@@ -348,9 +301,7 @@ auto_prepend_file=test3.jpg
 
 然后上传事先准备的图片马 `test3.jpg` ，访问 `readme.php` 文件即可。
 
-{% note danger %}
-踩坑提示
-{% endnote %}
+### 踩坑提示
 
 没有把 `user_ini.cache_ttl` 设置的时间改为`300`，无论如何都不解析orz。
 
@@ -370,45 +321,53 @@ user_ini.cache_ttl = 300
 
 ## Pass-06
 
-{% note primary %}
+### 知识点
+
 考察点：黑名单过滤不完全
 应用场景：黑名单过滤规则不严谨，没有将后缀名转换为小写
-{% endnote %}
 
 如果是黑盒测试可能得看运气才能绕过，但是如果能够看到后端源码（白盒审计），就会发现本关并没有将文件后缀名小写（没有 `strtolower` 函数），直接通过文件后缀名大小写混写（ `test3.phP` ）即可绕过。
 
 ## Pass-07
 
-{% note primary %}
 考察点： Windows系统特性
-应用场景：① 服务器搭建在Windows上；② 没有去除字符串收尾处的空白字符。
-{% endnote %}
+
+应用场景：
+
+1.  服务器搭建在Windows上；
+2. 没有去除字符串收尾处的空白字符。
 
 同上一题，只是将大小写混写变为了空格。为什么能够绕过呢？
 
 因为Windows系统对于文件和文件名存在限制，空格字符放在结尾时，不符合操作系统的命名规范。因此在最后生成文件时，字符会被自动去除。
 
-{% note danger %}
-踩坑提示
-{% endnote %}
+### 踩坑提示
 
 此处利用的是Windows的特性，博主以为是Docker配置问题排查了一个多小时orz，因此又重新转回本机进行测试。
 
 ## Pass-08
 
-{% note primary %}
+### 知识点
+
 考察点： Windows系统特性
-应用场景：① 服务器搭建在Windows上；② 没有去除字符串收尾处的 `.` 点。
-{% endnote %}
+
+应用场景：
+
+1. 服务器搭建在Windows上；
+2.  没有去除字符串收尾处的 `.` 点。
 
 同上一题，` ` （空格）换成了 `.` （点）。与上一题的原理相同。
 
 ## Pass-09
 
-{% note primary %}
+### 知识点
+
 考察点： Windows 系统特性
-应用场景：① 服务器搭建在 Windows 上；② 没有去除字符串收尾处的 `::$DATA` 。
-{% endnote %}
+
+应用场景：
+
+1. 服务器搭建在 Windows 上；
+2. 没有去除字符串收尾处的 `::$DATA` 。
 
 同上一题，`.` （点）换成了 `::$DATA` 。
 
@@ -416,10 +375,10 @@ user_ini.cache_ttl = 300
 
 ## Pass-10
 
-{% note primary %}
+### 知识点
+
 考察点：逻辑绕过
 应用场景：文件名上传者可控
-{% endnote %}
 
 对后端源码进行审计，发现本题代码与前面题目的区别：
 
@@ -460,67 +419,73 @@ user_ini.cache_ttl = 300
 
 ## Pass-11
 
-{% note primary %}
+### 知识点
+
 考察点：双写绕过
 应用场景：黑名单只是简单替换为空
-{% endnote %}
 
 分析后端源码：
 
 ``` php
-    if (file_exists(UPLOAD_PATH)) {
-        $deny_ext = array("php","php5","php4","php3","php2","html","htm","phtml","pht","jsp","jspa","jspx","jsw","jsv","jspf","jtml","asp","aspx","asa","asax","asOcx","ashx","asmx","cer","swf","htaccess","ini");
+if (file_exists(UPLOAD_PATH)) {
 
-        $file_name = trim($_FILES['upload_file']['name']);
-        $file_name = str_ireplace($deny_ext,"", $file_name);
-        $temp_file = $_FILES['upload_file']['tmp_name'];
-        $img_path = UPLOAD_PATH.'/'.$file_name;        
-        if (move_uploaded_file($temp_file, $img_path)) {
-            $is_upload = true;
-        } else {
-            $msg = '上传出错！';
-        }
-    } else {
-        $msg = UPLOAD_PATH . '文件夹不存在,请手工创建！';
-    }
+    $deny_ext = array("php","php5","php4","php3","php2","html","htm","phtml","pht","jsp","jspa","jspx","jsw","jsv","jspf","jtml","asp","aspx","asa","asax","asOcx","ashx","asmx","cer","swf","htaccess","ini");
+
+    $file_name = trim($_FILES['upload_file']['name']);
+    $file_name = str_ireplace($deny_ext,"", $file_name);
+    $temp_file = $_FILES['upload_file']['tmp_name'];
+    $img_path = UPLOAD_PATH.'/'.$file_name;
+    if (move_uploaded_file($temp_file, $img_path)) {
+    $is_upload = true;
+    } else {
+    $msg = '上传出错！';
+    }
+    } else {
+    $msg = UPLOAD_PATH . '文件夹不存在,请手工创建！';
+    }
+..................
+}
 ```
 
 发现只是将黑名单替换为了空，因此可以将文件后缀名双写（ `test.pphphp` ）来进行绕过，这样在替换为空之后，文件后缀名就变为了 `test.php`
 
 ## Pass-12
 
-{% note primary %}
+### 知识点
+
 考察点：Get 型 `%00` 绕过
-应用场景：① PHP 版本 < 5.3.4 ; `php.ini` 配置文件中 `magic_quotes_gpc=Off` ；
-{% endnote %}
+应用场景：
 
-本题是白名单了，只允许
+1. PHP 版本 < 5.3.4 ; 
+2.  `php.ini` 配置文件中 `magic_quotes_gpc=Off` ；
 
-{% note danger %}
-踩坑提示
-{% endnote %}
+### 踩坑提示
 
 注意php版本问题，我始终没有绕过orz
 
 ## Pass-13
 
-{% note primary %}
-考察点：Post 型 `%00` 绕过
-应用场景：① PHP 版本 < 5.3.4 ; `php.ini` 配置文件中 `magic_quotes_gpc=Off` ；
-{% endnote %}
+### 知识点
 
-{% note danger %}
-踩坑提示
-{% endnote %}
+考察点：Post 型 `%00` 绕过
+应用场景：
+
+1. PHP 版本 < 5.3.4 ;
+2. `php.ini` 配置文件中 `magic_quotes_gpc=Off` ；
+
+### 踩坑提示
 
 注意 PHP 版本问题，我始终没有绕过orz
 
 ## Pass-14
 
-{% note primary %}
+### 知识点
+
 考察点：文件头检测
-应用场景：①文件格式仅根据文件头判断；②存在文件包含漏洞
-{% endnote %}
+应用场景：
+
+1. 文件格式仅根据文件头判断；
+2. 存在文件包含漏洞
 
 分析后端代码：
 
@@ -565,10 +530,13 @@ Burp 抓包修改图片马文件头：
 
 ## Pass-15
 
-{% note primary %}
+### 知识点
+
 考察点：文件头检测
-应用场景：①通过 `getimagesize()` 函数判断文件类型；②存在文件包含漏洞
-{% endnote %}
+应用场景：
+
+1. 通过 `getimagesize()` 函数判断文件类型；
+2. 存在文件包含漏洞
 
 分析后端代码：
 
@@ -598,14 +566,9 @@ function isImage($filename){
 
 分析上述逻辑，可以看出关键点在于 `getimagesize()` 和 `image_type_to_extension()` 函数上，查阅 PHP 手册：
 
-{% blockquote PHP Manual https://www.php.net/manual/en/function.getimagesize.php %}
-- getimagesize()
-  确定任何支持的指定图像文件的大小，并返回尺寸以及文件类型和 height/width 文本字符串，以在标准 HTML IMG 标签和对应的 HTTP 内容类型中使用。
-
-- image_type_to_extension()
-  根据指定的图像类型返回对应的后缀名， 或者在失败时返回 false。
-
-  {% endblockquote %}
+>`getimagesize()`：确定任何支持的指定图像文件的大小，并返回尺寸以及文件类型和 height/width 文本字符串，以在标准 HTML IMG 标签和对应的 HTTP 内容类型中使用。
+>
+>`image_type_to_extension()`：根据指定的图像类型返回对应的后缀名， 或者在失败时返回 false。
 
 `getimagesize()` 函数是 PHP 语言的一个内置函数，它的功能是获取一个图像文件的大小和类型。这个函数接受一个文件名作为参数，并返回一个数组，包含了图像的宽度，高度，类型，属性，位数和MIME类型。这个函数还可以接受一个可选的参数 `$image_info` ，用于提取图像文件中的一些扩展信息，例如 JPG 的 APP 标记。这个函数可以用于在 HTML 中生成正确的 IMG 标签或者判断图像文件的格式。**`getimagesize()` 函数也是通过文件头来判断文件类型的。**
 `image_type_to_extension()` 函数也是 PHP 语言的一个内置函数，它的功能是根据一个图像类型的常量 `IMAGETYPE_XXX` 来获取对应的文件后缀。这个函数接受两个参数，第一个参数是图像类型的常量，例如IMAGETYPE_PNG，第二个参数是一个布尔值，表示是否在后缀前加一个点，默认是 true 。这个函数返回一个字符串，表示图像类型的后缀，例如" .png "或者" .jpg "。如果图像类型不合法，就返回 false 。这个函数可以用于生成正确的文件名或者 MIME 类型。
@@ -618,10 +581,16 @@ function isImage($filename){
 
 ## Pass-16
 
-{% note primary %}
+### 知识点
+
 考察点：文件头检测
-应用场景：①通过 `exif_imagetype()` 函数判断文件类型；②存在文件包含漏洞；③开启 `php_exif` 模块。
-{% endnote %}
+应用场景：
+
+1. 通过 `exif_imagetype()` 函数判断文件类型；
+2. 存在文件包含漏洞；
+3. 开启 `php_exif` 模块。
+
+### 解题方法
 
 分析后端源码：
 
@@ -654,18 +623,21 @@ function isImage($filename){
 
 ![请求图片马](https://pic.imgdb.cn/item/647c13a7f024cca1732749dc.png)
 
-{% note danger %}
-踩坑提示
-{% endnote %}
+
+### 踩坑提示
 
 这个函数需要开启 `php_exif` 模块
 
 ## Pass-17
 
-{% note primary %}
+### 知识点
+
 考察点：二次渲染绕过
-应用场景：①通过 `exif_imagetype()` 函数判断文件类型；②存在文件包含漏洞；③开启 `php_exif` 模块。
-{% endnote %}
+应用场景：
+
+1. 通过 `exif_imagetype()` 函数判断文件类型；
+2. 存在文件包含漏洞；
+3. 开启 `php_exif` 模块。
 
 后端源码分析：
 
@@ -729,3 +701,44 @@ GIF 或者 png 格式同理。
 考察点：文件头检测
 应用场景：①通过 `exif_imagetype()` 函数判断文件类型；②存在文件包含漏洞；③开启 `php_exif` 模块。
 {% endnote %} -->
+
+## 注释
+
+
+## MIME
+
+要想绕过 `MIME` 限制，就得先了解 `MIME` 是什么。
+
+>`MIME` 通过在文件的头部添加一些元数据（例如文件类型和编码方式）来指示文件的类型和处理方式。这些元数据可以帮助接收者在不同的设备和软件上正确地打开、显示或处理文件。例如，`MIME` 可以用于将图像文件、音频文件、视频文件、文档文件和其他类型的文件添加到电子邮件中，从而使邮件接收者可以轻松地查看和下载这些文件。
+>`MIME` 也用于 Web 服务器上的文件传输，允许 Web 服务器将不同的文件类型正确地传输到 Web 浏览器。Web 浏览器可以使用 `MIME` 类型来确定如何处理从 Web 服务器接收到的文件，例如在浏览器中显示图像或将文件下载到计算机上。
+
+HTTP 头部的 `Content-Type` 字段的内容就是 `MIME` 类型。
+
+所谓 `MIME` 绕过，就是因为服务器后端只检测了 `MIME` 头，因此把对应部分修改成符合要求的文件类型即可绕过。
+
+以下是一些常见的 `MIME` 文件类型，以及它们对应的 `MIME` 类型和文件扩展名，但是这并非全部 `MIME` 类型：
+
+| MIME类型                      | 文件扩展名  |
+| ----------------------------- | :---------: |
+| text/plain                    |    .txt     |
+| text/html                     | .html; .htm |
+| application/pdf               |    .pdf     |
+| application/msword            |    .doc     |
+| application/vnd.ms-excel      |    .xls     |
+| application/vnd.ms-powerpoint |    .ppt     |
+| image/jpeg                    | .jpg; .jpeg |
+| image/gif                     |    .gif     |
+| image/png                     |    .png     |
+| audio/mpeg                    |    .mp3     |
+| video/mpeg                    |    .mpeg    |
+| video/mp4                     |    .mp4     |
+| application/zip               |    .zip     |
+| application/x-gzip            | .gzip; .gz  |
+
+### NTFS 文件特性
+
+`::$DATA` 是 `Windows` 操作系统中的一种特殊命名约定，用于表示 NTFS 文件系统中的数据流。
+
+在 PHP 中，可以使用 `fopen()` 、`fread()` 和 `fwrite()` 等函数来读取和写入文件流，但是不能直接使用 `::$DATA` 来访问数据流。
+
+在后文中还会详细介绍。
