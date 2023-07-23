@@ -3,7 +3,6 @@ title: Github敏感信息搜索
 tags:
 ---
 
-
 ## 出发点
 
 最近做敏感信息收集项目，需要做 Github 的敏感信息收集，特此写一篇文章记录一下比较有用的搜索语法
@@ -85,9 +84,9 @@ tags:
 
 ```
 content:<regex> in:description,readme
-
-content:
-
+<regex> fork:true
+in:body
+in:comments
 ```
 
 常用正则表达式（regex）：`(/<regex>/)
@@ -101,4 +100,7 @@ content:
 
 # IP
 /((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}/
+
+# secret
+pass|password|pwd|key|secret|token
 ```

@@ -14,15 +14,20 @@ password: xdxdsqyc15511551
 message: 暂未完成，仍在施工
 ---
 
-## 信息收集
+## 靶机详情
 
 靶机IP：192.168.118.134
 
-先上 nmap 扫一下
- 
+## 信息收集
+
+### nmap 扫描
+
+按照常规的方法：使用Nmap对靶机进行扫描，通过 TCP 、 UDP 扫描端口、获取开放端口对应信息、系统版本信息。
+
+下面是通过 TCP 、UDP 扫描发现的开放端口信息：
+
 ```
-┌──(kali㉿kali)-[~/Desktop/BoxWalk/Vulnhub/w1r3s]
-└─$ sudo nmap -sT --min-rate 10000 -p- 192.168.118.134 -oA nmapscan/portscan
+$ sudo nmap -sT --min-rate 10000 -p- 192.168.118.134 -oA nmapscan/portscan
 Starting Nmap 7.93 ( https://nmap.org ) at 2023-06-01 09:59 EDT
 Nmap scan report for 192.168.118.134
 Host is up (0.0038s latency).
@@ -36,8 +41,7 @@ MAC Address: 00:0C:29:AA:7F:FC (VMware)
 
 Nmap done: 1 IP address (1 host up) scanned in 13.52 seconds
        
-┌──(kali㉿kali)-[~/Desktop/BoxWalk/Vulnhub/w1r3s]
-└─$ sudo nmap -sT -sV -O --script=vuln --min-rate 10000 -p21,22,80,3306 192.168.118.134 -oA nmapscan/servscan     
+$ sudo nmap -sT -sV -O --script=vuln --min-rate 10000 -p21,22,80,3306 192.168.118.134 -oA nmapscan/servscan     
 Starting Nmap 7.93 ( https://nmap.org ) at 2023-06-01 10:02 EDT
 Pre-scan script results:
 | broadcast-avahi-dos: 
@@ -49,8 +53,7 @@ Pre-scan script results:
 Note: Host seems down. If it is really up, but blocking our ping probes, try -Pn
 Nmap done: 1 IP address (0 hosts up) scanned in 35.35 seconds
 
-┌──(kali㉿kali)-[~/Desktop/BoxWalk/Vulnhub/w1r3s]
-└─$ sudo nmap -sU -sV --min-rate 10000 -p- 192.168.118.134 -oA nmapscan/udpscan
+$ sudo nmap -sU -sV --min-rate 10000 -p- 192.168.118.134 -oA nmapscan/udpscan
 Starting Nmap 7.93 ( https://nmap.org ) at 2023-06-01 10:06 EDT
 Note: Host seems down. If it is really up, but blocking our ping probes, try -Pn
 Nmap done: 1 IP address (0 hosts up) scanned in 0.73 seconds
@@ -62,13 +65,12 @@ Nmap done: 1 IP address (0 hosts up) scanned in 0.73 seconds
 
 ## ftp服务
 
-首先是 ftp 服务，通过 kali 自带的工具 tftp 能够匿名登录，但是因为信息不足，没办法利用。
+首先是 ftp 服务，通过 kali 自带的工具 tftp 能够匿名登录，但是因为信息不足，没办法利用。所以暂时搁置，等待更多信息以便利用。
 
 ## web服务
 
 ```
-┌──(kali㉿kali)-[~/Desktop/BoxWalk/Vulnhub/w1r3s]
-└─$ dirsearch -u http://192.168.118.134               
+$ dirsearch -u http://192.168.118.134               
 
   _|. _ _  _  _  _ _|_    v0.4.2
  (_||| _) (/_(_|| (_| )
@@ -82,52 +84,33 @@ Error Log: /home/kali/.dirsearch/logs/errors-23-06-09_11-16-00.log
 Target: http://192.168.118.134/
 
 [11:16:00] Starting: 
-[11:16:01] 403 -  280B  - /.ht_wsr.txt
-[11:16:01] 403 -  280B  - /.htaccess.orig
-[11:16:01] 403 -  280B  - /.htaccess.sample
-[11:16:01] 403 -  280B  - /.htaccess.bak1
-[11:16:01] 403 -  280B  - /.htaccess.save
-[11:16:01] 403 -  280B  - /.htaccess_sc
-[11:16:01] 403 -  280B  - /.htaccess_orig
-[11:16:01] 403 -  280B  - /.htaccessBAK
-[11:16:01] 403 -  280B  - /.htaccessOLD
-[11:16:01] 403 -  280B  - /.htaccess_extra
-[11:16:01] 403 -  280B  - /.htm
-[11:16:01] 403 -  280B  - /.htaccessOLD2
-[11:16:01] 403 -  280B  - /.html
-[11:16:01] 403 -  280B  - /.htpasswd_test
-[11:16:01] 403 -  280B  - /.htpasswds
-[11:16:01] 403 -  280B  - /.httr-oauth
-[11:16:02] 403 -  280B  - /.php
-[11:16:02] 403 -  280B  - /.php3
 [11:16:13] 301 -  326B  - /administrator  ->  http://192.168.118.134/administrator/
-[11:16:13] 403 -  280B  - /administrator/.htaccess
 [11:16:13] 302 -    7KB - /administrator/index.php  ->  installation/
 [11:16:13] 302 -    7KB - /administrator/  ->  installation/
 [11:16:24] 200 -   11KB - /index.html
 [11:16:25] 301 -  323B  - /javascript  ->  http://192.168.118.134/javascript/
-[11:16:35] 403 -  280B  - /server-status
-[11:16:35] 403 -  280B  - /server-status/
 [11:16:44] 301 -    0B  - /wordpress/  ->  http://localhost/wordpress/
 [11:16:45] 200 -    2KB - /wordpress/wp-login.php
 
 Task Completed
 ```
 
+保留可以利用的扫描结果，发现两个能够访问的页面 `installation/` 和 `/wordpress/`，打开页面观察一下界面，搜索更多信息：
+
+
+![WP图片]()
+![cuppa图片]()
+
+发现 `cuppa` 默认进入安装界面，猜测此处可能存在利用点，于是使用 `searchsploit` 搜索 `exp` 脚本，发现 `cuppa` 在 `/alertConfigField.php` 存在 RFI （远程文件包含）漏洞，复制利用脚本到本地，修改 request 包
 
 ```
-┌──(kali㉿kali)-[~/Desktop/BoxWalk/Vulnhub/w1r3s]
-└─$ searchsploit cuppa   
------------------------------------------------------------------------------------------------------ ---------------------------------
- Exploit Title     |  Path
------------------------------------------------------------------------------------------------------ ---------------------------------
-Cuppa CMS - '/alertConfigField.php' Local/Remote File Inclusion        | php/webapps/25971.txt
------------------------------------------------------------------------------------------------------ ---------------------------------
+$ searchsploit cuppa   
+
+Cuppa CMS - '/alertConfigField.php' Local/Remote File Inclusion| php/webapps/25971.txt
+------------------------------------------------------------------------------
 Shellcodes: No Results
 
-
-┌──(kali㉿kali)-[~/Desktop/BoxWalk/Vulnhub/w1r3s]
-└─$ searchsploit -m 25971.txt
+$ searchsploit -m 25971.txt
   Exploit: Cuppa CMS - '/alertConfigField.php' Local/Remote File Inclusion
       URL: https://www.exploit-db.com/exploits/25971
      Path: /usr/share/exploitdb/exploits/php/webapps/25971.txt

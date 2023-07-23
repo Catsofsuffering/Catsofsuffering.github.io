@@ -12,9 +12,8 @@ top_img: https://pic.imgdb.cn/item/647cc8931ddac507ccbda697.jpg
 cover: https://pic.imgdb.cn/item/647cc8931ddac507ccbda697.jpg
 ---
 
-## HA-Narak
 
-### 信息搜集
+## 信息搜集
 
 ### Nmap扫描
 

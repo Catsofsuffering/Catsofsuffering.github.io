@@ -20,7 +20,7 @@ cover: https://pic.imgdb.cn/item/64aaeb061ddac507cc460e7c.jpg
 
 ### nmap扫描
 
-按照常规的方法：使用Nmap对靶机进行扫描，通过 TCP | UDP 扫描端口、获取开放端口对应信息、系统版本信息。
+按照常规的方法：使用Nmap对靶机进行扫描，通过 TCP 、 UDP 扫描端口、获取开放端口对应信息、系统版本信息。
 
 下面是通过 TCP 、UDP 扫描发现的开放端口信息：
 
