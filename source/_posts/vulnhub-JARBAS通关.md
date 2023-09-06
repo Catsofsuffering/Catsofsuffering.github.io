@@ -136,19 +136,6 @@ eder:vipsu
 ```
 $ dirsearch -u http://192.168.118.136:8080 --cookie="JSESSIONID.d771878c=node08k4qeinw3ejxq54z5xgx0p1012683.node0; ACEGI_SECURITY_HASHED_REMEMBER_ME_COOKIE=ZWRlcjoxNjg3NjI4MDc5Mjg1OmQxYzMwYzkwOGE0M2ExM2FhMjhmYTcyODlmOTdkYWNhZGVjMWU4ZTEyMzRlYmJjMmY0ZmQyYzJkZGYyYmFmNmQ=" -x 403
 
-
-  _|. _ _  _  _  _ _|_    v0.4.2
- (_||| _) (/_(_|| (_| )
-
-Extensions: php, aspx, jsp, html, js | HTTP method: GET | Threads: 30
-Wordlist size: 10927
-
-Output File: /home/kali/.dirsearch/reports/192.168.118.136-8080/_23-06-11_03-26-51.txt
-
-Error Log: /home/kali/.dirsearch/logs/errors-23-06-11_03-26-51.log
-
-Target: http://192.168.118.136:8080/
-
 [03:26:52] Starting: 
 [03:27:00] 302 -    0B  - /about  ->  http://192.168.118.136:8080/about/
 [03:27:00] 302 -    0B  - /actions  ->  http://192.168.118.136:8080/actions/

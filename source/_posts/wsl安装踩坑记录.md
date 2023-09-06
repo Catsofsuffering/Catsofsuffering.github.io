@@ -6,12 +6,12 @@ tags:
   - 工具
 categories: 工具
 keywords: wsl
-description: 本文记录了作者在安装wsl时面临的问题以及解决方案，主要包含了对wsl的安装、配置子系统代理、更改默认用户、安装Win-kex以及配置对应Windows terminal窗口的处理方法。
+description: 本文记录了作者在安装wsl时面临的问题以及解决方案，主要包含了对wsl的安装、配置子系统代理、更改默认用户、安装Win-kex、配置对应Windows terminal窗口、开启 systemctl 的处理方法。
 top_img: https://pic.imgdb.cn/item/647c13acf024cca173275319.png
 cover: https://pic.imgdb.cn/item/647c13acf024cca173275319.png
 ---
 
-## wsl安装
+## WSL 安装
 
 启用 Windows 子系統 Linux 版:
 
@@ -31,7 +31,7 @@ dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /nores
 wsl --set-default-version 2
 ```
 
-## wsl更改安装位置
+## WSL 更改安装位置
 
 首先，查看已安装的子系统版本:
 
@@ -69,7 +69,7 @@ wsl --import kali-linux F:\tools\wsl F:\tools\wsl\kali.tar --version 2
 del kali.tar
 ```
 
-## wsl配置子系统代理
+## WSL 配置子系统代理
 
 ### 设置ALL_PROXY环境变量
 
@@ -100,7 +100,7 @@ socks4 <Windows IP> <Port>
 前两种方法的踩坑记录保存在隐藏框中。
 
 
-## wsl更改默认登录账户
+## WSL 更改默认登录账户
 
 wsl 默认是通过 root 账户登录的，出于安全考虑，希望能更换成常规账户登录.
 
@@ -181,6 +181,30 @@ sftp <user>@<IP>             # sftp文件管理
 
 如果需要持久化管理，还可以打开 wsl 的 `settings.json` 在 `profile` 项中进行配置。
 
+## WSL 开启 `systemctl` 
+
+>Supporting systemd required changes to the WSL architecture. As systemd requires PID 1, the WSL init process started within the Linux distribution becomes a child process of the systemd. Because the WSL init process is responsible for providing the infrastructure for communication between the Linux and Windows components, changing this hierarchy required rethinking some of the assumptions made with the WSL init process. Additional modifications had to be made to ensure a clean shutdown (as that shutdown is controlled by systemd now) and to have compatibility with WSLg, It is also important to note that with these change, systemd services will NOT keep your WSL instance alive. Your WSL instance will stay alive in the same way it did before, which you can [read more about here](https://devblogs.microsoft.com/commandline/background-task-support-in-wsl/).
+
+上文是微软更新公告中对于宣布了 WSL 支持 `systemd` ，只需要按照如下操作即可开启 WSL 的 `systemd` ——编辑 `/etc/wsl.conf` 文件：
+
+``` shell
+[boot]
+systemd=true
+```
+
+保存之后，使用 `wsl.exe --shutdown` 关闭 WSL 系统，通过在 Linux 子系统中运行下面的命令可以验证 `systemd` 是否正常运行：
+
+```
+systemctl list-unit-files
+```
+
+正常的结果如下：
+
+![systemctl结果](https://pic.imgdb.cn/item/64c72de31ddac507cc0b2bcf.jpg)
+
+## WSL 与 VirtualBox 并不兼容
+
+帮助朋友安装 WSL 时，发现 WSL 与旧版 VirtualBox 并不兼容，通过查询
 ## 失败尝试
 
 ### 通过子系统IP进行代理
@@ -301,9 +325,3 @@ echo "source /path/to/.proxyrc -e" >> ~/.bashrc
 ```
 
 其中 `/path/to/` 是一个占位符，表示要指定的文件或目录的路径，需要把 `/path/to/` 替换成 `.proxyrc` 文件所在的路径，比如 `/home/user/.proxyrc` 。这样，每次每次登录 WSL 子系统时，就会自动执行 `.proxyrc` 文件中的命令，开启代理。
-
-## WSL 开启 `systemctl` 
-
->Supporting systemd required changes to the WSL architecture. As systemd requires PID 1, the WSL init process started within the Linux distribution becomes a child process of the systemd. Because the WSL init process is responsible for providing the infrastructure for communication between the Linux and Windows components, changing this hierarchy required rethinking some of the assumptions made with the WSL init process. Additional modifications had to be made to ensure a clean shutdown (as that shutdown is controlled by systemd now) and to have compatibility with WSLg, It is also important to note that with these change, systemd services will NOT keep your WSL instance alive. Your WSL instance will stay alive in the same way it did before, which you can [read more about here](https://devblogs.microsoft.com/commandline/background-task-support-in-wsl/).
-
-上文是微软更新公告中对于 WSL 

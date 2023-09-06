@@ -3,7 +3,6 @@ title: tmux学习及常用配置
 tags:
 ---
 
-
 ## Tmux 配置
 
 ``` bash

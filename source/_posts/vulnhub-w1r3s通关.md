@@ -308,8 +308,7 @@ mysql:!:17554:0:99999:7:::
 
 
 ```
-┌──(kali㉿kali)-[~/Desktop/BoxWalk/Vulnhub/w1r3s]
-└─$ sudo john  hashpasswd    
+$ sudo john  hashpasswd    
 Warning: detected hash type "sha512crypt", but the string is also recognized as "HMAC-SHA256"
 Use the "--format=HMAC-SHA256" option to force loading these as that type instead
 Using default input encoding: UTF-8
@@ -326,8 +325,7 @@ computer         (w1r3s)
 ```
 
 ```
-┌──(kali㉿kali)-[~/Desktop/BoxWalk/Vulnhub/w1r3s]
-└─$ ssh w1r3s@192.168.118.134  
+$ ssh w1r3s@192.168.118.134  
 The authenticity of host '192.168.118.134 (192.168.118.134)' can't be established.
 ED25519 key fingerprint is SHA256:Bue5VbUKeMSJMQdicmcMPTCv6xvD7I+20Ki8Um8gcWM.
 This key is not known by any other names
