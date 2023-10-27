@@ -1,9 +1,7 @@
 ---
 title: mkdocs构建自己的漏洞&PoC库
-date: 2023-06-03 10:53:50
 tags:
-- mkdocs
-- 漏洞&PoC库
+  - mkdocs
 categories: 漏洞&PoC库
 keywords: 漏洞&PoC库
 description: 收集了不少已经披露的漏洞和PoC，但是想自己挨个复现做个汇总，因此就有了构建自己的漏洞&PoC库这个想法。期间采用过 gitbook、honkit，但都效果不佳。兜兜转转最终选择使用mkdocs来构建整个文档。
@@ -11,7 +9,9 @@ top_img: https://pic.imgdb.cn/item/647c13abf024cca173275227.png
 cover: https://pic.imgdb.cn/item/647c13abf024cca173275227.png
 password: xdxdsqyc15511551
 message: 暂未完成，仍在施工
+date: 2023-06-03 10:53:50
 ---
+
 
 ## 背景条件
 
@@ -35,7 +35,10 @@ Honkit ，也即是从2020开源版本中 fork 出来进行开发的静态网站
 
 ### Honkit 安装问题 
 
+
+
 ### Honkit 使用问题
+
 
 
 ## 最终选择

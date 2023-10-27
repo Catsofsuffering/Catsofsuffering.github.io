@@ -121,8 +121,7 @@ Copied to: /home/kali/Desktop/BoxWalk/Vulnhub/w1r3s/25971.txt
 ```
 
 ```
-┌──(kali㉿kali)-[~/Desktop/BoxWalk/Vulnhub/w1r3s]
-└─$ cat 25971.txt         
+$ cat 25971.txt         
 # Exploit Title   : Cuppa CMS File Inclusion
 # Date            : 4 June 2013
 # Exploit Author  : CWH Underground

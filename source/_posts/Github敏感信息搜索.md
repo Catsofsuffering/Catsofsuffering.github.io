@@ -1,6 +1,14 @@
 ---
 title: Github敏感信息搜索
 tags:
+  - Github
+  - 敏感信息
+categories: 笔记
+keywords: 信息收集
+description: 本文记录了作者在使用 GitHub 搜索敏感信息整理的一些技巧，主要来源于实战经验和 GitHub 文档。
+top_img: https://pic.imgdb.cn/item/64fa9349661c6c8e5490bd62.jpg
+cover: https://pic.imgdb.cn/item/64fa9349661c6c8e5490bd62.jpg
+date: 2023-10-27 10:38:07
 ---
 
 ## 出发点
@@ -29,7 +37,6 @@ tags:
 | `committer-name:NAME` | `committer-name:wanstrath` 匹配提交者姓名中包含“wanstrath”的提交。 |
 | `author-email:EMAIL` | `author-email:chris@github.com` 匹配作者 `chris@github.com` 的提交。 | 
 | `committer-email:EMAIL` | `committer-email:chris@github.com` 匹配提交者 `chris@github.com` 的提交。 |
-
 
 ### 搜索 Pull Requests 和 Issues
 
@@ -104,3 +111,5 @@ in:comments
 # secret
 pass|password|pwd|key|secret|token
 ```
+
+
