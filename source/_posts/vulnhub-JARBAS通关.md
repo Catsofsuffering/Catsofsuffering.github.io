@@ -2,15 +2,13 @@
 title: vulnhub-JARBAS通关
 date: 2023-06-10 10:00:24
 tags:
-- vulnhub
-- jarbas
-- WriteUp
+  - vulnhub
+  - jarbas
+  - WriteUp
 categories: WriteUp
 description: 本文记录了作者在通关vulnhub靶机JARBAS中遇到的问题以及踩坑后的解决方案。（摘要补充）
 top_img: https://pic.imgdb.cn/item/647cc8931ddac507ccbda697.jpg
 cover: https://pic.imgdb.cn/item/647cc8931ddac507ccbda697.jpg
-password: xdxdsqyc15511551
-message: 暂未完成，仍在施工
 ---
 
 ## 靶机详情
@@ -77,6 +75,13 @@ Nmap done: 1 IP address (1 host up) scanned in 72.82 seconds
 
 根据提供的 nmap 扫描结果，靶机（192.168.118.135）开放了以下服务和端口：SSH（22/tcp），HTTP（80/tcp），MySQL（3306/tcp），和 HTTP 代理（8080/tcp）。同时靶机系统版本可能是 Linux 3.X 或 4.X 。最后，UDP 扫描结果显示存在一个在33848端口开放的未知 UDP 服务。
 
+### 攻击面分析
+
+根据扫描信息，当前可以从下列几个方向进行攻击：
+
+1. 网页：前台80端口和后台8080端口
+2. 数据库：MySQL3306端口
+3. UDP服务：33848端口
 ### Web 服务扫描
 
 接下来使用 `dirsearch` 扫描一下 80 端口的 Web 服务存在哪些目录。
@@ -84,8 +89,8 @@ Nmap done: 1 IP address (1 host up) scanned in 72.82 seconds
 ```
 $ dirsearch -u http://192.168.118.135
 
-[23:32:55] 200 -  359B  - /access.html                                        [23:33:11] 200 -   32KB - /index.html                                         
-
+[23:32:55] 200 -  359B  - /access.html
+[23:33:11] 200 -   32KB - /index.html
 Task Completed 
 ```
 
@@ -101,27 +106,16 @@ Disallow: /
 
 ### 获取立足点
 
-继续寻找新的突破口，访问8080端口的 http 代理。发现存在三个明显是 hash 值的用户名与密码。使用 `hash-identifier` 识别加密，猜测是 MD5 加密，因此再使用 `jhon` 破解加密，最终得到结果
+### hash爆破后台凭据
+
+继续寻找新的突破口，访问8080端口的后台页面。发现存在三个明显是 hash 值的用户名与密码。使用 `hash-identifier` 识别加密，猜测是 MD5 加密，因此再使用 `jhon` 破解加密，最终得到结果
 
 ```
 $ hash-identifier 5978a63b4654c73c60fa24f836386d87    
-   #########################################################################  
-   #     __  __                     __           ______    _____           #  
-   #    /\ \/\ \                   /\ \         /\__  _\  /\  _ `\         #  
-   #    \ \ \_\ \     __      ____ \ \ \___     \/_/\ \/  \ \ \/\ \        #  
-   #     \ \  _  \  /'__`\   / ,__\ \ \  _ `\      \ \ \   \ \ \ \ \       #  
-   #      \ \ \ \ \/\ \_\ \_/\__, `\ \ \ \ \ \      \_\ \__ \ \ \_\ \      #  
-   #       \ \_\ \_\ \___ \_\/\____/  \ \_\ \_\     /\_____\ \ \____/      #  
-   #        \/_/\/_/\/__/\/_/\/___/    \/_/\/_/     \/_____/  \/___/  v1.2 #  
-   #                                                             By Zion3R #  
-   #                                                    www.Blackploit.com #  
-   #                                                   Root@Blackploit.com #  
-   #########################################################################                                                           
---------------------------------------------------      
-                                                        
+
 Possible Hashs:                                         
 [+] MD5                                                 
-[+] Domain Cached Credentials - MD4(MD4(($pass)).(strtolower($username)))  
+[+] Domain Cached Credentials - MD4(MD4(($pass)).(strtolower($username))) 
 ```
 
 ```
@@ -131,56 +125,44 @@ trindade:marianna
 eder:vipsu
 ```
 
-~~前两个登录8080端口后台都失败了，我以为这条路又走不通，浪费了半小时试了最后一个，唉。~~
+~~因为前两个登录8080端口后台都失败了，我以为这条路又走不通。在兜兜转转徘徊了半小时之后，又回来尝试这个攻击向量，才发现自己的失误。~~
 
-```
-$ dirsearch -u http://192.168.118.136:8080 --cookie="JSESSIONID.d771878c=node08k4qeinw3ejxq54z5xgx0p1012683.node0; ACEGI_SECURITY_HASHED_REMEMBER_ME_COOKIE=ZWRlcjoxNjg3NjI4MDc5Mjg1OmQxYzMwYzkwOGE0M2ExM2FhMjhmYTcyODlmOTdkYWNhZGVjMWU4ZTEyMzRlYmJjMmY0ZmQyYzJkZGYyYmFmNmQ=" -x 403
+### 失败尝试
 
-[03:26:52] Starting: 
-[03:27:00] 302 -    0B  - /about  ->  http://192.168.118.136:8080/about/
-[03:27:00] 302 -    0B  - /actions  ->  http://192.168.118.136:8080/actions/
-[03:27:06] 302 -    0B  - /api  ->  http://192.168.118.136:8080/api/
-[03:27:07] 302 -    0B  - /assets  ->  http://192.168.118.136:8080/assets/
-[03:27:07] 500 -   13KB - /assets/
-[03:27:07] 302 -    0B  - /authentication  ->  http://192.168.118.136:8080/authentication/
-[03:27:07] 200 -   13KB - /api/
-[03:27:09] 302 -    0B  - /class  ->  http://192.168.118.136:8080/class/
-[03:27:09] 302 -    0B  - /columns  ->  http://192.168.118.136:8080/columns/
-[03:27:10] 200 -   22KB - /cli/
-[03:27:10] 200 -  237B  - /config.xml
-[03:27:10] 303 -    0B  - /console/j_security_check  ->  http://192.168.118.136:8080/loginError
-[03:27:11] 302 -    0B  - /credentials  ->  http://192.168.118.136:8080/credentials/
-[03:27:12] 200 -   13KB - /credentials/
-[03:27:14] 400 -    6KB - /error
-[03:27:15] 200 -   17KB - /favicon.ico
-[03:27:20] 200 -   11KB - /index
-[03:27:20] 200 -   11KB - /instance/
-[03:27:20] 303 -    0B  - /j_security_check  ->  http://192.168.118.136:8080/loginError
-[03:27:23] 302 -    0B  - /log  ->  http://192.168.118.136:8080/log/
-[03:27:23] 200 -    9KB - /log/
-[03:27:23] 200 -   11KB - /login
-[03:27:24] 302 -    0B  - /logout  ->  http://192.168.118.136:8080/
-[03:27:24] 302 -    0B  - /logout/  ->  http://192.168.118.136:8080/
-[03:27:27] 500 -   13KB - /main
-[03:27:33] 200 -   17KB - /manage
-[03:27:34] 302 -    0B  - /nodes  ->  http://192.168.118.136:8080/nodes/
-[03:27:39] 302 -    0B  - /people  ->  http://192.168.118.136:8080/people/
-[03:27:45] 302 -    0B  - /projects  ->  http://192.168.118.136:8080/projects/
-[03:27:46] 302 -    0B  - /properties  ->  http://192.168.118.136:8080/properties/
-[03:27:49] 302 -    0B  - /root  ->  http://192.168.118.136:8080/root/
-[03:27:49] 200 -   71B  - /robots.txt
-[03:27:51] 302 -    0B  - /search  ->  http://192.168.118.136:8080/search/
-[03:27:51] 401 -    0B  - /secured
-[03:27:51] 200 -   11KB - /restart
-[03:27:51] 302 -    0B  - /security  ->  http://192.168.118.136:8080/security/
-[03:27:53] 200 -   12KB - /script/jqueryplugins/dataTables/extras/TableTools/media/swf/ZeroClipboard.swf
-[03:27:53] 200 -   12KB - /script/
-[03:27:53] 200 -   12KB - /script
-[03:28:00] 302 -    0B  - /target  ->  http://192.168.118.136:8080/target/
-[03:28:05] 302 -    0B  - /url  ->  http://192.168.118.136:8080/url/
-[03:28:06] 200 -   11KB - /target/                                         
-[03:28:07] 302 -    0B  - /version  ->  http://192.168.118.136:8080/version/
-[03:28:07] 302 -    0B  - /views  ->  http://192.168.118.136:8080/views/   
-                                                                           
-Task Completed
-```
+登录之后，浏览后台管理界面，发现存在一个“Build History”的页面，仔细观察后，发现url链接的尾部就是"build"，这难免就让人想到之前 `robots` 中给出的提示，因此针对性分析一下这个板块。
+
+![pic1](https://pic.imgdb.cn/item/653b5cbcc458853aef1cfab2.jpg)
+
+然后当我后知后觉的去查询CMS的时候，才发现这是 Jenkins 系统<sup>[①](#Jenkins-用户手册)</sup>，翻看 Jenkins 文档后尝试使用 Jenkins Pipeline 写入后门。
+
+### CI/CD 工具反弹Shell
+
+
+
+## 注释
+
+### Jenkins 用户手册
+
+[Jenkins](https://www.jenkins.io/zh/doc/) 是一款开源 CI&CD 软件，用于自动化各种任务，包括构建、测试和部署软件。Jenkins 支持各种运行方式，可通过系统包、Docker 或者通过一个独立的 Java 程序。
+
+![jenkins](https://pic.imgdb.cn/item/653b7dd8c458853aef8a589b.jpg)
+
+Jenkins 的主要功能包括：
+
+1. **持续集成**：Jenkins 可以在代码库中的每次提交或定期计划的基础上触发自动化构建，确保应用程序代码的集成和构建是可靠的。
+
+2. **自动化构建和测试**：Jenkins 可以构建应用程序代码，运行单元测试、集成测试和其他自动化测试，以确保软件质量。
+
+3. **部署**：它支持自动化部署到不同的目标环境，如开发、测试和生产服务器。
+
+4. **插件生态系统**：Jenkins 提供了一个庞大的插件生态系统，允许用户扩展其功能。用户可以轻松地集成各种构建工具、版本控制系统、测试框架和其他工具。
+
+5. **分布式构建**：Jenkins 支持在多台计算机上并行运行构建任务，以加速构建过程。
+
+6. **监控和报告**：它生成构建和测试的报告，并提供了可视化工具来监控构建任务的状态。
+
+7. **可配置性**：Jenkins 允许用户通过Web界面配置构建任务，无需编写复杂的脚本。
+
+8. **安全性**：Jenkins 具有用户身份验证和授权机制，可以管理用户对不同任务的访问权限。
+
+Jenkins通常用于敏捷开发环境中，以实现持续集成和持续交付 (CI/CD) 目标，帮助开发团队更快地构建、测试和部署软件，同时提高软件质量。它是一个强大的工具，广泛用于开发和DevOps团队中。
