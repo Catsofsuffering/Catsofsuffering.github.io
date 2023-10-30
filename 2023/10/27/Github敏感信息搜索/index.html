@@ -1,0 +1,381 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>Github敏感信息搜索 | Peony</title><meta name="author" content="Peony"><meta name="copyright" content="Peony"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文记录了作者在使用 GitHub 搜索敏感信息整理的一些技巧，主要来源于实战经验和 GitHub 文档。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Github敏感信息搜索">
+<meta property="og:url" content="https://peonycsa.com/2023/10/27/Github%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%90%9C%E7%B4%A2/index.html">
+<meta property="og:site_name" content="Peony">
+<meta property="og:description" content="本文记录了作者在使用 GitHub 搜索敏感信息整理的一些技巧，主要来源于实战经验和 GitHub 文档。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic.imgdb.cn/item/64fa9349661c6c8e5490bd62.jpg">
+<meta property="article:published_time" content="2023-10-27T02:38:07.000Z">
+<meta property="article:modified_time" content="2023-10-27T02:38:07.931Z">
+<meta property="article:author" content="Peony">
+<meta property="article:tag" content="Github">
+<meta property="article:tag" content="敏感信息">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic.imgdb.cn/item/64fa9349661c6c8e5490bd62.jpg"><link rel="shortcut icon" href="https://pic.imgdb.cn/item/647c139af024cca1732734de.png"><link rel="canonical" href="https://peonycsa.com/2023/10/27/Github%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%90%9C%E7%B4%A2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Github敏感信息搜索',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-10-27 10:38:07'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://pic.imgdb.cn/item/647c139af024cca1732734de.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">31</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 杂项</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/life/"><i class="fa-fw fas fa-music"></i><span> 生活</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movie/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://pic.imgdb.cn/item/64fa9349661c6c8e5490bd62.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Peony"><span class="site-name">Peony</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 杂项</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/life/"><i class="fa-fw fas fa-music"></i><span> 生活</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movie/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Github敏感信息搜索</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-10-27T02:38:07.000Z" title="发表于 2023-10-27 10:38:07">2023-10-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-27T02:38:07.931Z" title="更新于 2023-10-27 10:38:07">2023-10-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="出发点"><a href="#出发点" class="headerlink" title="出发点"></a>出发点</h2><p>最近做敏感信息收集项目，需要做 Github 的敏感信息收集，特此写一篇文章记录一下比较有用的搜索语法</p>
+<h2 id="常用搜索语法"><a href="#常用搜索语法" class="headerlink" title="常用搜索语法"></a>常用搜索语法</h2><h3 id="搜索仓库"><a href="#搜索仓库" class="headerlink" title="搜索仓库"></a>搜索仓库</h3><table>
+<thead>
+<tr>
+<th>限定符</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>in:name</code></td>
+<td><code>jquery in:name</code> 匹配名称中带有”jquery”的存储库。</td>
+</tr>
+<tr>
+<td><code>in:description</code></td>
+<td><code>jquery in:name,description</code> 匹配名称或说明中带有”jquery”的存储库。</td>
+</tr>
+<tr>
+<td><code>in:topics</code></td>
+<td><code>jquery in:topics</code> 将带”jquery”标签的存储库匹配为主题。</td>
+</tr>
+<tr>
+<td><code>in:readme</code></td>
+<td><code>jquery in:readme</code> 匹配自述文件中提及”jquery”的存储库。</td>
+</tr>
+<tr>
+<td><code>repo:owner/name</code></td>
+<td><code>repo:octocat/hello-world</code> 匹配特定的存储库名称。</td>
+</tr>
+</tbody></table>
+<h3 id="搜索-Commit"><a href="#搜索-Commit" class="headerlink" title="搜索 Commit"></a>搜索 Commit</h3><table>
+<thead>
+<tr>
+<th>限定符</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>author:USERNAME</code></td>
+<td><code>author:defunkt</code> 匹配作者 &#96;&#96;@defunkt&#96; 的提交。</td>
+</tr>
+<tr>
+<td><code>committer:USERNAME</code></td>
+<td><code>committer:defunkt</code> 匹配提交者 &#96;&#96;@defunkt&#96; 的提交。</td>
+</tr>
+<tr>
+<td><code>author-name:NAME</code></td>
+<td><code>author-name:wanstrath</code> 匹配作者姓名中包含“wanstrath”的提交。</td>
+</tr>
+<tr>
+<td><code>committer-name:NAME</code></td>
+<td><code>committer-name:wanstrath</code> 匹配提交者姓名中包含“wanstrath”的提交。</td>
+</tr>
+<tr>
+<td><code>author-email:EMAIL</code></td>
+<td><code>author-email:chris@github.com</code> 匹配作者 <code>chris@github.com</code> 的提交。</td>
+</tr>
+<tr>
+<td><code>committer-email:EMAIL</code></td>
+<td><code>committer-email:chris@github.com</code> 匹配提交者 <code>chris@github.com</code> 的提交。</td>
+</tr>
+</tbody></table>
+<h3 id="搜索-Pull-Requests-和-Issues"><a href="#搜索-Pull-Requests-和-Issues" class="headerlink" title="搜索 Pull Requests 和 Issues"></a>搜索 Pull Requests 和 Issues</h3><table>
+<thead>
+<tr>
+<th>限定符</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>type:pr</code></td>
+<td><code>cat type:p</code>r&#96; 匹配包含 “cat” 一词的拉取请求。</td>
+</tr>
+<tr>
+<td><code>type:issue</code></td>
+<td><code>github commenter:defunkt type:issue</code> 匹配包含 “github” 一词且包含 <code>@defunkt</code> 的评论的问题。</td>
+</tr>
+<tr>
+<td><code>is:pr</code></td>
+<td><code>event is:pr</code> 匹配包含 “event” 一词的拉取请求。</td>
+</tr>
+<tr>
+<td><code>is:issue</code></td>
+<td><code>is:issue label:bug is:closed</code> 匹配包含 “bug” 标签的已关闭问题。</td>
+</tr>
+<tr>
+<td><code>in:title</code></td>
+<td><code>warning in:title</code> 匹配标题中包含 “warning” 的问题。</td>
+</tr>
+<tr>
+<td><code>in:body</code></td>
+<td><code>error in:title,body</code> 匹配标题或正文中包含 “error” 的问题。</td>
+</tr>
+<tr>
+<td><code>in:comments</code></td>
+<td><code>shipit in:comments</code> 匹配在评论中提及 “shipit” 的问题。</td>
+</tr>
+<tr>
+<td><code>involves:USERNAME</code></td>
+<td><code>involves:defunkt involves:jlord</code> 匹配涉及 <code>@defunkt</code> 或 <code>@jlord</code> 的问题。</td>
+</tr>
+<tr>
+<td><code>in:body involves:USERNAME</code></td>
+<td><code>NOT bootstrap in:body involves:mdo</code> 匹配涉及 <code>@mdo</code> 且正文中不包含“bootstrap”一词的问题。</td>
+</tr>
+<tr>
+<td><code>label:LABEL</code></td>
+<td><code>label:&quot;help wanted&quot; language:ruby</code> 匹配标签为“help wanted”且位于 Ruby 存储库中的问题。</td>
+</tr>
+<tr>
+<td><code>in:body -label:LABEL label:LABEL</code></td>
+<td><code>broken in:body -label:bug label:priority</code> 匹配正文中包含“broken”一词且没有“bug”标签但有“priority”标签的问题。</td>
+</tr>
+<tr>
+<td><code>label:LABEL label:LABEL</code></td>
+<td><code>label:bug label:resolved</code> 匹配标签为“bug”和“已解决”的问题。</td>
+</tr>
+<tr>
+<td><code>label:LABEL,LABEL</code></td>
+<td><code>label:bug,resolved</code> 匹配标签为“bug”或“已解决”的问题。</td>
+</tr>
+<tr>
+<td><code>mentions:USERNAME</code></td>
+<td><code>resque mentions:defunkt</code> 匹配提及 <code>@defunkt</code> 且包含“resque”一词的问题。</td>
+</tr>
+<tr>
+<td><code>team:ORGNAME/TEAMNAME</code></td>
+<td><code>team:jekyll/owners</code> 匹配提及 <code>@jekyll/owners</code> 团队的问题。</td>
+</tr>
+<tr>
+<td><code>team:ORGNAME/TEAMNAME</code> <code>is:open is:pr</code></td>
+<td><code>team:myorg/ops is:open is:pr</code> 匹配提及 <code>@myorg/ops</code> 团队的打开的拉取请求。</td>
+</tr>
+<tr>
+<td><code>commenter:USERNAME</code></td>
+<td><code>github commenter:defunkt org:github</code> 匹配 GitHub 拥有的存储库中含有“github”一词且包含 <code>@defunkt</code> 评论的问题。</td>
+</tr>
+</tbody></table>
+<h3 id="搜索-Fork-信息"><a href="#搜索-Fork-信息" class="headerlink" title="搜索 Fork 信息"></a>搜索 Fork 信息</h3><table>
+<thead>
+<tr>
+<th>限定符</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>fork:true</code></td>
+<td><code>github fork:true</code> 与所有包含“github”一词的存储库匹配，包括分支。</td>
+</tr>
+<tr>
+<td><code>language:_LANGUAGE_</code> <code>fork:true</code></td>
+<td><code>android language:java fork:true</code> 与具有分支和常规存储库中用 Java 编写的“android”一词的代码相匹配。</td>
+</tr>
+<tr>
+<td><code>fork:only</code></td>
+<td><code>github fork:only</code> 与所有包含“github”一词的分支存储库匹配。</td>
+</tr>
+<tr>
+<td><code>forks:&gt;_n_</code> <code>fork:only</code></td>
+<td><code>forks:&gt;500 fork:only</code> 与具有超过 500 个分支的存储库匹配，并且仅返回分支存储库。</td>
+</tr>
+</tbody></table>
+<h3 id="搜索-Gist"><a href="#搜索-Gist" class="headerlink" title="搜索 Gist"></a>搜索 Gist</h3><table>
+<thead>
+<tr>
+<th align="left">限定符</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>anon:true</code></td>
+<td align="left"><code>cat anon:true</code> 在与 cat 相关的 Gist 搜索中包括匿名 Gist 。</td>
+</tr>
+<tr>
+<td align="left"><code>filename:_FILENAME_</code></td>
+<td align="left"><code>filename:.bashrc</code> 查找包含“.bashrc”文件的所有 Gist 。</td>
+</tr>
+<tr>
+<td align="left"><code>language:_LANGUAGE_</code></td>
+<td align="left"><code>cat language:html</code> 查找包含 HTML 文件且具有“cat”一词的所有 Gist 。</td>
+</tr>
+<tr>
+<td align="left"><code>extension:_EXTENSION_</code></td>
+<td align="left"><code>join extension:coffee</code> 在具有 coffee 扩展的 Gist 中查找“join”的所有实例。</td>
+</tr>
+</tbody></table>
+<h3 id="查询长度限制"><a href="#查询长度限制" class="headerlink" title="查询长度限制"></a>查询长度限制</h3><p>在 GitHub 上搜索时，查询的长度有一些限制：</p>
+<ul>
+<li>查询字符不超过<strong>256个</strong>；</li>
+<li>查询中的逻辑运算符（<code>AND</code>、<code>OR</code> 或 <code>NOT</code>） 不能使用超过<strong>5个</strong> ；</li>
+</ul>
+<h2 id="敏感信息检索示例"><a href="#敏感信息检索示例" class="headerlink" title="敏感信息检索示例"></a>敏感信息检索示例</h2><p>常用搜索语法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">content:&lt;regex&gt; in:description,readme</span><br><span class="line">&lt;regex&gt; fork:true</span><br><span class="line">in:body</span><br><span class="line">in:comments</span><br></pre></td></tr></table></figure>
+
+<p>常用正则表达式（regex）：&#96;(&#x2F;<regex>&#x2F;)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># email</span><br><span class="line">(/[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/) </span><br><span class="line"></span><br><span class="line"># host</span><br><span class="line">(/^[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)</span><br><span class="line"></span><br><span class="line"># IP</span><br><span class="line">/((2(5[0-5]|[0-4]\d))|[0-1]?\d&#123;1,2&#125;)(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d&#123;1,2&#125;))&#123;3&#125;/</span><br><span class="line"></span><br><span class="line"># secret</span><br><span class="line">pass|password|pwd|key|secret|token</span><br></pre></td></tr></table></figure>
+
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://peonycsa.com">Peony</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://peonycsa.com/2023/10/27/Github%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%90%9C%E7%B4%A2/">https://peonycsa.com/2023/10/27/Github%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%90%9C%E7%B4%A2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://peonycsa.com" target="_blank">Peony</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Github/">Github</a><a class="post-meta__tags" href="/tags/%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF/">敏感信息</a></div><div class="post_share"><div class="social-share" data-image="https://pic.imgdb.cn/item/64fa9349661c6c8e5490bd62.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://fastly.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/10/27/Vulnhub-KioptrixLevel1%E9%80%9A%E5%85%B3%E8%AE%B0%E5%BD%95/" title="Vulnhub-KioptrixLevel1通关记录"><img class="cover" src="https://pic.imgdb.cn/item/653b2755c458853aef761f44.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Vulnhub-KioptrixLevel1通关记录</div></div></a></div><div class="next-post pull-right"><a href="/2023/10/27/%E8%BF%90%E7%BB%B4%E5%B0%8F%E6%8A%80%E5%B7%A7/" title="运维小技巧"><img class="cover" src="https://pic.imgdb.cn/item/653b21d6c458853aef672984.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">运维小技巧</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://pic.imgdb.cn/item/647c139af024cca1732734de.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Peony</div><div class="author-info__description">知道自己需要的是什么之后，真正的学习才算开始。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">31</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Catsofsuffering"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Catsofsuffering" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:graywar1@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BA%E5%8F%91%E7%82%B9"><span class="toc-number">1.</span> <span class="toc-text">出发点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%90%9C%E7%B4%A2%E8%AF%AD%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">常用搜索语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E4%BB%93%E5%BA%93"><span class="toc-number">2.1.</span> <span class="toc-text">搜索仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2-Commit"><span class="toc-number">2.2.</span> <span class="toc-text">搜索 Commit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2-Pull-Requests-%E5%92%8C-Issues"><span class="toc-number">2.3.</span> <span class="toc-text">搜索 Pull Requests 和 Issues</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2-Fork-%E4%BF%A1%E6%81%AF"><span class="toc-number">2.4.</span> <span class="toc-text">搜索 Fork 信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2-Gist"><span class="toc-number">2.5.</span> <span class="toc-text">搜索 Gist</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E9%95%BF%E5%BA%A6%E9%99%90%E5%88%B6"><span class="toc-number">2.6.</span> <span class="toc-text">查询长度限制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2%E7%A4%BA%E4%BE%8B"><span class="toc-number">3.</span> <span class="toc-text">敏感信息检索示例</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/10/27/Vulnhub-KioptrixLevel1%E9%80%9A%E5%85%B3%E8%AE%B0%E5%BD%95/" title="Vulnhub-KioptrixLevel1通关记录"><img src="https://pic.imgdb.cn/item/653b2755c458853aef761f44.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vulnhub-KioptrixLevel1通关记录"/></a><div class="content"><a class="title" href="/2023/10/27/Vulnhub-KioptrixLevel1%E9%80%9A%E5%85%B3%E8%AE%B0%E5%BD%95/" title="Vulnhub-KioptrixLevel1通关记录">Vulnhub-KioptrixLevel1通关记录</a><time datetime="2023-10-27T02:45:07.000Z" title="发表于 2023-10-27 10:45:07">2023-10-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/27/Github%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%90%9C%E7%B4%A2/" title="Github敏感信息搜索"><img src="https://pic.imgdb.cn/item/64fa9349661c6c8e5490bd62.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Github敏感信息搜索"/></a><div class="content"><a class="title" href="/2023/10/27/Github%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%90%9C%E7%B4%A2/" title="Github敏感信息搜索">Github敏感信息搜索</a><time datetime="2023-10-27T02:38:07.000Z" title="发表于 2023-10-27 10:38:07">2023-10-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/27/%E8%BF%90%E7%BB%B4%E5%B0%8F%E6%8A%80%E5%B7%A7/" title="运维小技巧"><img src="https://pic.imgdb.cn/item/653b21d6c458853aef672984.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="运维小技巧"/></a><div class="content"><a class="title" href="/2023/10/27/%E8%BF%90%E7%BB%B4%E5%B0%8F%E6%8A%80%E5%B7%A7/" title="运维小技巧">运维小技巧</a><time datetime="2023-10-27T02:22:20.000Z" title="发表于 2023-10-27 10:22:20">2023-10-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/11/Vulnhub-SICKOSv1-1%E9%80%9A%E5%85%B3%E8%AE%B0%E5%BD%95/" title="Vulnhub-SICKOSv1.1通关记录"><img src="https://pic.imgdb.cn/item/64aae46e1ddac507cc3c4359.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vulnhub-SICKOSv1.1通关记录"/></a><div class="content"><a class="title" href="/2023/09/11/Vulnhub-SICKOSv1-1%E9%80%9A%E5%85%B3%E8%AE%B0%E5%BD%95/" title="Vulnhub-SICKOSv1.1通关记录">Vulnhub-SICKOSv1.1通关记录</a><time datetime="2023-09-11T07:32:20.000Z" title="发表于 2023-09-11 15:32:20">2023-09-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/06/%E8%B0%83%E8%8A%82%E5%8E%8B%E5%8A%9B%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/" title="调节压力课程笔记"><img src="https://pic.imgdb.cn/item/64f84659661c6c8e54f93782.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="调节压力课程笔记"/></a><div class="content"><a class="title" href="/2023/09/06/%E8%B0%83%E8%8A%82%E5%8E%8B%E5%8A%9B%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/" title="调节压力课程笔记">调节压力课程笔记</a><time datetime="2023-09-06T09:35:20.000Z" title="发表于 2023-09-06 17:35:20">2023-09-06</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://pic.imgdb.cn/item/64fa9349661c6c8e5490bd62.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Peony</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div></div></body></html>
