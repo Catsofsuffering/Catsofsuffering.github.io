@@ -11,7 +11,6 @@ description: 本文记录了作者在通关vulnhub靶机w1r3s中遇到的问题�
 top_img: https://pic.imgdb.cn/item/647dcd281ddac507ccf5125c.jpg
 cover: https://pic.imgdb.cn/item/647dcd281ddac507ccf5125c.jpg
 ---
-
 ## 靶机详情
 
 靶机IP：192.168.118.134

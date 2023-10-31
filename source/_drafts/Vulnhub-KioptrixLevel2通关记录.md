@@ -1,6 +1,15 @@
 ---
 title: Vulnhub-KioptrixLevel2通关记录
 tags:
+  - Kioptrix
+  - vulnhub
+  - WriteUp
+categories: WriteUp
+keywords: vulnhub
+description: 本文记录了作者在通关vulnhub靶机JARBAS中遇到的问题以及踩坑后的解决方案。
+top_img: https://pic.imgdb.cn/item/64aae46e1ddac507cc3c4359.jpg
+cover: https://pic.imgdb.cn/item/64aae46e1ddac507cc3c4359.jpg
+date: 2023-10-30 17:09:20
 ---
 
 ## 靶机描述
@@ -27,8 +36,6 @@ PORT     STATE SERVICE
 749/tcp  open  kerberos-adm
 3306/tcp open  mysql
 ```
-
-
 
 ### Web 目录扫描
 

