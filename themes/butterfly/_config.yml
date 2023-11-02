@@ -904,53 +904,71 @@ CDN:
   # when set it to local, you need to install hexo-butterfly-extjs
   third_party_provider: jsdelivr
   option:
+
+    # main
     main_css: /css/index.css
     main: /js/main.js
     utils: /js/utils.js
-    translate: /js/tw_cn.js
+
+    # tramslate
+    translate: https://cdn1.tianli0.top/npm/js-heo@1.0.6/translate/tw_cn.jss
     local_search: /js/search/local-search.js
-    algolia_js: /js/search/algolia.js
-    algolia_search_v4: "https://fastly.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"
-    instantsearch_v4: "https://fastly.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"
-    pjax: "https://fastly.jsdelivr.net/npm/pjax/pjax.min.js"
-    gitalk: "https://fastly.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"
-    gitalk_css: "https://fastly.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"
-    blueimp_md5: "https://fastly.jsdelivr.net/npm/blueimp-md5/js/md5.min.js"
-    valine: "https://fastly.jsdelivr.net/npm/valine/dist/Valine.min.js"
-    disqusjs: "https://fastly.jsdelivr.net/npm/disqusjs@1/dist/disqus.js"
-    disqusjs_css: "https://fastly.jsdelivr.net/npm/disqusjs@1/dist/disqusjs.css"
-    twikoo: "https://fastly.jsdelivr.net/npm/twikoo@1/dist/twikoo.all.min.js"
-    waline_js: "https://fastly.jsdelivr.net/npm/@waline/client/dist/waline.js"
-    waline_css: "https://fastly.jsdelivr.net/npm/@waline/client/dist/waline.css"
+  
+    # search
+    algolia_js: https://cdn1.tianli0.top/npm/js-heo@1.0.11/algolia/algolia.js
+    algolia_search: https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/instantsearch.js/2.10.5/instantsearch.min.js
+    algolia_search_css: https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/instantsearch.js/2.10.5/instantsearch.min.css
+    
+    # pjax
+    pjax: "https://lib.baomitu.com/pjax/0.2.8/pjax.min.js"
+
+    #  baomitu
+    waline_js: "https://lib.baomitu.com/waline/latest/waline.js"
+    waline_css: "https://lib.baomitu.com/waline/latest/waline.css"
+    
+    # share
     sharejs: "https://fastly.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js"
     sharejs_css: "https://fastly.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"
-    mathjax: "https://fastly.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-    katex: "https://fastly.jsdelivr.net/npm/katex@latest/dist/katex.min.css"
-    katex_copytex: "https://fastly.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.min.js"
-    katex_copytex_css: "https://fastly.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.css"
-    mermaid: "https://fastly.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"
-    canvas_ribbon: "https://fastly.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js"
+
+    # bytecdn
+    gitalk: "https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/gitalk/1.7.2/gitalk.min.js"
+    gitalk_css: "https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/gitalk/1.7.2/gitalk.min.css"
+    blueimp_md5: "https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/blueimp-md5/2.19.0/js/md5.min.js"
+    valine: "https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/valine/1.4.16/Valine.min.js"
+    disqusjs: "https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/disqusjs/1.3.0/disqus.js"
+    disqusjs_css: "https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/disqusjs/1.3.0/disqusjs.css"
+    twikoo: "https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/twikoo/1.4.18/twikoo.all.min.js"
+    mathjax: "https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/mathjax/3.2.0/es5/tex-mml-chtml.js"
+    katex: "https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/KaTeX/0.15.2/katex.min.css"
+    katex_copytex: "https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/KaTeX/0.15.2/contrib/copy-tex.min.js"
+    katex_copytex_css: "https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/KaTeX/0.15.2/contrib/copy-tex.css"
+    mermaid: "https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/mermaid/8.14.0/mermaid.min.js"
+    canvas_nest: "https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/canvas-nest.js/2.0.4/canvas-nest.js"
+    lazyload: "https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/vanilla-lazyload/17.3.1/lazyload.iife.min.js"
+    instantpage: "https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/instant.page/5.1.0/instantpage.min.js"
+    typed: "https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/typed.js/2.0.12/typed.min.js"
+    pangu: "https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/pangu/4.0.7/pangu.min.js"
+    medium_zoom: "https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/medium-zoom/1.0.6/medium-zoom.min.js"
+    snackbar_css: "https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/snackbarjs/1.1.0/snackbar.min.css"
+    snackbar: "https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/snackbarjs/1.1.0/snackbar.min.js"
+    fontawesomeV6: "https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.css"
+    aplayer_css: "https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/aplayer/1.10.1/APlayer.min.css"
+    aplayer_js: "https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/aplayer/1.10.1/APlayer.min.js"
+    prismjs_js: "https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/prism/1.27.0/prism.min.js"
+    prismjs_lineNumber_js: "https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.js"
+    prismjs_autoloader: "https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/prism/1.27.0/plugins/autoloader/prism-autoloader.min.js"
+
+    # jsdelivr
     canvas_fluttering_ribbon: "https://fastly.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"
-    canvas_nest: "https://fastly.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"
+    canvas_ribbon: "https://fastly.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js"
     activate_power_mode: "https://fastly.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"
     fireworks: "https://fastly.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"
     click_heart: "https://fastly.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js"
     ClickShowText: "https://fastly.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js"
-    lazyload: "https://fastly.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"
-    instantpage: "https://fastly.jsdelivr.net/npm/instant.page@5/instantpage.min.js"
-    typed: "https://fastly.jsdelivr.net/npm/typed.js/lib/typed.min.js"
-    pangu: "https://fastly.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"
     fancybox_css_v4: "https://fastly.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css"
     fancybox_v4: "https://fastly.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"
-    medium_zoom: "https://fastly.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"
-    snackbar_css: "https://fastly.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"
-    snackbar: "https://fastly.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"
-    fontawesomeV6: "https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.css"
     flickr_justified_gallery_js: "https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js"
     flickr_justified_gallery_css: "https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css"
-    aplayer_css: "https://fastly.jsdelivr.net/npm/aplayer@1/dist/APlayer.min.css"
-    aplayer_js: "https://fastly.jsdelivr.net/npm/aplayer@1/dist/APlayer.min.js"
     meting_js: "https://fastly.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"
-    prismjs_js: "https://fastly.jsdelivr.net/npm/prismjs@1/prism.min.js"
-    prismjs_lineNumber_js: "https://fastly.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"
-    prismjs_autoloader: "https://fastly.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"
+
+
