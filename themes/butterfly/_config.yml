@@ -909,28 +909,20 @@ CDN:
     main_css: /css/index.css
     main: /js/main.js
     utils: /js/utils.js
-
-    # tramslate
-    translate: https://cdn1.tianli0.top/npm/js-heo@1.0.6/translate/tw_cn.jss
     local_search: /js/search/local-search.js
-  
-    # search
+      
+    # tianli0
+    translate: https://cdn1.tianli0.top/npm/js-heo@1.0.6/translate/tw_cn.jss
     algolia_js: https://cdn1.tianli0.top/npm/js-heo@1.0.11/algolia/algolia.js
-    algolia_search: https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/instantsearch.js/2.10.5/instantsearch.min.js
-    algolia_search_css: https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/instantsearch.js/2.10.5/instantsearch.min.css
-    
-    # pjax
-    pjax: "https://lib.baomitu.com/pjax/0.2.8/pjax.min.js"
 
     #  baomitu
+    pjax: "https://lib.baomitu.com/pjax/0.2.8/pjax.min.js"
     waline_js: "https://lib.baomitu.com/waline/latest/waline.js"
     waline_css: "https://lib.baomitu.com/waline/latest/waline.css"
-    
-    # share
-    sharejs: "https://fastly.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js"
-    sharejs_css: "https://fastly.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"
 
     # bytecdn
+    algolia_search: https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/instantsearch.js/2.10.5/instantsearch.min.js
+    algolia_search_css: https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/instantsearch.js/2.10.5/instantsearch.min.css
     gitalk: "https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/gitalk/1.7.2/gitalk.min.js"
     gitalk_css: "https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/gitalk/1.7.2/gitalk.min.css"
     blueimp_md5: "https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/blueimp-md5/2.19.0/js/md5.min.js"
@@ -957,6 +949,10 @@ CDN:
     prismjs_js: "https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/prism/1.27.0/prism.min.js"
     prismjs_lineNumber_js: "https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/prism/1.27.0/plugins/line-numbers/prism-line-numbers.min.js"
     prismjs_autoloader: "https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/prism/1.27.0/plugins/autoloader/prism-autoloader.min.js"
+    fancybox_css_v4: "https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/fancybox/3.5.7/jquery.fancybox.min.css"
+    fancybox_v4: "https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/fancybox/3.5.7/jquery.fancybox.min.js"
+    sharejs: "https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/social-share.js/1.0.16/js/social-share.min.js"
+    sharejs_css: "https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/social-share.js/1.0.16/css/share.min.css"
 
     # jsdelivr
     canvas_fluttering_ribbon: "https://fastly.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"
@@ -965,8 +961,6 @@ CDN:
     fireworks: "https://fastly.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"
     click_heart: "https://fastly.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js"
     ClickShowText: "https://fastly.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js"
-    fancybox_css_v4: "https://fastly.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css"
-    fancybox_v4: "https://fastly.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"
     flickr_justified_gallery_js: "https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js"
     flickr_justified_gallery_css: "https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css"
     meting_js: "https://fastly.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"

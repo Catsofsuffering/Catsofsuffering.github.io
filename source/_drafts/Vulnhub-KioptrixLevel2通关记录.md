@@ -37,6 +37,26 @@ PORT     STATE SERVICE
 3306/tcp open  mysql
 ```
 
+
+```
+$ sudo nmap -sT -p22,80,111,443,631,821,3306 -sV --min-rate 10000 192.168.213.133 -oN nmapscan/servscan.txt
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-11-09 04:28 EST
+Nmap scan report for 192.168.213.133
+Host is up (0.00097s latency).
+
+PORT     STATE  SERVICE  VERSION
+22/tcp   open   ssh      OpenSSH 3.9p1 (protocol 1.99)
+80/tcp   open   http     Apache httpd 2.0.52 ((CentOS))
+111/tcp  open   rpcbind  2 (RPC #100000)
+443/tcp  open   ssl/http Apache httpd 2.0.52 ((CentOS))
+631/tcp  open   ipp      CUPS 1.1
+821/tcp  closed unknown
+3306/tcp open   mysql    MySQL (unauthorized)
+MAC Address: 00:0C:29:53:19:56 (VMware)
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 12.56 seconds
+```
 ### Web 目录扫描
 
 ```

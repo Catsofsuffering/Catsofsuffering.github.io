@@ -7,8 +7,8 @@ tags:
   - WriteUp
 categories: WriteUp
 description: 本文记录了作者在通关vulnhub靶机JARBAS中遇到的问题，通过目录爆破发现 Jenkins 后台登录界面，并爆破密码获取登录凭据，通过 pipline ACL 漏洞写入反弹shell获取立足点。
-top_img: https://pic.imgdb.cn/item/647cc8931ddac507ccbda697.jpg
-cover: https://pic.imgdb.cn/item/647cc8931ddac507ccbda697.jpg
+top_img: https://pic.imgdb.cn/item/653b2755c458853aef761f44.jpg
+cover: https://pic.imgdb.cn/item/653b2755c458853aef761f44.jpg
 ---
 ## 靶机详情
 
