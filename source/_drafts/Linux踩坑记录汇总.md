@@ -58,11 +58,6 @@ chmod +x /etc/rc.d/rc.local ;\
 /sbin/chkconfig ss5 on
 ```
 
-## 知识点总结
-
-### ss5 服务
-
-
 
 ### tail命令
 
@@ -84,5 +79,60 @@ tail命令是一个用于查看文件末尾内容的命令。它可以显示文�
 3. 跟踪日志：`journalctl -f` 可以实时跟踪并显示最新的日志消息。
 4. 导出日志：`journalctl` 能将日志导出为文件。
 
+## find 命令
+
+```
+find /etc/ -name "*" | xargs grep -ri "192.168.0.103" -l;
+```
+## `/dev/mapper/` 是什么
+
+`/dev/mapper` 是 Linux 系统中用于 LVM（Logical Volume Manager）和 DM（Device Mapper）设备映射的设备路径。这个目录通常包含 LVM 创建的逻辑卷和 DM 创建的设备映射。
+
+1. **LVM（Logical Volume Manager）：** LVM 是一种用于管理磁盘存储的软件，它允许将物理磁盘的空间抽象为逻辑卷（Logical Volumes），并允许在运行时调整这些卷的大小。在 LVM 中，逻辑卷的路径通常是 `/dev/mapper/vg_name-lv_name`，其中 `vg_name` 是卷组（Volume Group）的名称，`lv_name` 是逻辑卷的名称。
+
+   例如：
+   ```plaintext
+   /dev/mapper/myvg-mylv
+   ```
+
+2. **DM（Device Mapper）：** Device Mapper 是 Linux 内核中的一个框架，用于在块设备和块设备之间创建映射。它允许在逻辑块设备和底层物理设备之间插入不同的层，从而支持各种高级存储技术。在 `/dev/mapper` 中，你可能会看到一些由 DM 创建的设备映射，这些设备映射的名称取决于其配置。
+
+   例如：
+   ```plaintext
+   /dev/mapper/encrypted-home
+   ```
+
+总之，`/dev/mapper` 是一个包含 LVM 逻辑卷和 DM 设备映射的目录。在使用 LVM 或者其他设备映射技术时，这个目录下的设备路径会动态地生成。
 
 
+## 注释
+
+### ss5 服务
+
+`ss5` 是一个开源的 SOCKS (SOCKet Secure) 代理服务器软件，提供 SOCKS v4 和 SOCKS v5 协议支持。它允许网络中的计算机通过代理服务器进行连接，并通过这个代理服务器进行通信，以实现一些网络访问的控制和安全性需求。
+
+以下是 `ss5` 服务的一些主要特点和用途：
+
+1. **SOCKS 代理服务：** `ss5` 提供 SOCKS 代理服务，可以为支持 SOCKS 协议的应用程序提供代理服务。这对于需要通过中间代理进行网络连接的应用程序很有用。
+
+2. **支持 SOCKS v4 和 SOCKS v5：** `ss5` 同时支持 SOCKS v4 和 SOCKS v5 协议，这两者在功能和安全性上有一些区别。
+
+3. **用户认证支持：** 可以配置 `ss5` 要求用户进行身份验证，以确保只有授权用户可以通过代理进行连接。
+
+4. **访问控制：** `ss5` 允许管理员配置访问控制规则，限制哪些用户或哪些 IP 地址可以通过代理进行连接，以提高网络安全性。
+
+5. **运行日志：** `ss5` 提供日志功能，记录代理服务器的运行状况，以便管理员监控和审计代理的使用情况。
+
+6. **轻量级：** `ss5` 是一个相对轻量级的代理服务器，易于安装和配置。
+
+以下是一个简单的示例，展示了如何通过 `ss5` 在本地启动 SOCKS 代理服务：
+
+```bash
+# 安装 ss5（使用适合您的包管理器）
+sudo apt-get install ss5   # 对于 Debian/Ubuntu 系统
+
+# 启动 ss5 服务
+sudo /etc/init.d/ss5 start
+```
+
+请注意，这只是一个简单的示例。在生产环境中，您需要根据具体的需求和安全标准进行更详细的配置和管理。使用 SOCKS 代理服务器时，请确保您了解其安全性和合规性要求。

@@ -83,6 +83,13 @@ $ cat scanoutput/nikto_scan.txt
 + GET /#wp-config.php#: #wp-config.php# file found. This file contains the credentials.
 ```
 
+http://192.168.213.133/manual/
+
+Apache/2.0.52 (CentOS)
+
+```
+
+```
 ## 获取立足点
 
 ## 注释
