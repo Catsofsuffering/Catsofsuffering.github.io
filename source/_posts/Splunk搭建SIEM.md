@@ -46,7 +46,7 @@ UF的主要功能包括：数据采集、日志转发、安全性、数据压缩
 ![create a new virtual disk](https://pic.imgdb.cn/item/657fc152c458853aefc7d4cb.jpg)
 ### 预先分配存储空间
 
-首先使用 `fdisk` 命令查看分区信息<sup>[①](#fdisk-命令)</sup>。
+首先使用 `fdisk` 命令查看分区信息<sup>[①](#理解-Linux-中的-fdisk-命令)</sup>。
 
 ```
 fdisk -l
@@ -114,9 +114,6 @@ su - splunk -c "/opt/splunk/bin/splunk start --accept-license --answer-yes"
 在 Splunk Web 界面上打开 `Manage Apps` 界面，直接点击 `Install app from file` 按钮，将 Splunkbase 上下载的安装包直接导入即可。
 
 ![Install Apps](https://pic.imgdb.cn/item/65ae2442871b83018abfadf8.jpg)
-
-
-
 ## 安装Gitlab
 
 ```
@@ -145,15 +142,12 @@ su - gitlab -c "sed -i 's|external_url '\''GENERATED_EXTERNAL_URL'\''|external_u
 ```
 ## Splunk Forwarder 安装与配置
 
-### Splunk UF 安装
-
-### Splunk UF 配置
-
+下载 Splunk Forwarder 安装包之后，将安装包在目标服务器中解压，此处作者选择在平时直接解压压缩包到指定目录安装即可，默认为 `/opt/splunkforwarder` 目录。
 ## 注释
 
-### fdisk 命令
+### 理解 Linux 中的 fdisk 命令
 
-`fdisk` 是用于处理磁盘分区的 Linux 命令。它提供了一个交互式的命令行界面，允许你在硬盘上创建、删除、调整和显示分区。以下是 `fdisk` 命令的一些基本用法：
+在 Linux 系统中，`fdisk` 是一个用于处理磁盘分区的关键命令。通过提供一个交互式的命令行界面，`fdisk` 允许用户对硬盘进行创建、删除、调整和查看分区的操作。下面是一些 `fdisk` 命令的基本用法：
 
 1. **查看磁盘分区信息**：
 
@@ -161,7 +155,7 @@ su - gitlab -c "sed -i 's|external_url '\''GENERATED_EXTERNAL_URL'\''|external_u
    fdisk -l
    ```
 
-   这将列出所有磁盘的分区信息。
+   这个命令将列出系统上所有磁盘的分区信息，包括磁盘的大小、分区类型等。
 
 2. **打开一个磁盘进行分区**：
 
@@ -169,26 +163,26 @@ su - gitlab -c "sed -i 's|external_url '\''GENERATED_EXTERNAL_URL'\''|external_u
    fdisk /dev/sdX
    ```
 
-   这里的 `/dev/sdX` 是你要分区的磁盘，例如 `/dev/sda`。
+   这里的 `/dev/sdX` 代表要进行分区操作的磁盘，例如 `/dev/sda`。
 
 3. **显示分区列表**：
 
-   在 `fdisk` 的交互式界面中，可以输入 `p` 来显示分区列表。
+   在 `fdisk` 的交互式界面中，输入 `p` 可以显示磁盘的分区列表，包括分区的起始扇区和大小。
 
 4. **创建新的分区**：
 
-   在 `fdisk` 的交互式界面中，可以输入 `n` 来创建新分区。
+   在 `fdisk` 的交互式界面中，输入 `n` 可以启动创建新分区的过程，用户需要提供分区的类型、起始扇区和大小。
 
 5. **删除分区**：
 
-   在 `fdisk` 的交互式界面中，可以输入 `d` 来删除分区。
+   在 `fdisk` 的交互式界面中，输入 `d` 可以删除已有分区。用户需要确认删除的分区编号。
 
 6. **保存更改**：
 
-   在 `fdisk` 的交互式界面中，创建或删除分区后，需要输入 `w` 来保存更改。
+   在 `fdisk` 的交互式界面中，完成分区操作后，输入 `w` 可以保存所做的更改。请谨慎使用此命令，因为它会直接修改磁盘上的分区表。
 
 7. **退出 `fdisk`**：
 
-   在 `fdisk` 的交互式界面中，可以输入 `q` 来退出而不保存更改。
+   在 `fdisk` 的交互式界面中，输入 `q` 可以退出而不保存更改，而输入 `w` 可以退出并保存更改。
 
-这只是 `fdisk` 的基本用法。请谨慎使用，特别是在处理实际的硬盘时。如果不熟悉分区的操作，最好提前备份数据。
+这仅仅是 `fdisk` 命令的基本用法。在进行实际的硬盘操作时，需要谨慎使用，确保提前备份好重要数据。分区操作可能会对数据造成不可逆的影响，特别是在不熟悉分区概念和操作的情况下。
