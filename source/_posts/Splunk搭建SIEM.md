@@ -6,8 +6,8 @@ tags:
 categories: SOC
 keywords: Splunk
 description: 本文记录了作者在使用Splunk搭建SIEM时所需的知识点以及操作流程
-top_img: https://pic.imgdb.cn/item/64aae46e1ddac507cc3c4359.jpg
-cover: https://pic.imgdb.cn/item/64aae46e1ddac507cc3c4359.jpg
+top_img: https://pic.imgdb.cn/item/65b86159871b83018a7fa6ca.jpg
+cover: https://pic.imgdb.cn/item/65b86159871b83018a7fa6ca.jpg
 ---
 ## Splunk 简介
 

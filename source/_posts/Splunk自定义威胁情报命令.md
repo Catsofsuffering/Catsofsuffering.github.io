@@ -6,8 +6,8 @@ tags:
   - Splunk
 categories: 安全运营
 description: 本文记录了作者在开发Splunk自定义命令，通过调用API拉取微步情报信息，所需的知识点以及操作流程
-top_img: https://pic.imgdb.cn/item/64aae46e1ddac507cc3c4359.jpg
-cover: https://pic.imgdb.cn/item/64aae46e1ddac507cc3c4359.jpg
+top_img: https://pic.imgdb.cn/item/65b860e0871b83018a7e5d20.jpg
+cover: https://pic.imgdb.cn/item/65b860e0871b83018a7e5d20.jpg
 ---
 ## 事前准备
 ### 配置 VSCode 调试插件
