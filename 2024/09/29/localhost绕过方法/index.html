@@ -1,0 +1,261 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>localhost绕过方法 | Peony</title><meta name="author" content="Peony"><meta name="copyright" content="Peony"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文记录了localhost的绕过技巧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="localhost绕过方法">
+<meta property="og:url" content="https://peonycsa.com/2024/09/29/localhost%E7%BB%95%E8%BF%87%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Peony">
+<meta property="og:description" content="本文记录了localhost的绕过技巧">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic.imgdb.cn/item/65b86159871b83018a7fa6ca.jpg">
+<meta property="article:published_time" content="2024-09-29T07:25:13.957Z">
+<meta property="article:modified_time" content="2024-09-29T07:54:08.733Z">
+<meta property="article:author" content="Peony">
+<meta property="article:tag" content="localhost">
+<meta property="article:tag" content="Bypass">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic.imgdb.cn/item/65b86159871b83018a7fa6ca.jpg"><link rel="shortcut icon" href="https://pic.imgdb.cn/item/647c139af024cca1732734de.png"><link rel="canonical" href="https://peonycsa.com/2024/09/29/localhost%E7%BB%95%E8%BF%87%E6%96%B9%E6%B3%95/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'localhost绕过方法',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2024-09-29 15:54:08'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://pic.imgdb.cn/item/647c139af024cca1732734de.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">35</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 杂项</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/life/"><i class="fa-fw fas fa-music"></i><span> 生活</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movie/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://pic.imgdb.cn/item/65b86159871b83018a7fa6ca.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Peony"><span class="site-name">Peony</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 杂项</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/life/"><i class="fa-fw fas fa-music"></i><span> 生活</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movie/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">localhost绕过方法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-09-29T07:25:13.957Z" title="发表于 2024-09-29 15:25:13">2024-09-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-09-29T07:54:08.733Z" title="更新于 2024-09-29 15:54:08">2024-09-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Bypass/">Bypass</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">555</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>最近学习THM，正好了解到了localhost的绕过方式，笔者将以下技巧作为备忘录记录：</p>
+<table>
+<thead>
+<tr>
+<th>绕过方式</th>
+<th>描述</th>
+<th>示例或注意事项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>http://127.0.0.1</code></td>
+<td>标准localhost的IPv4地址</td>
+<td>通常用于访问本地服务</td>
+</tr>
+<tr>
+<td><code>http://127.1</code></td>
+<td>省略了末尾的0，仍然指向localhost</td>
+<td><code>curl http://127.1:8080</code></td>
+</tr>
+<tr>
+<td><code>http://0177.0.0.1</code></td>
+<td>使用八进制表示法，0177等于127</td>
+<td>需要支持八进制的解析</td>
+</tr>
+<tr>
+<td><code>http://0x7F.0.0.1</code></td>
+<td>使用十六进制表示法，0x7F等于127</td>
+<td>需要支持十六进制的解析</td>
+</tr>
+<tr>
+<td><code>http://017700000001</code></td>
+<td>127.0.0.1的八进制整数格式</td>
+<td><code>curl http://017700000001:8080</code></td>
+</tr>
+<tr>
+<td><code>http://2130706433</code></td>
+<td>127.0.0.1的十进制整数格式</td>
+<td><code>curl http://2130706433:8080</code></td>
+</tr>
+<tr>
+<td><code>http://0x7F000001</code></td>
+<td>127.0.0.1的十六进制整数格式</td>
+<td>需要支持十六进制的解析</td>
+</tr>
+<tr>
+<td><code>http://127.127.127.127</code></td>
+<td>这个IP地址的原理尚不明确，但可能是程序的特定实现。</td>
+<td>一般不常见</td>
+</tr>
+<tr>
+<td><code>http://127。0。0。1</code></td>
+<td>使用中文句号绕过</td>
+<td>可能会被某些解析器支持</td>
+</tr>
+<tr>
+<td><code>http://1②7.0.0.1</code></td>
+<td>使用不同的数字符号（如圈选数字）绕过</td>
+<td>需要特殊处理来解析</td>
+</tr>
+<tr>
+<td>除了上述表格，还包括：</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>DNS欺骗</strong>：如果DNS服务器返回localhost的IP，可以通过篡改DNS来绕过限制。</li>
+<li><strong>IPv6 地址</strong>：使用<code>::1</code>作为localhost的IPv6表示形式。</li>
+<li><strong>代理</strong>：通过代理服务访问localhost，能够隐藏实际请求源。</li>
+<li><strong>子域名劫持本地 IP</strong>：比如注册一个子域名为 <code>127.0.0.1.nip.io</code> ，可以让子域名解析到本地IP地址（127.0.0.1），使得攻击者能够通过特定的子域名访问本地服务，达到绕过策。</li>
+<li><strong>子域名劫持云环境元数据服务</strong>：<ul>
+<li>IP地址 <code>169.254.169.254</code> 是云服务提供商（如AWS、GCP等）用来提供实例元数据的地址。该元数据可能包含敏感信息，如<strong>实例ID、密钥</strong>等。</li>
+<li>阻止对该IP的访问可以减少敏感数据被泄露的风险。</li>
+<li>攻击者可以通过注册自己的子域名，并将其DNS记录指向 <code>169.254.169.254</code>，来诱导系统或用户访问该服务，从而窃取关键信息。</li>
+</ul>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://peonycsa.com">Peony</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://peonycsa.com/2024/09/29/localhost%E7%BB%95%E8%BF%87%E6%96%B9%E6%B3%95/">https://peonycsa.com/2024/09/29/localhost%E7%BB%95%E8%BF%87%E6%96%B9%E6%B3%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://peonycsa.com" target="_blank">Peony</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/localhost/">localhost</a><a class="post-meta__tags" href="/tags/Bypass/">Bypass</a></div><div class="post_share"><div class="social-share" data-image="https://pic.imgdb.cn/item/65b86159871b83018a7fa6ca.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://fastly.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/01/29/%E7%BB%88%E7%AB%AF%E5%8D%87%E7%BA%A7%E4%B8%8E%E6%8F%90%E9%AB%98%E7%A8%B3%E5%AE%9A%E6%80%A7/" title="终端升级与提高稳定性"><img class="cover" src="https://pic.imgdb.cn/item/65b76b5d871b83018ab4a506.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">终端升级与提高稳定性</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://pic.imgdb.cn/item/647c139af024cca1732734de.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Peony</div><div class="author-info__description">知道自己需要的是什么之后，真正的学习才算开始。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">35</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Catsofsuffering"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Catsofsuffering" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:graywar1@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/09/29/localhost%E7%BB%95%E8%BF%87%E6%96%B9%E6%B3%95/" title="localhost绕过方法"><img src="https://pic.imgdb.cn/item/65b86159871b83018a7fa6ca.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="localhost绕过方法"/></a><div class="content"><a class="title" href="/2024/09/29/localhost%E7%BB%95%E8%BF%87%E6%96%B9%E6%B3%95/" title="localhost绕过方法">localhost绕过方法</a><time datetime="2024-09-29T07:25:13.957Z" title="发表于 2024-09-29 15:25:13">2024-09-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/01/29/%E7%BB%88%E7%AB%AF%E5%8D%87%E7%BA%A7%E4%B8%8E%E6%8F%90%E9%AB%98%E7%A8%B3%E5%AE%9A%E6%80%A7/" title="终端升级与提高稳定性"><img src="https://pic.imgdb.cn/item/65b76b5d871b83018ab4a506.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="终端升级与提高稳定性"/></a><div class="content"><a class="title" href="/2024/01/29/%E7%BB%88%E7%AB%AF%E5%8D%87%E7%BA%A7%E4%B8%8E%E6%8F%90%E9%AB%98%E7%A8%B3%E5%AE%9A%E6%80%A7/" title="终端升级与提高稳定性">终端升级与提高稳定性</a><time datetime="2024-01-29T09:01:35.000Z" title="发表于 2024-01-29 17:01:35">2024-01-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/01/18/Splunk%E8%87%AA%E5%AE%9A%E4%B9%89%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5%E5%91%BD%E4%BB%A4/" title="Splunk自定义威胁情报命令"><img src="https://pic.imgdb.cn/item/65b860e0871b83018a7e5d20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Splunk自定义威胁情报命令"/></a><div class="content"><a class="title" href="/2024/01/18/Splunk%E8%87%AA%E5%AE%9A%E4%B9%89%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5%E5%91%BD%E4%BB%A4/" title="Splunk自定义威胁情报命令">Splunk自定义威胁情报命令</a><time datetime="2024-01-18T07:34:35.000Z" title="发表于 2024-01-18 15:34:35">2024-01-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/27/Vulnhub-KioptrixLevel1%E9%80%9A%E5%85%B3%E8%AE%B0%E5%BD%95/" title="Vulnhub-KioptrixLevel1通关记录"><img src="https://pic.imgdb.cn/item/653b2755c458853aef761f44.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vulnhub-KioptrixLevel1通关记录"/></a><div class="content"><a class="title" href="/2023/10/27/Vulnhub-KioptrixLevel1%E9%80%9A%E5%85%B3%E8%AE%B0%E5%BD%95/" title="Vulnhub-KioptrixLevel1通关记录">Vulnhub-KioptrixLevel1通关记录</a><time datetime="2023-10-27T02:45:07.000Z" title="发表于 2023-10-27 10:45:07">2023-10-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/27/Github%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%90%9C%E7%B4%A2/" title="Github敏感信息搜索"><img src="https://pic.imgdb.cn/item/64fa9349661c6c8e5490bd62.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Github敏感信息搜索"/></a><div class="content"><a class="title" href="/2023/10/27/Github%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%90%9C%E7%B4%A2/" title="Github敏感信息搜索">Github敏感信息搜索</a><time datetime="2023-10-27T02:38:07.000Z" title="发表于 2023-10-27 10:38:07">2023-10-27</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://pic.imgdb.cn/item/65b86159871b83018a7fa6ca.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Peony</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div></div></body></html>
