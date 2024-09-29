@@ -201,10 +201,6 @@ systemctl list-unit-files
 正常的结果如下：
 
 ![systemctl结果](https://pic.imgdb.cn/item/64c72de31ddac507cc0b2bcf.jpg)
-
-## WSL 与 VirtualBox 并不兼容
-
-帮助朋友安装 WSL 时，发现 WSL 与旧版 VirtualBox 并不兼容，通过查询
 ## 失败尝试
 
 ### 通过子系统IP进行代理

@@ -50,7 +50,13 @@ UF的主要功能包括：数据采集、日志转发、安全性、数据压缩
 
 ```
 fdisk -l
-fdisk /dev/sdb
+# fdisk /dev/sdb
+```
+
+如果不小心生成了签名，可以使用 `wipefs` 命令擦除签名
+
+```
+wipefs --all --backup /dev/vdh
 ```
 
 然后创建对应的物理卷、逻辑组和逻辑卷，并挂载到 `/opt/splunk` 安装目录下。创建服务账号 `splunk` ，将安装压缩包解压到 `/opt` 目录下（安装包中自带splunk文件夹），并将文件所属改为对应的服务账号，使用服务账号启动程序。
@@ -90,7 +96,7 @@ chown -R splunk:splunk /opt/splunk/
 su - splunk -c "/opt/splunk/bin/splunk start --accept-license --answer-yes"
 ```
 
-注意提前备份 `/etc/fstab` 文件：
+如果是虚拟机的话，可以提前在此处预备一个分支镜像，以防配置丢失。注意提前备份 `/etc/fstab` 文件：
 
 ``` sh
 # /etc/fstab: static file system information.
