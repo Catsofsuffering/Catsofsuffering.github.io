@@ -6,8 +6,8 @@ tags:
 categories: Bypass
 keywords: localhost
 description: 本文记录了localhost的绕过技巧
-top_img: https://pic.imgdb.cn/item/65b86159871b83018a7fa6ca.jpg
-cover: https://pic.imgdb.cn/item/65b86159871b83018a7fa6ca.jpg
+top_img: https://pic.imgdb.cn/item/66fe303a0a206445e3a8edf7.png
+cover: https://pic.imgdb.cn/item/66fe303a0a206445e3a8edf7.png
 ---
 最近学习THM，正好了解到了localhost的绕过方式，笔者将以下技巧作为备忘录记录：
 
@@ -28,3 +28,8 @@ cover: https://pic.imgdb.cn/item/65b86159871b83018a7fa6ca.jpg
 - **DNS欺骗**：如果DNS服务器返回localhost的IP，可以通过篡改DNS来绕过限制。
 - **IPv6 地址**：使用`::1`作为localhost的IPv6表示形式。
 - **代理**：通过代理服务访问localhost，能够隐藏实际请求源。
+- **子域名劫持本地 IP**：比如注册一个子域名为 `127.0.0.1.nip.io` ，可以让子域名解析到本地IP地址（127.0.0.1），使得攻击者能够通过特定的子域名访问本地服务，达到绕过策。
+- **子域名劫持云环境元数据服务**：
+    - IP地址 `169.254.169.254` 是云服务提供商（如AWS、GCP等）用来提供实例元数据的地址。该元数据可能包含敏感信息，如**实例ID、密钥**等。
+    - 阻止对该IP的访问可以减少敏感数据被泄露的风险。
+    - 攻击者可以通过注册自己的子域名，并将其DNS记录指向 `169.254.169.254`，来诱导系统或用户访问该服务，从而窃取关键信息。
