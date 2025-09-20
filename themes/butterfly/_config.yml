@@ -436,7 +436,7 @@ footer:
   owner:
     enable: true
     since: 2020
-  custom_text:
+  custom_text: <a href="icp链接"><span>备案号：渝ICP备2025068510号-1</span></a>
   copyright: true # Copyright of theme and framework
 
 # Analysis
@@ -788,7 +788,7 @@ fancybox: true
 # mermaid
 # see https://github.com/mermaid-js/mermaid
 mermaid:
-  enable: false
+  enable: enable
   # built-in themes: default/forest/dark/neutral
   theme:
     light: default
